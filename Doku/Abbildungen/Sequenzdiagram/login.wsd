@@ -1,0 +1,48 @@
+@startuml
+title player login
+actor player
+box "player services"
+collections "player services" as ps
+participant "Sessions" as sess
+participant "User" as usr 
+end box
+database database as db
+
+player -> ps: login(name)
+activate ps
+ps -> db: select name, uuid from users where name is name
+activate db
+db->ps: user_names[], user_uuids[]
+deactivate db
+alt user_names.lenght >= 1
+    ps -> sess: generate_user_session(user_name)
+    activate sess
+    ps <- sess: session_id
+    deactivate sess
+    ps -> sess: register_session(session_id)
+    activate sess
+    sess -> ps: success
+    deactivate sess
+    alt seccess == true
+        ps -> player: session_id
+        
+    else 
+        ps -> player: ThrowHTTPException(500)
+    end
+else
+    ps -> usr: register_user(user_name)
+    activate usr
+    usr->db: insert (name) values\n (user_name) into users
+    activate db
+    db -> usr: user_name, user_uuid
+    deactivate db
+    usr -> ps: user_name, user_uuid
+    deactivate usr
+    ps -> sess: register_session(user_name)
+    activate sess
+    sess -> ps: session_id
+    deactivate sess
+    ps -> player: session_id
+end
+
+@enduml
