@@ -1,0 +1,5 @@
+Datenbank aufsetzen in drei einfachen Schritten:
+1. Den Ordner Daten und das docker-compose File in einen beliebigen Ordner kopieren.
+2. Im Terminal zu dem ausgewählten Ordner navigieren. Docker compose up -d ausführen.
+3. Der Container ist nun in Docker Desktop zu sehen. Nun kann man das Terminal der Datenbank aufrufen und sich mit psql -U testuser -d pong_daten anmelden.
+Nun kann man wie gewohnt SQL Statements in dem Terminal ausführen.
