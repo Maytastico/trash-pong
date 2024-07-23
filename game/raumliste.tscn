@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://b5lvnuaqvpiw2"]
+[gd_scene load_steps=3 format=3 uid="uid://b5lvnuaqvpiw2"]
 
+[ext_resource type="Script" path="res://logic/raumliste.gd" id="1_djvwx"]
 [ext_resource type="FontFile" uid="uid://baeom0xb31cqk" path="res://ressources/PressStart2P-Regular.ttf" id="1_m7v30"]
 
 [node name="Raumliste" type="Control"]
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_djvwx")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
@@ -50,6 +52,7 @@ theme_override_font_sizes/font_size = 16
 text = "Create Room"
 
 [node name="Join Room" type="Button" parent="."]
+layout_mode = 0
 offset_left = 960.0
 offset_top = 288.0
 offset_right = 1136.0
@@ -71,3 +74,5 @@ item_count = 3
 item_0/text = "Ahhhhhhh                                         0/2                                                            Aron"
 item_1/text = "Hello                                                   1/2                                                            May"
 item_2/text = "Room3                                                2/2                                                            Caro"
+
+[connection signal="pressed" from="Join Room" to="." method="_on_join_room_pressed"]
