@@ -10,8 +10,8 @@ const DEFAULT_PORT = 8910
 #@onready var join_button = $JoinButton
 @onready var status_ok = $StatusOk
 @onready var status_fail = $StatusFail
-@onready var port_forward_label = $PortForward
-@onready var find_public_ip_button = $FindPublicIP
+
+
 
 var peer = null
 
@@ -87,7 +87,16 @@ func _set_status(text, isok):
 
 
 func _on_host_pressed():
+	if(username.text.strip_edges() == ""):
+		_set_status("Enter a username", false)
+		return
+	
 	_set_status("Connecting...", true)
+	host_button.set_disabled(true)
+	var raumliste = load("res://raumliste.tscn").instantiate()
+
+	get_tree().get_root().add_child(raumliste)
+	hide()
 	#peer = ENetMultiplayerPeer.new()
 	#var err = peer.create_server(DEFAULT_PORT, 1) # Maximum of 1 peer, since it's a 2-player game.
 	#if err != OK:

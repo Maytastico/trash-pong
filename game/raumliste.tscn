@@ -2,7 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://baeom0xb31cqk" path="res://ressources/PressStart2P-Regular.ttf" id="1_m7v30"]
 
-[node name="Control" type="Control"]
+[node name="Raumliste" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,9 +12,62 @@ grow_vertical = 2
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_left = 12.0
-offset_top = 25.0
-offset_right = 52.0
-offset_bottom = 48.0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 160.0
+offset_bottom = 87.0
 theme_override_fonts/font = ExtResource("1_m7v30")
-text = "Räume:"
+text = "Rooms:"
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 96.0
+offset_right = 888.0
+offset_bottom = 128.0
+columns = 3
+
+[node name="RoomLabel" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Room                                                 "
+
+[node name="PlayersLabel" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Players                                                    "
+
+[node name="CreatorLabel" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Creator"
+
+[node name="Create Room" type="Button" parent="."]
+layout_mode = 0
+offset_left = 960.0
+offset_top = 224.0
+offset_right = 1088.0
+offset_bottom = 264.0
+theme_override_fonts/font = ExtResource("1_m7v30")
+theme_override_font_sizes/font_size = 16
+text = "Create Room"
+
+[node name="Join Room" type="Button" parent="."]
+offset_left = 960.0
+offset_top = 288.0
+offset_right = 1136.0
+offset_bottom = 328.0
+theme_override_fonts/font = ExtResource("1_m7v30")
+theme_override_font_sizes/font_size = 16
+text = "Join Room"
+
+[node name="ItemList" type="ItemList" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 128.0
+offset_right = 944.0
+offset_bottom = 568.0
+allow_reselect = true
+allow_search = false
+max_text_lines = 100
+item_count = 3
+item_0/text = "Ahhhhhhh                                         0/2                                                            Aron"
+item_1/text = "Hello                                                   1/2                                                            May"
+item_2/text = "Room3                                                2/2                                                            Caro"

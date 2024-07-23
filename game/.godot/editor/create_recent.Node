@@ -1,2 +1,6 @@
-TextureRect
 Label
+GridContainer
+ItemList
+Panel
+Button
+TextureRect
