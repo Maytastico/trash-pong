@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://b5lvnuaqvpiw2"]
+[gd_scene load_steps=5 format=3 uid="uid://b5lvnuaqvpiw2"]
 
 [ext_resource type="Script" path="res://logic/raumliste.gd" id="1_djvwx"]
 [ext_resource type="FontFile" uid="uid://baeom0xb31cqk" path="res://ressources/PressStart2P-Regular.ttf" id="1_m7v30"]
+[ext_resource type="Texture2D" uid="uid://c2xxjqx60grfi" path="res://ressources/lock.png" id="3_xhjr5"]
+[ext_resource type="Texture2D" uid="uid://w6cyv2251fva" path="res://ressources/unlocked.png" id="4_uswh5"]
 
 [node name="Raumliste" type="Control"]
 layout_mode = 3
@@ -25,7 +27,7 @@ text = "Rooms:"
 layout_mode = 0
 offset_left = 64.0
 offset_top = 96.0
-offset_right = 888.0
+offset_right = 936.0
 offset_bottom = 128.0
 columns = 3
 
@@ -72,7 +74,48 @@ allow_search = false
 max_text_lines = 100
 item_count = 3
 item_0/text = "Ahhhhhhh                                         0/2                                                            Aron"
+item_0/icon = ExtResource("3_xhjr5")
 item_1/text = "Hello                                                   1/2                                                            May"
+item_1/icon = ExtResource("4_uswh5")
 item_2/text = "Room3                                                2/2                                                            Caro"
+item_2/icon = ExtResource("3_xhjr5")
 
+[node name="EnterPasswordPanel" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 424.0
+offset_top = 256.0
+offset_right = 744.0
+offset_bottom = 392.0
+
+[node name="EnterPasswordLabel" type="Label" parent="EnterPasswordPanel"]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 48.0
+offset_right = 227.0
+offset_bottom = 71.0
+theme_override_fonts/font = ExtResource("1_m7v30")
+theme_override_font_sizes/font_size = 13
+text = "Enter Password:"
+
+[node name="InputPassword" type="LineEdit" parent="EnterPasswordPanel/EnterPasswordLabel"]
+layout_mode = 0
+offset_left = -24.0
+offset_top = 24.0
+offset_right = 192.0
+offset_bottom = 55.0
+theme_override_fonts/font = ExtResource("1_m7v30")
+theme_override_font_sizes/font_size = 16
+placeholder_text = "Password"
+
+[node name="JoinButton" type="Button" parent="EnterPasswordPanel"]
+layout_mode = 0
+offset_left = 232.0
+offset_top = 64.0
+offset_right = 304.0
+offset_bottom = 104.0
+theme_override_fonts/font = ExtResource("1_m7v30")
+text = "Join"
+
+[connection signal="pressed" from="Create Room" to="." method="_on_create_room_pressed"]
 [connection signal="pressed" from="Join Room" to="." method="_on_join_room_pressed"]

@@ -16,3 +16,10 @@ func _on_join_room_pressed():
 
 	get_tree().get_root().add_child(imraum)
 	hide()
+
+
+func _on_create_room_pressed():
+	var createroom = load("res://create_room.tscn").instantiate()
+
+	get_tree().get_root().add_child(createroom)
+	hide()
