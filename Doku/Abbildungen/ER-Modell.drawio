@@ -1,0 +1,60 @@
+<mxfile host="Electron" modified="2024-07-18T19:36:32.611Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.2.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="YhBG3_nXB3DSIzr0oWcr" version="24.2.5" type="device" pages="2">
+  <diagram name="Seite-1" id="VVJrTmWuzIV7tomtIF9Y">
+    <mxGraphModel dx="281" dy="613" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="sOrx_UfOEs_xQSuLxxRq-1" value="Spieler" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sOrx_UfOEs_xQSuLxxRq-3" value="Vorname" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="230" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sOrx_UfOEs_xQSuLxxRq-4" value="Nachname" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="260" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sOrx_UfOEs_xQSuLxxRq-5" value="Alias" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="290" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sOrx_UfOEs_xQSuLxxRq-6" value="Spieler_ID PK" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="320" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sOrx_UfOEs_xQSuLxxRq-14" value="Spieler_ID 1&amp;nbsp; FK" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="465" y="257" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sOrx_UfOEs_xQSuLxxRq-15" value="Spieler-ID 2 FK" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="465" y="287" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sOrx_UfOEs_xQSuLxxRq-17" value="Punktestand&lt;div&gt;alle Tore&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="347" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="sOrx_UfOEs_xQSuLxxRq-18" value="2" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="325" y="178" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="sOrx_UfOEs_xQSuLxxRq-25" value="Raum" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="460" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sOrx_UfOEs_xQSuLxxRq-32" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="440" y="175" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="LhlaWOtVFx5PgeP5w2lt-4" value="Öffentlich" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="465" y="317" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="LhlaWOtVFx5PgeP5w2lt-5" value="Passwort" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="465" y="347" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="LhlaWOtVFx5PgeP5w2lt-6" value="Raum_ID" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="465" y="227" width="110" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="nGHE4RYU7416MLSm7vnE" name="Seite-2">
+    <mxGraphModel dx="281" dy="613" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

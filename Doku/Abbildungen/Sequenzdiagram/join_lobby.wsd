@@ -1,0 +1,100 @@
+@startuml
+title "join lobby   "
+actor player
+box "game services"
+collections "game services" as gs
+participant "Lobby Model" as lo
+end box
+database database as db
+
+player -> gs: join_lobby\n(lobby_uuid,user_uuid)
+activate gs
+gs-> lo: fetch_lobby(lobby_uuid)
+activate lo
+lo->db: select * from lobby\n where uuid Is lobby_uuid
+activate db
+db->lo: lobbies[]
+deactivate db
+
+alt lobbies.lenght<1
+    lo->gs: Null
+else
+    create participant Lobby
+    lo -> Lobby: Lobby(lobbies[0])
+    lo->gs:<<ref>> Lobby()
+    deactivate lo
+end
+
+gs->Lobby: password_enabled()
+activate Lobby
+Lobby->gs: this.password_enabled
+deactivate Lobby
+
+gs->Lobby: whitelist()
+activate Lobby
+Lobby->gs: this.whitelist()
+deactivate Lobby
+
+alt password_enabled
+    gs->Lobby: check_password(pw)
+    activate Lobby
+    create participant bcrypt
+    Lobby->bcrypt: brcypt()
+    Lobby->bcrypt: hash_password(pw)
+    activate bcrypt
+    bcrypt->Lobby: hashed_pw
+    deactivate bcrypt
+    Lobby->bcrypt: validate_hash(hashed_pw, pw)
+    activate bcrypt
+    bcrypt->Lobby: result
+    deactivate bcrypt
+    Lobby->gs: result
+    deactivate Lobby
+    alt !result
+        gs->player: ThrowHTTPException(401)
+    end
+    destroy bcrypt
+end
+
+
+
+
+alt whitelist
+    gs->Lobby: lobby.is_user_authorized(user_uuid)
+    activate Lobby
+    
+    Lobby->Lobby: this.whitelist.exists(user_uuid)
+    activate Lobby
+    Lobby->Lobby: exists_in_whitelist
+    deactivate Lobby
+    Lobby->gs: exists_in_whitelist
+    deactivate Lobby
+    alt !exists_in_whitelist
+        gs->player: ThrowHTTPException(401)
+    end
+end    
+
+
+alt Spieler-ID1 != Null and Spieler-ID2 != Null
+    gs->player:ThrowException("Lobby Full")
+end
+
+gs->Lobby: add_user_to_lobby(user_uuid)
+activate Lobby
+Lobby->Lobby: users.append(user_uuid)
+Lobby->gs
+deactivate Lobby
+
+gs->lo: update_lobby(Lobby)
+activate lo
+lo->gs: result
+deactivate lo
+
+alt !result
+    gs->player: ThrowHTTPException(500)
+end
+
+gs->player: Lobby.json_serialized()
+deactivate gs
+
+@enduml
