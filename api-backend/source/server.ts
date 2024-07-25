@@ -34,7 +34,7 @@ router.use((req: any, res:any) => {
 
 const httpServer = http.createServer((router))
 
-let port: number = 3000;
+let port: number = 3001;
 if(process.env.PORT != undefined && parseInt(process.env.PORT) > 0) {
     port = parseInt(process.env.PORT);
 }
