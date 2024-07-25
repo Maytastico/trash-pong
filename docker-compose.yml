@@ -1,0 +1,25 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres:latest
+    build:
+        context: ./Datenbank
+        dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: SicheresPasswort!
+      POSTGRES_DB: pong_daten
+    ports:
+      - "5432:5432"
+  api-backend:
+    build:
+        context: ./api-backend
+        dockerfile: Dockerfile
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - "8080:8080"
+      
+volumes:
+  postgressql:

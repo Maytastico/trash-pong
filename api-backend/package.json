@@ -5,8 +5,9 @@
   "main": "source/server.ts",
   "scripts": {
     "dev": "nodemon source/server.ts",
-    "build": "rm -rf build/ && prettier --write source/ && tsc",
-    "test": "jest"
+    "build": "rm -rf ./dist && tsc",
+    "test": "jest",
+    "start": "node dist/server.js"
   },
   "repository": {
     "type": "git",
