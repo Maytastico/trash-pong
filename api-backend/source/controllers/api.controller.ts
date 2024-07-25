@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import {getRoom} from "../database/room";
+import { getAllRooms } from "../database/room";  
 
 const dbRoom = async (req: Request, res: Response, next: NextFunction) =>{
     const roomId = parseInt(req.params.id, 10);
@@ -11,4 +12,13 @@ const dbRoom = async (req: Request, res: Response, next: NextFunction) =>{
     }
 }
 
-export default dbRoom;
+const dbAllRooms = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const rooms = await getAllRooms();
+      return res.status(200).json(rooms);
+    } catch (err) {
+        return res.sendStatus(404);
+    }
+  }
+  
+  export { dbRoom, dbAllRooms };
