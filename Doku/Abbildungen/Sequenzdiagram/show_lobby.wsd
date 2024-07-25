@@ -1,0 +1,34 @@
+@startuml
+title "show lobby"
+actor player
+' box "player services"
+' collections "player services" as ps
+' participant "Sessions" as sess
+' participant "User" as usr 
+' end box
+box "game services"
+collections "game services" as gs
+participant "Lobby Model" as lo
+end box
+database database as db
+
+player -> gs: show_lobby(filters)
+activate gs
+gs->lo: fetch_lobbies()
+activate lo
+lo -> db: select * from lobbies limit 10
+activate db
+db -> lo: lobbies[]
+deactivate db
+lo -> gs: lobbies[]
+deactivate lo
+gs -> player: lobbies[]
+deactivate gs
+
+
+
+
+' else l>obby[0].
+' else lobbies[0].max_players < \n (lobbies.current_player+1)
+'     gs -> player: ThrowException("Lobby Full")
+@enduml
