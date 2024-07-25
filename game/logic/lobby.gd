@@ -85,6 +85,10 @@ func _set_status(text, isok):
 		status_ok.set_text("")
 		status_fail.set_text(text)
 
+func _canceled():
+	if has_node("/root/imraum"):
+		get_node(^"/root/imraum").free()
+		show()
 
 func _on_host_pressed():
 	if(username.text.strip_edges() == ""):
@@ -129,7 +133,6 @@ func _on_host_pressed():
 #	_set_status("Connecting...", true)
 
 
-func _on_find_public_ip_pressed():
-	OS.shell_open("https://icanhazip.com/")
+
 
 

@@ -25,6 +25,7 @@ theme_override_fonts/font = ExtResource("1_lrs6h")
 text = "Create Room"
 
 [node name="CreateButton" type="Button" parent="."]
+layout_mode = 0
 offset_left = 624.0
 offset_top = 520.0
 offset_right = 952.0
@@ -32,6 +33,7 @@ offset_bottom = 575.0
 text = "Create Room"
 
 [node name="CancelButton" type="Button" parent="."]
+layout_mode = 0
 offset_left = 184.0
 offset_top = 520.0
 offset_right = 512.0
