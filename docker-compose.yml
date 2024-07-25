@@ -12,6 +12,7 @@ services:
       POSTGRES_DB: pong_daten
     ports:
       - "5432:5432"
+    restart: always
   backend:
     build:
         context: ./api-backend
@@ -20,11 +21,21 @@ services:
       - ./:/usr/src/app
     ports:
       - "3000:3000"
+    links:
+      - db
+    depends_on:
+      - db
+    restart: always
   game:
     build:
         context: ./game
         dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    links:
+      - backend
+    restart: always
+    depends_on:
+      - backend
 volumes:
   postgressql:
