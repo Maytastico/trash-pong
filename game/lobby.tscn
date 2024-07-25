@@ -19,6 +19,9 @@ grow_vertical = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
 
+[node name="Ping" type="HTTPRequest" parent="."]
+unique_name_in_owner = true
+
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 0
 offset_left = -90.0
@@ -123,4 +126,5 @@ size_flags_horizontal = 2
 size_flags_vertical = 0
 horizontal_alignment = 1
 
+[connection signal="request_completed" from="Ping" to="LobbyPanel" method="_on_ping_request_completed"]
 [connection signal="pressed" from="LobbyPanel/HostButton" to="LobbyPanel" method="_on_host_pressed"]
