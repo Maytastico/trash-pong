@@ -1,20 +1,15 @@
 import express from 'express';
 import health from './health';
-<<<<<<< HEAD
 import user from './user';
-=======
 import api from './api';
 import search from './search';
->>>>>>> 6600379b9bcc54005ee916994c9f70eb12197eb3
+import { auth } from '../controllers/auth.controller';
 
 const router = express.Router();
 
 router.use("/health", health);
-<<<<<<< HEAD
 router.use("/user", user);
-=======
-router.use("/api",api);
-router.use("/search",search);
->>>>>>> 6600379b9bcc54005ee916994c9f70eb12197eb3
+router.use("/api", auth, api);
+router.use("/search", auth, search);
 
 export default router;

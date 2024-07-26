@@ -22,4 +22,4 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     } catch (err) {
       res.status(401).send('Please authenticate');
     }
-   };
+};

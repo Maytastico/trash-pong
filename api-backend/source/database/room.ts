@@ -1,4 +1,4 @@
-import {pool} from './conn'
+import { pool } from "./conn";
 
 export async function getRoom(id:number){
   const client = await pool.connect();
