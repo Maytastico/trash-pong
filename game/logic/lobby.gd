@@ -98,17 +98,12 @@ func _on_host_pressed():
 	
 	_set_status("Connecting...", true)
 	host_button.set_disabled(true)
-	var err = pingRequest.request("backend:3000/ping")
+	var url = "http://localhost:3000/ping"
+	var err = pingRequest.request(url, [], HTTPClient.METHOD_GET)
 	if err != OK:
+		_set_status("Internal Error", false)
 		print("Failed to send request: ", err)
 		
-		
-	#var raumliste = load("res://raumliste.tscn").instantiate()
-	#get_tree().get_root().add_child(raumliste)
-	#hide()
-	
-	
-	
 	#peer = ENetMultiplayerPeer.new()
 	#var err = peer.create_server(DEFAULT_PORT, 1) # Maximum of 1 peer, since it's a 2-player game.
 	#if err != OK:
@@ -148,7 +143,10 @@ func _on_host_pressed():
 
 func _on_ping_request_completed(result, response_code, headers, body):
 	if response_code == 200:
-		print("API is online")
+		var raumliste = load("res://raumliste.tscn").instantiate()
+		get_tree().get_root().add_child(raumliste)
+		hide()
 		# Hier dein Code, der ausgeführt wird, wenn die API online ist
 	else:
-		print("API is offline or request failed with code: ", response_code)
+		_set_status("No Connection", false)
+		host_button.set_disabled(false)
