@@ -1,12 +1,10 @@
 import express from 'express';
-import test from './test';
-import pingFunction from '../controllers/ping.controller';
 import health from './health';
+import user from './user';
 
 const router = express.Router();
 
-router.use("/test", test);
-router.use("/ping", pingFunction);
 router.use("/health", health);
+router.use("/user", user);
 
 export default router;
