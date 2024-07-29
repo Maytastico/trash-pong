@@ -65,7 +65,7 @@ ALTER SEQUENCE public.raum_raum_id_seq OWNED BY public.raum.raum_id;
 CREATE TABLE public.spieler (
     spieler_id integer NOT NULL,
     alias character varying(255) NOT NULL,
-    punktestand integer DEFAULT 0 NOT NULL
+    punktestand integer DEFAULT 0 NOT NULL,
 );
 
 
