@@ -4,7 +4,8 @@ extends Control
 # Not present on the list of registered or common ports as of December 2022:
 # https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
 const DEFAULT_PORT = 8910
-
+const apiURL = "http://localhost:3000"
+var jwtToken
 @onready var username = $Name
 @onready var host_button = $HostButton
 #@onready var join_button = $JoinButton
@@ -12,6 +13,7 @@ const DEFAULT_PORT = 8910
 @onready var status_fail = $StatusFail
 
 @onready var pingRequest = %Ping
+@onready var loginRequest = %Login
 
 
 var peer = null
@@ -95,11 +97,26 @@ func _on_host_pressed():
 	if(username.text.strip_edges() == ""):
 		_set_status("Enter a username", false)
 		return
-	
 	_set_status("Connecting...", true)
 	host_button.set_disabled(true)
-	var url = "http://localhost:3000/ping"
+	if(_ping() < 0):
+		return
+	if(_login() < 0):
+		return
+	
+	
+func _ping():
+	var url = apiURL + "/ping"
 	var err = pingRequest.request(url, [], HTTPClient.METHOD_GET)
+	if err != OK:
+		_set_status("Internal Error", false)
+		print("Failed to send request: ", err)
+		return -1
+	return 0
+	
+func _login():
+	var url = apiURL + "/user/login"
+	var err = loginRequest.request(url, [], HTTPClient.METHOD_POST)
 	if err != OK:
 		_set_status("Internal Error", false)
 		print("Failed to send request: ", err)
@@ -143,10 +160,18 @@ func _on_host_pressed():
 
 func _on_ping_request_completed(result, response_code, headers, body):
 	if response_code == 200:
-		var raumliste = load("res://raumliste.tscn").instantiate()
-		get_tree().get_root().add_child(raumliste)
-		hide()
+		#var raumliste = load("res://raumliste.tscn").instantiate()
+		#get_tree().get_root().add_child(raumliste)
+		#hide()
+		return 0
 		# Hier dein Code, der ausgeführt wird, wenn die API online ist
 	else:
 		_set_status("No Connection", false)
 		host_button.set_disabled(false)
+		return -1
+
+
+func _on_login_request_completed(result, response_code, headers, body):
+	if result == OK and response_code == 200:
+		var response_text = body.get_string_from_utf8()
+		print("Response Text:", response_text)
