@@ -10,7 +10,7 @@ CREATE TABLE "user" (
     user_id SERIAL PRIMARY KEY,
     name character varying(255) NOT NULL UNIQUE,
     punktestand integer DEFAULT 0 NOT NULL,
-    token VARCHAR(255) UNIQUE
+    token VARCHAR(512) UNIQUE
 );
 
 -- Erstellen der Tabelle 'raum'

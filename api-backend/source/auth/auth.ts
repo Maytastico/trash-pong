@@ -4,5 +4,6 @@ import { registerAuthtoken } from "../database/user";
 import { User } from "../types/User";
 
 export function generateAccessToken(user: User):string {
-    return jwt.sign(user, SECRET_KEY, { expiresIn: '1800s' });
+    const userdata:User = user
+    return jwt.sign({username: userdata.name, user_id: user.user_id}, SECRET_KEY, { expiresIn: '1800s' });
 }   
