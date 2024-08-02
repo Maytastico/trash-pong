@@ -19,6 +19,11 @@ services:
         dockerfile: Dockerfile
     volumes:
       - ./:/usr/src/app
+    environment:
+      PGHOST: db
+      PGUSER: testuser
+      PGPASSWORD: SicheresPasswort!
+      PGDATABASE: pong_daten
     ports:
       - "3000:3000"
     links:
