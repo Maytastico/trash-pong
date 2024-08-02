@@ -116,7 +116,7 @@ func _ping():
 	
 func _login():
 	var url = apiURL + "/user/login"
-	var name = '"'+ username.text + '"'
+	var name = username.text
 	var json_obj = {"username": name}
 	var json_string =  JSON.new().stringify(json_obj)
 
