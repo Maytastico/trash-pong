@@ -4,7 +4,7 @@ extends Control
 # Not present on the list of registered or common ports as of December 2022:
 # https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
 const DEFAULT_PORT = 8910
-				
+
 @onready var username = $Name
 @onready var host_button = $HostButton
 #@onready var join_button = $JoinButton
@@ -87,10 +87,6 @@ func _set_status(text, isok):
 		status_ok.set_text("")
 		status_fail.set_text(text)
 
-func _canceled():
-	if has_node("/root/imraum"):
-		get_node(^"/root/imraum").free()
-		show()
 
 func _on_host_pressed():
 	if(username.text.strip_edges() == ""):
