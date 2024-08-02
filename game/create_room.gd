@@ -38,9 +38,10 @@ func _on_create_button_pressed():
 	var password = PasswordLabel.text
 	var jsonObject = {
 		"title" : Roomname,
-		"password" : password,
-		"public" : needsPassword,
-		"playerID" : 1
+		"pw" : password,
+		"oeffentlich" : needsPassword,
+		"user_id1" : 1,
+		"user_id2" : 0
 	}
 	var json_string =  JSON.new().stringify(jsonObject)
 	var url = Global.apiURL + "/api/room"
@@ -51,4 +52,5 @@ func _on_create_button_pressed():
 
 
 func _on_create_room_request_completed(result, response_code, headers, body):
+	print(str(response_code))
 	pass # Replace with function body.
