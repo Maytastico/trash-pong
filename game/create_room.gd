@@ -17,8 +17,10 @@ func _process(delta):
 func _on_cancel_button_pressed():
 	var root = get_tree().get_root()
 	root.remove_child(self)
+
 	self.queue_free()
 	
 	for child in root.get_children():
-		child.show()
+		if child is Control:
+			child.show()
 

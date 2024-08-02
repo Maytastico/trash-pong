@@ -4,8 +4,7 @@ extends Control
 # Not present on the list of registered or common ports as of December 2022:
 # https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
 const DEFAULT_PORT = 8910
-const apiURL = "http://localhost:3000" # API-URL
-var jwtToken                         
+				
 @onready var username = $Name
 @onready var host_button = $HostButton
 #@onready var join_button = $JoinButton
@@ -106,7 +105,7 @@ func _on_host_pressed():
 	
 	
 func _ping():
-	var url = apiURL + "/health/ping"
+	var url = Global.apiURL + "/health/ping"
 	var err = pingRequest.request(url, [], HTTPClient.METHOD_GET)
 	if err != OK:
 		_set_status("Internal Error", false)
@@ -115,7 +114,7 @@ func _ping():
 	return 0
 	
 func _login():
-	var url = apiURL + "/user/login"
+	var url = Global.apiURL + "/user/login"
 	var name = username.text
 	var json_obj = {"username": name}
 	var json_string =  JSON.new().stringify(json_obj)
@@ -174,7 +173,7 @@ func _on_ping_request_completed(result, response_code, headers, body):
 
 func _on_login_request_completed(result, response_code, headers, body):
 	if result == OK and response_code == 200:
-		jwtToken = body.get_string_from_utf8()
+		Global.jwtToken = body.get_string_from_utf8()
 		
 		var raumliste = load("res://raumliste.tscn").instantiate()
 		get_tree().get_root().add_child(raumliste)

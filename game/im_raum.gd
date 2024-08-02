@@ -19,4 +19,5 @@ func _on_leave_button_pressed():
 	self.queue_free()
 	
 	for child in root.get_children():
-		child.show()
+		if child is Control:
+			child.show()
