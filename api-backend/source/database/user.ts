@@ -66,9 +66,8 @@ export async function registerAuthtoken(user_id: number, token: string) {
   try {
     // Transaktion starten
     await client.query('BEGIN');
-
-    // Update-Abfrage
-    const query: string = 'UPDATE "user" SET token = $1 WHERE user_id = $2;';
+    await revokeAuthtoken(user_id);
+    const query:string = 'UPDATE "user" SET token = $1 WHERE user_id = $2;';
     const res = await client.query(query, [token, user_id]);
 
     // Transaktion erfolgreich, also COMMIT
@@ -89,7 +88,7 @@ export async function registerAuthtoken(user_id: number, token: string) {
 export async function revokeAuthtoken(user_id:number) {
   const client = await pool.connect();
   try {
-    let query: string = 'UPDATE "user" SET token = NULL WHERE user_id = $2;';
+    let query: string = 'UPDATE "user" SET token = NULL WHERE user_id = $1;';
 
     const res = await client.query(query,[user_id]);
     console.log(res.rows);
