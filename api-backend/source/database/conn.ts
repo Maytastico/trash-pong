@@ -11,7 +11,7 @@ pool.on('error', (err, client) => {
 export async function checkConnection() {
   const client = await pool.connect();
   try {
-    const res = await client.query('SELECT * FROM Spieler');
+    const res = await client.query('SELECT * FROM user');
     console.log(res.rows[0]);
   } finally {
     client.release();
