@@ -4,8 +4,8 @@ extends Control
 # Not present on the list of registered or common ports as of December 2022:
 # https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
 const DEFAULT_PORT = 8910
-const apiURL = "http://localhost:3000"
-var jwtToken
+const apiURL = "http://localhost:3000" # API-URL
+var jwtToken                         
 @onready var username = $Name
 @onready var host_button = $HostButton
 #@onready var join_button = $JoinButton
@@ -106,7 +106,7 @@ func _on_host_pressed():
 	
 	
 func _ping():
-	var url = apiURL + "/ping"
+	var url = apiURL + "/health/ping"
 	var err = pingRequest.request(url, [], HTTPClient.METHOD_GET)
 	if err != OK:
 		_set_status("Internal Error", false)
@@ -116,10 +116,18 @@ func _ping():
 	
 func _login():
 	var url = apiURL + "/user/login"
-	var err = loginRequest.request(url, [], HTTPClient.METHOD_POST)
+	var name = '"'+ username.text + '"'
+	var json_obj = {"username": name}
+	var json_string =  JSON.new().stringify(json_obj)
+
+	var headers = ["Content-Type: application/json"]
+	
+	var err = loginRequest.request(url, headers, HTTPClient.METHOD_POST, json_string)
 	if err != OK:
 		_set_status("Internal Error", false)
 		print("Failed to send request: ", err)
+		return -1
+	return 0
 		
 	#peer = ENetMultiplayerPeer.new()
 	#var err = peer.create_server(DEFAULT_PORT, 1) # Maximum of 1 peer, since it's a 2-player game.
@@ -164,14 +172,17 @@ func _on_ping_request_completed(result, response_code, headers, body):
 		#get_tree().get_root().add_child(raumliste)
 		#hide()
 		return 0
-		# Hier dein Code, der ausgeführt wird, wenn die API online ist
-	else:
-		_set_status("No Connection", false)
-		host_button.set_disabled(false)
-		return -1
 
 
 func _on_login_request_completed(result, response_code, headers, body):
 	if result == OK and response_code == 200:
-		var response_text = body.get_string_from_utf8()
-		print("Response Text:", response_text)
+		jwtToken = body.get_string_from_utf8()
+		
+		var raumliste = load("res://raumliste.tscn").instantiate()
+		get_tree().get_root().add_child(raumliste)
+		hide()
+	else:
+		_set_status("No Connection", false)
+		host_button.set_disabled(false)
+		return -1
+		
