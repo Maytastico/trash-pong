@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhnvjhtyhh65c"]
+[gd_scene load_steps=3 format=3 uid="uid://bhnvjhtyhh65c"]
 
+[ext_resource type="Script" path="res://im_raum.gd" id="1_bwh5w"]
 [ext_resource type="FontFile" uid="uid://baeom0xb31cqk" path="res://ressources/PressStart2P-Regular.ttf" id="1_niiwp"]
 
 [node name="ImRaum" type="Control"]
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_bwh5w")
 
 [node name="Raumname" type="Label" parent="."]
 layout_mode = 0
@@ -71,3 +73,5 @@ offset_right = 952.0
 offset_bottom = 335.0
 theme_override_fonts/font = ExtResource("1_niiwp")
 text = "Joiner"
+
+[connection signal="pressed" from="LeaveButton" to="." method="_on_leave_button_pressed"]

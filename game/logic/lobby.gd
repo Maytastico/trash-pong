@@ -168,9 +168,7 @@ func _login():
 
 func _on_ping_request_completed(result, response_code, headers, body):
 	if response_code == 200:
-		#var raumliste = load("res://raumliste.tscn").instantiate()
-		#get_tree().get_root().add_child(raumliste)
-		#hide()
+
 		return 0
 
 

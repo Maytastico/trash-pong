@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cvdld70iesfj0"]
+[gd_scene load_steps=4 format=3 uid="uid://cvdld70iesfj0"]
 
+[ext_resource type="Script" path="res://create_room.gd" id="1_kx5jo"]
 [ext_resource type="FontFile" uid="uid://baeom0xb31cqk" path="res://ressources/PressStart2P-Regular.ttf" id="1_lrs6h"]
 [ext_resource type="Script" path="res://logic/RequirePassword.gd" id="2_s5wax"]
 
@@ -14,12 +15,13 @@ offset_right = -8.0
 offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_kx5jo")
 
 [node name="Raumname" type="Label" parent="."]
 layout_mode = 0
 offset_left = 64.0
 offset_top = 72.0
-offset_right = 192.0
+offset_right = 240.0
 offset_bottom = 95.0
 theme_override_fonts/font = ExtResource("1_lrs6h")
 text = "Create Room"
@@ -84,4 +86,5 @@ offset_top = -8.0
 offset_right = 432.0
 offset_bottom = 39.0
 
+[connection signal="pressed" from="CancelButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="toggled" from="RequirePassword" to="RequirePassword" method="_on_toggled"]

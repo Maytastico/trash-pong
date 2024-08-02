@@ -1,6 +1,6 @@
-extends CheckButton
+extends Control
 
-@onready var passwordlabel = $"../PasswordLabel"
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -11,13 +11,12 @@ func _process(delta):
 	pass
 
 
-func _on_toggled(toggled_on):
-	if (toggled_on):
-		passwordlabel.visible = true
-	if(!toggled_on):
-		passwordlabel.visible = false
 
+func _on_leave_button_pressed():
+	var root = get_tree().get_root()
+	root.remove_child(self)
 
-
-
-
+	self.queue_free()
+	
+	for child in root.get_children():
+		child.show()
