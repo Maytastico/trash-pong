@@ -74,18 +74,32 @@ func printAllRooms():
 		
 func fillRoomList():
 	RaumListe.clear()
-	var titlewidth = 30
-	var playercountwidth = 20
+	var titlewidth = 45
+	var playercountwidth = 60
 	var creatorwitdh = 20
+	var locked_icon = load("res://ressources/lock.png")
+	var unlocked_icon = load("res://ressources/unlocked.png")
 	for room in Global.rooms:
-		var player_amount = 2
+		var player_amount = 1
+		if(room.player2 != null):
+			player_amount = 2
 		var title = room.title.rpad(titlewidth)
 		var player_count_text = ("%d/2" % [player_amount]).rpad(playercountwidth)
 		var creator_text = room.player1.rpad(creatorwitdh)
 		
 		var ListItem = title + player_count_text + creator_text
-		RaumListe.add_item(ListItem)
+		if(room.public):
+			RaumListe.add_item(ListItem, unlocked_icon)
+		else:
+			RaumListe.add_item(ListItem, locked_icon)
 		
 	
 
 
+
+
+func _on_refresh_pressed():
+	var url = Global.apiURL + "/api/room"
+	var token = Global.jwtToken
+	var headers = ["Authorization: Bearer %s" % token]
+	allSeRoomsRequest.request(url, headers, HTTPClient.METHOD_GET)
