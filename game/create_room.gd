@@ -9,6 +9,7 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	RoomnameObject.text = Global.username + "'s Room"
 	pass # Replace with function body.
 
 
@@ -34,7 +35,7 @@ func _on_cancel_button_pressed():
 
 func _on_create_button_pressed():
 	var Roomname = RoomnameObject.text
-	var needsPassword = requirePasswordObject.toggled 
+	var needsPassword = !requirePasswordObject.button_pressed
 	var password = PasswordLabel.text
 	var jsonObject = {
 		"title" : Roomname,
@@ -46,7 +47,10 @@ func _on_create_button_pressed():
 	var json_string =  JSON.new().stringify(jsonObject)
 	var url = Global.apiURL + "/api/room"
 	var token = Global.jwtToken
-	var headers = ["Authorization: Bearer %s" % token]
+	var headers = [
+	"Authorization: Bearer %s" % token,
+	"Content-Type: application/json"
+	]
 	createRoomRequest.request(url, headers, HTTPClient.METHOD_POST, json_string)
 
 

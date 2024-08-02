@@ -2,10 +2,10 @@ extends Control
 
 @onready var allSeRoomsRequest = %GetAllSeRooms
 @onready var RaumListe = $ItemList
-@onready var ClickTimer = $Refresh/Timer
 @onready var RefrshButton = $Refresh
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	RefrshButton.disabled = true
 	var url = Global.apiURL + "/api/room"
 	var token = Global.jwtToken
 	var headers = ["Authorization: Bearer %s" % token]
@@ -18,9 +18,11 @@ func _process(delta):
 
 		
 func _on_join_room_pressed():
-	var imraum = load("res://im_raum.tscn").instantiate()
-	get_tree().get_root().add_child(imraum)
-	hide()
+	var selected_items = RaumListe.get_selected_items()
+	print(Global.rooms[selected_items[0]].title)
+	#var imraum = load("res://im_raum.tscn").instantiate()
+	#get_tree().get_root().add_child(imraum)
+	#hide()
 
 
 func _on_create_room_pressed():
@@ -41,6 +43,7 @@ func _on_get_all_se_rooms_request_completed(result, response_code, headers, body
 			fillRoomList()
 	else:
 		print("error")
+	RefrshButton.disabled = false
 		
 
 func fill_room_array(data):
@@ -48,17 +51,17 @@ func fill_room_array(data):
 	for item in data:
 		var room = preload("res://logic/Rooms.gd").new()
 		room.raum_id = item.get("raum_id", 0)
-		room.spieler_id_1 = item.get("spieler_id1", 0)
-		room.spieler_id_2 = item.get("spieler_id2", 0)
-		room.public = item.get("Öffentlich", true)
+		room.spieler_id_1 = item.get("user_id1", 0)
+		room.spieler_id_2 = item.get("user_id2", 0)
+		room.public = item.get("öffentlich", true)
 		var pw = item.get("passwort", "")
 		if(pw == null):
 			room.password = ""
 		else:
 			room.password = pw
 		room.title = item.get("titel", "Rooom")
-		room.player1 = item.get("spieler1", "Player1")
-		var player2 = item.get("spieler2", "Player2")
+		room.player1 = item.get("user1", "Player1")
+		var player2 = item.get("user2", "Player2")
 		if(player2 ==null):
 			room.player2 = ""
 		else:
@@ -106,12 +109,10 @@ func fillRoomList():
 
 func _on_refresh_pressed():
 	RefrshButton.disabled = true
-	ClickTimer.start()
 	var url = Global.apiURL + "/api/room"
 	var token = Global.jwtToken
 	var headers = ["Authorization: Bearer %s" % token]
 	allSeRoomsRequest.request(url, headers, HTTPClient.METHOD_GET)
 
 
-func _on_timer_timeout():
-	RefrshButton.disabled = false
+

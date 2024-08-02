@@ -97,6 +97,7 @@ size_flags_vertical = 2
 theme_override_fonts/font = ExtResource("1_sxk5a")
 theme_override_font_sizes/font_size = 16
 placeholder_text = "Thomas Kircher"
+max_length = 20
 
 [node name="HostButton" type="Button" parent="LobbyPanel"]
 layout_mode = 0

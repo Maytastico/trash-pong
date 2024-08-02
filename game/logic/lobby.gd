@@ -111,8 +111,8 @@ func _ping():
 	
 func _login():
 	var url = Global.apiURL + "/user/login"
-	var name = username.text
-	var json_obj = {"username": name}
+	Global.username = username.text
+	var json_obj = {"username": Global.username}
 	var json_string =  JSON.new().stringify(json_obj)
 
 	var headers = ["Content-Type: application/json"]

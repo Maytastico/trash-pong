@@ -36,7 +36,7 @@ const dbAllRooms = async (req: Request, res: Response, next: NextFunction) => {
       const newRoom = await createRoom(title, pw, oeffentlich, user_id1, user_id2);
       return res.status(201).json(newRoom);
     } catch (err) {
-      return res.sendStatus(404);
+      return res.sendStatus(404).json({error: err.message});
     }
   }
 export{dbCreateRoom}; 
