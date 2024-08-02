@@ -3,9 +3,10 @@ import { generateAccessToken, registerUserToken } from "../auth/auth";
 import { doesUserExist, registerUser } from "../database/user";
 
 export const login = async (req: Request, res: Response, next: NextFunction) =>{
-    const username: string = req.body.username
+    let username: string = req.body.username
     res.setHeader('Content-Type', 'text/plain');
     if(username !== undefined){
+        username = username.trim();
         if(username.length > 1){
             let result:boolean = await doesUserExist(username);
             if(result === false){

@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import {SECRET_KEY} from './token'
+import { registerAuthtoken } from "../database/user";
 
 
 export type User = {
@@ -14,8 +15,7 @@ export function generateAccessToken(username: string):string {
 }   
 
 export function registerUserToken(username: string, token: string): void{
-    let element: User= {username: username, token: token};
-    users.push(element)
+    registerAuthtoken()
 }
 
 export function getUserFromToken(token:string): User | undefined{
