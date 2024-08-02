@@ -42,3 +42,37 @@ export async function registerUser(name:string) {
     client.release();
   } 
 }
+
+export async function registerAuthtoken(username:string, token:string) {
+  const client = await pool.connect();
+  try {
+    let query: string = 'INSERT INTO "user"("token") VALUES ($1) where "name" like $2;';
+
+    const res = await client.query(query,[token, username]);
+    console.log(res.rows);
+    return res.rows;
+  } catch (err) {
+    await client.query('ROLLBACK');
+    console.error('Error executing query', err);
+    throw err;  // Weiterleiten des Fehlers an den Aufrufer
+  } finally {
+    client.release();
+  } 
+}
+
+export async function revokeAuthtoken(username:string, token:string) {
+  const client = await pool.connect();
+  try {
+    let query: string = 'INSERT INTO "user"("token") VALUES (NULL) where "name" like $1;';
+
+    const res = await client.query(query,[username]);
+    console.log(res.rows);
+    return res.rows;
+  } catch (err) {
+    await client.query('ROLLBACK');
+    console.error('Error executing query', err);
+    throw err;  // Weiterleiten des Fehlers an den Aufrufer
+  } finally {
+    client.release();
+  } 
+}
