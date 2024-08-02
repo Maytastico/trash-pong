@@ -5,7 +5,6 @@ import routes from './routes/index';
 
 const router: Express = express();
 
-router.use(express.json())
 router.use(morgan('dev'));
 router.use(express.urlencoded({extended: false}));
 router.use(express.json());
@@ -14,8 +13,13 @@ router.use((req: any, res: any, next: Function) => {
     // CORS Policy and headers
     // @ts-ignore
     res.header('Access-Control-Allow-Origin', '*');
+<<<<<<< HEAD
     //res.header('Access-Control-Allow-Headers', 'origin, X-Requested-With, Content-Type, Accept', 'Authorization');
     res.header('Access-Control-Allow-Headers', '*');
+=======
+    res.header('Access-Control-Allow-Headers', '*');
+
+>>>>>>> 067616cbf8895928bfdeee48b8e19b3b1738d254
     if(req.method === 'OPTIONS') {
         // @ts-ignore
         res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
