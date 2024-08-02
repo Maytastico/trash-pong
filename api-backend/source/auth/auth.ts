@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import {SECRET_KEY} from './token'
 
+
 export type User = {
     username: string;
     token: string;
