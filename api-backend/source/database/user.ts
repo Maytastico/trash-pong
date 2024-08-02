@@ -86,12 +86,12 @@ export async function registerAuthtoken(user_id: number, token: string) {
 }
 
 
-export async function revokeAuthtoken(username:string, token:string) {
+export async function revokeAuthtoken(user_id:number) {
   const client = await pool.connect();
   try {
-    let query: string = 'INSERT INTO "user"("token") VALUES (NULL) where "name" like $1;';
+    let query: string = 'UPDATE "user" SET token = NULL WHERE user_id = $2;';
 
-    const res = await client.query(query,[username]);
+    const res = await client.query(query,[user_id]);
     console.log(res.rows);
     return res.rows;
   } catch (err) {

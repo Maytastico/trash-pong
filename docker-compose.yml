@@ -43,4 +43,4 @@ services:
     depends_on:
       - backend
 volumes:
-  postgressql:
+  db:
