@@ -12,6 +12,24 @@ export async function getUser(id:number):Promise<User>{
   }
 }
 
+export async function getUserByName(name: string): Promise<User> {
+  const client = await pool.connect();
+  try {
+    const res = await client.query('SELECT * FROM "user" WHERE name = $1 LIMIT 1', [name]);
+    if (res.rows.length > 0) {
+      return res.rows[0] as User;
+    } else {
+      throw new Error('User not found');
+    }
+  } catch (err) {
+    console.error('Error executing query', err);
+    throw err;  // Weiterleiten des Fehlers an den Aufrufer
+  } finally {
+    client.release();
+  }
+}
+
+
 export async function doesUserExist(name:string):Promise<boolean>{
   const client = await pool.connect();
   try {
@@ -43,15 +61,22 @@ export async function registerUser(name:string) {
   } 
 }
 
-export async function registerAuthtoken(username:string, token:string) {
+export async function registerAuthtoken(user_id: number, token: string) {
   const client = await pool.connect();
   try {
-    let query: string = 'INSERT INTO "user"("token") VALUES ($1) where "name" like $2;';
+    // Transaktion starten
+    await client.query('BEGIN');
 
-    const res = await client.query(query,[token, username]);
-    console.log(res.rows);
-    return res.rows;
+    // Update-Abfrage
+    const query: string = 'UPDATE "user" SET token = $1 WHERE user_id = $2;';
+    const res = await client.query(query, [token, user_id]);
+
+    // Transaktion erfolgreich, also COMMIT
+    await client.query('COMMIT');
+    console.log(res.rowCount); // Anzahl der betroffenen Zeilen anzeigen
+    return res.rowCount; // oder eine andere relevante Rückgabe
   } catch (err) {
+    // Bei Fehler, Rollback der Transaktion
     await client.query('ROLLBACK');
     console.error('Error executing query', err);
     throw err;  // Weiterleiten des Fehlers an den Aufrufer
@@ -59,6 +84,7 @@ export async function registerAuthtoken(username:string, token:string) {
     client.release();
   } 
 }
+
 
 export async function revokeAuthtoken(username:string, token:string) {
   const client = await pool.connect();

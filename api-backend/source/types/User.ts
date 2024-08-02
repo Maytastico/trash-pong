@@ -1,5 +1,5 @@
 export interface User{
     user_id: number;
-    alias: string;
+    name: string;
     punktestand: number;
 }
