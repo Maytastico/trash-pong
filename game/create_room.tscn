@@ -86,5 +86,11 @@ offset_top = -8.0
 offset_right = 432.0
 offset_bottom = 39.0
 
+[node name="ValidateSession" type="HTTPRequest" parent="."]
+
+[node name="CreateRoom" type="HTTPRequest" parent="."]
+
+[connection signal="pressed" from="CreateButton" to="." method="_on_create_button_pressed"]
 [connection signal="pressed" from="CancelButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="toggled" from="RequirePassword" to="RequirePassword" method="_on_toggled"]
+[connection signal="request_completed" from="CreateRoom" to="." method="_on_create_room_request_completed"]

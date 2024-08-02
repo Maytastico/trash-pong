@@ -2,6 +2,8 @@ extends Control
 
 @onready var allSeRoomsRequest = %GetAllSeRooms
 @onready var RaumListe = $ItemList
+@onready var ClickTimer = $Refresh/Timer
+@onready var RefrshButton = $Refresh
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var url = Global.apiURL + "/api/room"
@@ -56,7 +58,11 @@ func fill_room_array(data):
 			room.password = pw
 		room.title = item.get("titel", "Rooom")
 		room.player1 = item.get("spieler1", "Player1")
-		room.player2 = item.get("spieler2", "Player2")
+		var player2 = item.get("spieler2", "Player2")
+		if(player2 ==null):
+			room.player2 = ""
+		else:
+			room.player2 = player2
 		Global.rooms.append(room)
 		
 
@@ -81,7 +87,7 @@ func fillRoomList():
 	var unlocked_icon = load("res://ressources/unlocked.png")
 	for room in Global.rooms:
 		var player_amount = 1
-		if(room.player2 != null):
+		if(room.player2 != ""):
 			player_amount = 2
 		var title = room.title.rpad(titlewidth)
 		var player_count_text = ("%d/2" % [player_amount]).rpad(playercountwidth)
@@ -99,7 +105,13 @@ func fillRoomList():
 
 
 func _on_refresh_pressed():
+	RefrshButton.disabled = true
+	ClickTimer.start()
 	var url = Global.apiURL + "/api/room"
 	var token = Global.jwtToken
 	var headers = ["Authorization: Bearer %s" % token]
 	allSeRoomsRequest.request(url, headers, HTTPClient.METHOD_GET)
+
+
+func _on_timer_timeout():
+	RefrshButton.disabled = false

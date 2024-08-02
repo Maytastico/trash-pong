@@ -167,8 +167,11 @@ func _login():
 
 func _on_ping_request_completed(result, response_code, headers, body):
 	if response_code == 200:
-
 		return 0
+	else:
+		_set_status("No Connection", false)
+		host_button.set_disabled(false)
+		return -1
 
 
 func _on_login_request_completed(result, response_code, headers, body):

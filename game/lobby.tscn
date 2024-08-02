@@ -25,6 +25,7 @@ timeout = 10.0
 
 [node name="Login" type="HTTPRequest" parent="."]
 unique_name_in_owner = true
+timeout = 10.0
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 0
