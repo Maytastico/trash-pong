@@ -1,14 +1,20 @@
 import { Request, Response, NextFunction } from "express";
 import { generateAccessToken, registerUserToken } from "../auth/auth";
+import { doesUserExist, registerUser } from "../database/user";
 
 export const login = async (req: Request, res: Response, next: NextFunction) =>{
     const username: string = req.body.username
     res.setHeader('Content-Type', 'text/plain');
     if(username !== undefined){
         if(username.length > 1){
-            const token = generateAccessToken(username)
-            registerUserToken(username, token)
-            
+            let result:boolean = await doesUserExist(username);
+            if(result === false){
+                await registerUser(username);
+            }
+
+            const token = generateAccessToken(username);
+            registerUserToken(username, token);
+                
             return res.send(token).status(200);
         }
     }

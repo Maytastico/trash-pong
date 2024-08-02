@@ -4,6 +4,7 @@ import { getAllRooms } from "../database/room";
 import { createRoom } from "../database/room";
 import { updateRoom } from "../database/room";
 import { deleteRoom } from "../database/room"; 
+import { getUser } from "../database/user";
 
 const dbRoom = async (req: Request, res: Response, next: NextFunction) =>{
     const roomId = parseInt(req.params.id, 10);
@@ -78,3 +79,15 @@ const dbDeleteRoom = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 export { dbDeleteRoom };
+
+const dbUser = async (req: Request, res: Response, next: NextFunction) =>{
+  const userId = parseInt(req.params.id, 10);
+  const user = await getUser(userId);
+  if (user) {
+      return res.json(user).status(200);
+  } else {
+    return res.sendStatus(404); // Falls kein Raum gefunden wurde
+  }
+}
+
+export { dbUser };
