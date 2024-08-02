@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { generateAccessToken, registerUserToken } from "../auth/auth";
-import { doesUserExist, registerUser } from "../database/user";
+import { generateAccessToken } from "../auth/auth";
+import { doesUserExist, registerAuthtoken, registerUser } from "../database/user";
 
 export const login = async (req: Request, res: Response, next: NextFunction) =>{
     let username: string = req.body.username
@@ -14,7 +14,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) =>{
             }
 
             const token = generateAccessToken(username);
-            registerUserToken(username, token);
+            registerAuthtoken(username, token);
                 
             return res.send(token).status(200);
         }
