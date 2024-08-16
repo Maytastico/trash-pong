@@ -24,7 +24,7 @@ func _ready():
 	multiplayer.connected_to_server.connect(_connected_ok)
 	multiplayer.connection_failed.connect(_connected_fail)
 	multiplayer.server_disconnected.connect(_server_disconnected)
-
+	username.grab_focus()
 #### Network callbacks from SceneTree ####
 
 # Callback from SceneTree.
@@ -182,3 +182,12 @@ func _on_login_request_completed(result, response_code, headers, body):
 		host_button.set_disabled(false)
 		return -1
 		
+
+
+
+
+
+
+
+func _on_name_text_submitted(new_text):
+	host_button.emit_signal("pressed")

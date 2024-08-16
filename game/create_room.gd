@@ -40,9 +40,7 @@ func _on_create_button_pressed():
 	var jsonObject = {
 		"title" : Roomname,
 		"pw" : password,
-		"oeffentlich" : needsPassword,
-		"user_id1" : 1,
-		"user_id2" : 0
+		"oeffentlich" : needsPassword
 	}
 	var json_string =  JSON.new().stringify(jsonObject)
 	var url = Global.apiURL + "/api/room"

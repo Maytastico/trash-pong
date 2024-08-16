@@ -85,6 +85,7 @@ offset_left = 136.0
 offset_top = -8.0
 offset_right = 432.0
 offset_bottom = 39.0
+max_length = 25
 
 [node name="ValidateSession" type="HTTPRequest" parent="."]
 
