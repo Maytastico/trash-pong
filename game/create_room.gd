@@ -58,6 +58,15 @@ func _on_create_button_pressed():
 func _on_create_room_request_completed(result, response_code, headers, body):
 	print(str(response_code))
 	if(response_code == 201):
+		var body_str = body.get_string_from_utf8()
+		print(body_str)
+		var json = JSON.new()
+		var parse_result = json.parse(body_str)
+		if parse_result == OK:
+			var data = json.get_data()
+			Global.activeRoomID = data[0].get("raum_id", -1)
+			print(str(Global.activeRoomID))
+			
 		var imraum = load("res://im_raum.tscn").instantiate()
 		get_tree().get_root().add_child(imraum)
 		hide()
