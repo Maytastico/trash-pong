@@ -3,6 +3,7 @@ import express, { Express } from 'express';
 import morgan from 'morgan';    
 import routes from './routes/index';
 import WebSocket from 'ws';
+import { initializeWebSocketServer } from './gameclient/socket';
 
 const router: Express = express();
 
@@ -40,6 +41,6 @@ if(process.env.PORT != undefined && parseInt(process.env.PORT) > 0) {
     port = parseInt(process.env.PORT);
 }
 
-const wss = new WebSocket.Server({server: httpServer});
+initializeWebSocketServer(httpServer);
 
 httpServer.listen(port, () => console.log(`The server listening on port ${port}`));
