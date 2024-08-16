@@ -1,4 +1,5 @@
-import express from 'express';import {dbRoom, dbAllRooms, dbUser} from '../controllers/api.controller';
+import express from 'express';
+import {dbRoom, dbAllRooms, dbUser} from '../controllers/api.controller';
 import {dbCreateRoom} from '../controllers/api.controller'; 
 import { dbUpdateRoom } from '../controllers/api.controller';
 import { dbDeleteRoom } from '../controllers/api.controller';  

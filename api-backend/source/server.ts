@@ -2,6 +2,7 @@ import http from 'http';
 import express, { Express } from 'express';
 import morgan from 'morgan';    
 import routes from './routes/index';
+import WebSocket from 'ws';
 
 const router: Express = express();
 
@@ -34,11 +35,13 @@ router.use((req: any, res:any) => {
     });
 });
 
-const httpServer = http.createServer((router))
+const httpServer: http.Server = http.createServer((router))
 
 let port: number = 3000;
 if(process.env.PORT != undefined && parseInt(process.env.PORT) > 0) {
     port = parseInt(process.env.PORT);
 }
+
+const wss = new WebSocket.Server({server: httpServer});
 
 httpServer.listen(port, () => console.log(`The server listening on port ${port}`));
