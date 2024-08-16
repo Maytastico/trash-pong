@@ -5,6 +5,8 @@ import { createRoom } from "../database/room";
 import { updateRoom } from "../database/room";
 import { deleteRoom } from "../database/room"; 
 import { getUser } from "../database/user";
+import { decodeAccessToken } from "../auth/auth";
+import { User } from "../types/User";
 
 const dbRoom = async (req: Request, res: Response, next: NextFunction) =>{
     const roomId = parseInt(req.params.id, 10);
@@ -28,13 +30,22 @@ const dbAllRooms = async (req: Request, res: Response, next: NextFunction) => {
   export { dbRoom, dbAllRooms };
 
   const dbCreateRoom = async (req: Request, res: Response, next: NextFunction) => {
+    const reqHeader = req.header('Authorization')
+    let token:string
+    if (reqHeader){
+      token = reqHeader.replace('Bearer ', '');
+    }else{
+      return res.status(401).send('Authorization header is missing');
+    }
+
     try {
-      const { title, pw, oeffentlich, user_id1, user_id2 } = req.body;
-      if (!title || !pw || oeffentlich === undefined || user_id1 === undefined) {
-        return res.status(400).json({ error: "Alle Felder außer user_id2 sind notwendig!" });
+      const { title, pw, oeffentlich, user_id1} = req.body;
+      let user: User = decodeAccessToken(token);
+      if (!title || !pw || oeffentlich === undefined) {
+        return res.status(400).json({ error: "title is requiered" });
       }
-      const newRoom = await createRoom(title, pw, oeffentlich, user_id1, user_id2);
-      return res.status(201).json(newRoom);
+      const newRoom = await createRoom(title, pw, oeffentlich, user.user_id, null);
+      return res.status(201).json();
     } catch (err) {
       return next(err);
     }
@@ -46,7 +57,7 @@ const dbUpdateRoom = async (req: Request, res: Response, next: NextFunction) => 
     const roomId = parseInt(req.params.id, 10);
     const { title, pw, oeffentlich, user_id1, user_id2 } = req.body;
     
-    if (!title || !pw || oeffentlich === undefined || user_id1 === undefined || user_id2 === undefined) {
+    if (!title || !pw || oeffentlich === undefined || user_id1 === undefined) {
       return res.status(400).json({ error: "All fields are required" });
     }
     
