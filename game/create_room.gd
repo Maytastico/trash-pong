@@ -37,6 +37,8 @@ func _on_create_button_pressed():
 	var Roomname = RoomnameObject.text
 	var needsPassword = !requirePasswordObject.button_pressed
 	var password = PasswordLabel.text
+	if(needsPassword):
+		password = null;
 	var jsonObject = {
 		"title" : Roomname,
 		"pw" : password,
@@ -55,4 +57,7 @@ func _on_create_button_pressed():
 
 func _on_create_room_request_completed(result, response_code, headers, body):
 	print(str(response_code))
-	pass # Replace with function body.
+	if(response_code == 201):
+		var imraum = load("res://im_raum.tscn").instantiate()
+		get_tree().get_root().add_child(imraum)
+		hide()
