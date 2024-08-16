@@ -34,7 +34,7 @@ export async function getAllRooms(): Promise<any[]> {
       client.release();
     }
   }
-export async function createRoom(title:string,pw:string,oeffentlich:boolean,user_id1:number,user_id2:number) {
+export async function createRoom(title:string,pw:string,oeffentlich:boolean,user_id1:number,user_id2:number | null) {
   const client = await pool.connect();
   try {
     const res = await client.query('Insert into Raum(titel,passwort,öffentlich,user_id1,user_id2)values($1,$2,$3,$4,$5);',[title,pw,oeffentlich,user_id1,user_id2]);
