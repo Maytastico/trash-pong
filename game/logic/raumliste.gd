@@ -66,7 +66,9 @@ func fill_room_array(data):
 		var room = preload("res://logic/Rooms.gd").new()
 		room.raum_id = item.get("raum_id", 0)
 		room.spieler_id_1 = item.get("user_id1", 0)
-		room.spieler_id_2 = item.get("user_id2", 0)
+		var spieler2_id = item.get("user_id2", 0)
+		if(spieler2_id == null):
+			room.spieler_id_2 = ""
 		room.public = item.get("öffentlich", true)
 		var pw = item.get("passwort", "")
 		if(pw == null):
