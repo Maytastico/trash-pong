@@ -39,13 +39,13 @@ const dbAllRooms = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     try {
-      const { title, pw, oeffentlich, user_id1} = req.body;
+      const { title, pw, oeffentlich} = req.body;
       let user: User = decodeAccessToken(token);
       if (!title || !pw || oeffentlich === undefined) {
         return res.status(400).json({ error: "title is requiered" });
       }
       const newRoom = await createRoom(title, pw, oeffentlich, user.user_id, null);
-      return res.status(201).json();
+      return res.status(201).json(newRoom);
     } catch (err) {
       return next(err);
     }
