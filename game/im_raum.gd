@@ -22,9 +22,21 @@ func _process(delta):
 func on_socket_connect(_payload: Variant, _name_space, error: bool):
 	if error:
 		print("Error connecting to socket")
+		print(_payload)
+		print(_name_space)
+		var root = get_tree().get_root()
+		root.remove_child(self)
+		Global.client.socketio_disconnect()
+		self.queue_free()
+		
+		for child in root.get_children():
+			if child is Control:
+				if child.name == "CreateRoom":
+					continue
+				child.show()
 	else:
-		_payload = {"roomId" : Global.rooms[Global.activeRoomID].raum_id, "playerId" : 3}
-		Global.client.socketio_send("joinRoom", _payload)
+		var packet = {"roomId" : Global.rooms[Global.activeRoomID].raum_id, "playerId" : 3}
+		Global.client.socketio_send("joinRoom", packet)
 		SetRoomProperties()
 		self.show()
 		
