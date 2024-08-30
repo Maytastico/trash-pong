@@ -52,13 +52,18 @@ export function initializeWebSocketServer(server: http.Server): void {
         ws.on('joinRoom', async (data: { roomId: number;}) => {
             const { roomId} = data;
 
-            const token = ws.request.headers['authorization'];
-                // Überprüfe, ob der Token existiert
-            if (!token) {
-                console.error('Authorization header is missing.');
-                ws.emit('error', 'Authorization header is missing');
-                return;
+            const headers = ws.request.headers
+
+            let token:  string;
+
+            if(headers['authorization'])
+                token = headers['authorization']
+            else if(ws.handshake.auth.token){
+                token = ws.handshake.auth.token
+            }else{
+                throw new Error("No Bearer Token set in header");
             }
+
             // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
             let player: User;
             try {
