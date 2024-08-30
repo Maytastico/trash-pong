@@ -7,3 +7,4 @@ const apiURL = "http://localhost:3000" # API-URL
 var rooms = []
 @onready var client = SocketIOClient
 @onready var activeRoomID : int = -1
+@onready var activeRoom 
