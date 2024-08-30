@@ -11,7 +11,7 @@ PGDATABASE=pong_daten
 
 1. Erstelle in dem Ordner ``source/auth`` die Datei token.ts
 
-2. Erstelle dir einen key indem du die node Konsole ``node`` (in der Konsole) aufrufst
+2. Erstelle dir einen key, indem du in der Konsole ``node`` aufrufst
 
 3. Führe folgendes Kommando aus
 ```js
