@@ -8,7 +8,7 @@ func _ready():
 	Global.client.on_connect.connect(on_socket_connect)
 	Global.client.on_event.connect(on_socket_event)
 	add_child(Global.client)
-	pass # Replace with function body.
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -16,11 +16,16 @@ func _process(delta):
 	pass
 
 func on_socket_connect(_payload: Variant, _name_space, error: bool):
-	pass
+	if error:
+		print("Error connecting to socket")
+	else:
+		_payload = {"roomId" : 1, "playerId" : 3}
+		Global.client.socketio_send("joinRoom", _payload)
 func on_socket_ready(_sid: String):
-	pass
+	Global.client.socketio_connect()
 
 func on_socket_event(event_name: String, payload: Variant, _name_space):
+	print("Received ", event_name, " ", payload)
 	pass
 
 func _on_leave_button_pressed():
