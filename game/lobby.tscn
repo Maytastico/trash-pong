@@ -54,6 +54,10 @@ size_flags_vertical = 2
 script = ExtResource("1")
 
 [node name="Title" type="Label" parent="LobbyPanel"]
+<<<<<<< HEAD
+=======
+custom_minimum_size = Vector2(300, 50)
+>>>>>>> 86a2fbc (Responsive_Layout eingefuegt)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
