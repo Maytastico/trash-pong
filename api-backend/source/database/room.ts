@@ -53,7 +53,7 @@ export async function updateRoom(id: number, title: string, pw: string, oeffentl
   try {
     const query = `
       UPDATE Raum 
-      SET titel = $1, passwort = $2, Öffentlich = $3, user_id1 = $4, user_id2 = $5 
+      SET titel = $1, passwort = $2, öffentlich = $3, user_id1 = $4, user_id2 = $5 
       WHERE raum_id = $6 
       RETURNING *;
     `;
