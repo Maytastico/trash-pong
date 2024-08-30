@@ -1,12 +1,12 @@
-import WebSocket from 'ws';
+import { Server as SocketIOServer } from 'socket.io';
 import http from 'http';
 
-let wss: WebSocket.Server | undefined;
+export let io: SocketIOServer;
 
 export function initializeWebSocketServer(server: http.Server): void {
-    wss = new WebSocket.Server({ server });
+    io = new SocketIOServer(server);
 
-    wss.on('connection', (ws) => {
+    io.on('connection', (ws) => {
         console.log('New WebSocket connection');
 
         ws.on('message', (message) => {
