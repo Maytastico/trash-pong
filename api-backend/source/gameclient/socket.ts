@@ -20,10 +20,17 @@ export function initializeWebSocketServer(server: http.Server): void {
     io.use((socket, next) => {
 
         try {
-            const token = socket.request.headers['authorization'];
-         
-            if (!token) {
-              throw new Error("No Bearer Token set in header");
+
+            const headers = socket.request.headers
+
+            let token:  string;
+
+            if(headers['authorization'])
+                token = headers['authorization']
+            else if(socket.handshake.auth.token){
+                token = socket.handshake.auth.token
+            }else{
+                throw new Error("No Bearer Token set in header");
             }
          
             const decoded = jwt.verify(token, SECRET_KEY);
