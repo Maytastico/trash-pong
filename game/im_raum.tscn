@@ -19,7 +19,6 @@ offset_top = 72.0
 offset_right = 192.0
 offset_bottom = 95.0
 theme_override_fonts/font = ExtResource("1_niiwp")
-text = "Raumname"
 
 [node name="StartButton" type="Button" parent="."]
 layout_mode = 0
@@ -44,7 +43,6 @@ offset_top = 64.0
 offset_right = 1072.0
 offset_bottom = 87.0
 theme_override_fonts/font = ExtResource("1_niiwp")
-text = "1/2"
 
 [node name="CreatorLabel" type="Label" parent="."]
 layout_mode = 0
@@ -53,7 +51,6 @@ offset_top = 312.0
 offset_right = 312.0
 offset_bottom = 335.0
 theme_override_fonts/font = ExtResource("1_niiwp")
-text = "Creator"
 
 [node name="vsLabel" type="Label" parent="."]
 layout_mode = 0
@@ -72,6 +69,5 @@ offset_top = 312.0
 offset_right = 952.0
 offset_bottom = 335.0
 theme_override_fonts/font = ExtResource("1_niiwp")
-text = "Joiner"
 
 [connection signal="pressed" from="LeaveButton" to="." method="_on_leave_button_pressed"]
