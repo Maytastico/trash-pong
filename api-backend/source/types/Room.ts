@@ -6,7 +6,13 @@ export interface RoomClient{
     ws?: Socket,
 }
 
-export interface CustomWebSocket extends Socket {
-    roomId?: string;
-    playerId?: string;
+export interface Raum{
+    room_id: number,
+    titel: string,
+    user_id1: number,
+    user_id2: number,
+    öffentlich: boolean,
+    passwort: string,
+    user1: string
+    user2: string
 }

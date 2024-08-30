@@ -4,7 +4,7 @@
   "description": "Restful API Backend for Pong Reimagined",
   "main": "source/server.ts",
   "scripts": {
-    "dev": "cross-env  PGUSER=testuser PGPASSWORD=SicheresPasswort! PGDATABASE=pong_daten nodemon source/server.ts",
+    "dev": "cross-env PGHOST=127.0.0.1 PGUSER=testuser PGPASSWORD=SicheresPasswort! PGDATABASE=pong_daten nodemon source/server.ts",
     "dev-virtual-machine": "cross-env PGHOST=192.168.1.1 PGUSER=testuser PGPASSWORD=SicheresPasswort! PGDATABASE=pong_daten nodemon source/server.ts",
     "debug": "cross-env  PGUSER=testuser PGPASSWORD=SicheresPasswort! PGDATABASE=pong_daten nodemon --exec 'node --inspect=0.0.0.0:9229 --require ts-node/register source/server.ts' ",
     "build": "rm -rf ./dist && tsc",
