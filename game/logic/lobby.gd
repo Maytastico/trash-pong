@@ -15,15 +15,15 @@ const DEFAULT_PORT = 8910
 @onready var loginRequest = %Login
 
 
-var peer = null
+#var peer = null
 
 func _ready():
 	# Connect all the callbacks related to networking.
-	multiplayer.peer_connected.connect(_player_connected)
-	multiplayer.peer_disconnected.connect(_player_disconnected)
-	multiplayer.connected_to_server.connect(_connected_ok)
-	multiplayer.connection_failed.connect(_connected_fail)
-	multiplayer.server_disconnected.connect(_server_disconnected)
+	#multiplayer.peer_connected.connect(_player_connected)
+	#multiplayer.peer_disconnected.connect(_player_disconnected)
+	#multiplayer.connected_to_server.connect(_connected_ok)
+	#multiplayer.connection_failed.connect(_connected_fail)
+	#multiplayer.server_disconnected.connect(_server_disconnected)
 	username.grab_focus()
 #### Network callbacks from SceneTree ####
 
@@ -182,12 +182,6 @@ func _on_login_request_completed(result, response_code, headers, body):
 		host_button.set_disabled(false)
 		return -1
 		
-
-
-
-
-
-
 
 func _on_name_text_submitted(new_text):
 	host_button.emit_signal("pressed")

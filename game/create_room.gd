@@ -65,8 +65,12 @@ func _on_create_room_request_completed(result, response_code, headers, body):
 		if parse_result == OK:
 			var data = json.get_data()
 			Global.activeRoomID = data[0].get("raum_id", -1)
-			print(str(Global.activeRoomID))
 			
 		var imraum = load("res://im_raum.tscn").instantiate()
 		get_tree().get_root().add_child(imraum)
 		hide()
+		
+		
+		
+
+		
