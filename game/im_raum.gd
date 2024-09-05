@@ -36,9 +36,9 @@ func on_socket_connect(_payload: Variant, _name_space, error: bool):
 					continue
 				child.show()
 	else:
-		var packet = {"roomId" : Global.rooms[Global.activeRoomID].raum_id, "playerId" : 3}
+		var packet = {"roomId" : Global.activeRoom.raum_id, "playerId" : 3}
 		Global.client.socketio_send("joinRoom", packet)
-		UpdateRoom(Global.rooms[Global.activeRoomID].raum_id)
+		UpdateRoom(Global.activeRoom.raum_id)
 		self.show()
 		
 func on_socket_ready(_sid: String):

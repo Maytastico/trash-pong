@@ -20,9 +20,6 @@ func _process(delta):
 	pass
 
 
-
-
-
 func _on_cancel_button_pressed():
 	var root = get_tree().get_root()
 	root.remove_child(self)
