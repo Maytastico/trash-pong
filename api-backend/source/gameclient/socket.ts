@@ -108,15 +108,17 @@ export function initializeWebSocketServer(server: http.Server): void {
                     
                     let room: Raum[] = await getRoomsByPlayerID(player.user_id);
                     
+                    console.log(room[0] as Raum);
+
                     if (room === null || typeof room === 'undefined') {
                         // Wenn der Raum nicht existiert, wird der Fehler gefangen und an den Client gesendet
-                        ws.emit('startPressed', 'No room associated with this user');
+                        ws.emit("error", "No room associated with this user");
                         return; // Beenden der Funktion, um den Fehler zu behandeln
                       }
-                    
-                    ws.to(String(room[0].room_id)).emit("starting_game",JSON.parse("{'start_game': true"));
+
+                    ws.to(room[0].raum_id.toString()).emit("starting_game",JSON.parse('{"start_game": true}'));
                     // Join the room
-                    console.log(`User ${player.name} started game ${room[0].room_id}`);
+                    console.log(`User ${player.name} started game ${room[0].raum_id}`);
                     
                     // Notify other users in the room
                 });
@@ -140,7 +142,8 @@ export function initializeWebSocketServer(server: http.Server): void {
             const rooms: Raum[] = await getRoomsByPlayerID(player.user_id);
 
             rooms.forEach(async (raum) => {
-                await deleteRoom(raum.room_id)
+                console.log("deleting room" + raum.raum_id)
+                await deleteRoom(raum.raum_id)
             });
 
             console.log(`Current rooms: ${Array.from(ws.rooms).join(', ')}`);

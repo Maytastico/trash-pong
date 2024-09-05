@@ -7,7 +7,7 @@ export interface RoomClient{
 }
 
 export interface Raum{
-    room_id: number,
+    raum_id: number,
     titel: string,
     user_id1: number,
     user_id2: number,
