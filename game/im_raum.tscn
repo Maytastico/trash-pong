@@ -72,5 +72,6 @@ theme_override_fonts/font = ExtResource("1_niiwp")
 
 [node name="GetRoom" type="HTTPRequest" parent="."]
 
+[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="LeaveButton" to="." method="_on_leave_button_pressed"]
 [connection signal="request_completed" from="GetRoom" to="." method="_on_get_room_request_completed"]

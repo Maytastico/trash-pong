@@ -46,8 +46,12 @@ func on_socket_ready(_sid: String):
 
 func on_socket_event(event_name: String, payload: Variant, _name_space):
 	print("Received ", event_name, " ", payload)
-	UpdateRoom(Global.activeRoom.raum_id)
-	pass
+	if event_name == "notification":
+		UpdateRoom(Global.activeRoom.raum_id)
+	if event_name == "starting_game":
+			var imraum = load("res://pong.tscn").instantiate()
+			get_tree().get_root().add_child(imraum)
+			hide()
 
 func _on_leave_button_pressed():
 	var root = get_tree().get_root()
@@ -118,3 +122,10 @@ func SetRoom(data):
 	else:
 		room.player2 = player2
 	Global.activeRoom = room
+
+
+func _on_start_button_pressed():
+	var payload = {"raum_id" : Global.activeRoom.raum_id}
+	var json_string =  JSON.new().stringify(payload)
+	Global.client.socketio_send("startPressed", json_string)
+	pass 

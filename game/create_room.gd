@@ -65,8 +65,6 @@ func _on_create_room_request_completed(result, response_code, headers, body):
 			var data = json.get_data()
 			Global.activeRoomID = data[0].get("raum_id", -1)
 			SetActiveRoom()
-			
-			
 
 func SetActiveRoom():
 	var url = Global.apiURL + "/api/room/" + str(Global.activeRoomID)
