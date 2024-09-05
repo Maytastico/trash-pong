@@ -93,35 +93,36 @@ export function initializeWebSocketServer(server: http.Server): void {
                     // Notify other users in the room
                     ws.to(roomId.toString()).emit('notification', `${player.name} has joined the room`);
                 });
-                ws.on('startPressed', async () => {
-                    const token = getToken(ws);
+                        ws.on('startPressed', async () => {
+                            const token = getToken(ws);
 
-                    // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
-                    let player: User;
-                    try {
-                        player = decodeAccessToken(token);
-                    } catch (err) {
-                        console.error('Invalid token');
-                        ws.emit('joinRoom', 'Invalid token');
-                        return;
-                    }
-                    
-                    let room: Raum[] = await getRoomsByPlayerID(player.user_id);
-                    
-                    console.log(room[0] as Raum);
+                            // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
+                            let player: User;
+                            try {
+                                player = decodeAccessToken(token);
+                            } catch (err) {
+                                console.error('Invalid token');
+                                ws.emit('joinRoom', 'Invalid token');
+                                return;
+                            }
+                            
+                            let room: Raum[] = await getRoomsByPlayerID(player.user_id);
+                            
+                            console.log(room[0] as Raum);
 
-                    if (room === null || typeof room === 'undefined') {
-                        // Wenn der Raum nicht existiert, wird der Fehler gefangen und an den Client gesendet
-                        ws.emit("error", "No room associated with this user");
-                        return; // Beenden der Funktion, um den Fehler zu behandeln
-                      }
-
-                    ws.to(room[0].raum_id.toString()).emit("starting_game",JSON.parse('{"start_game": true}'));
-                    // Join the room
-                    console.log(`User ${player.name} started game ${room[0].raum_id}`);
-                    
-                    // Notify other users in the room
-                });
+                            if (room === null || typeof room === 'undefined') {
+                                // Wenn der Raum nicht existiert, wird der Fehler gefangen und an den Client gesendet
+                                ws.emit("error", "No room associated with this user");
+                                return; // Beenden der Funktion, um den Fehler zu behandeln
+                            }
+                            
+                            ws.emit("starting_game", JSON.parse('{ "start_game": true }'));
+                            ws.to(room[0].raum_id.toString()).emit("starting_game",JSON.parse('{"start_game": true}'));
+                            // Join the room
+                            console.log(`User ${player.name} started game ${room[0].raum_id}`);
+                            
+                            // Notify other users in the room
+                        });
         // Handle 'sendMessage' Event
         ws.on('sendMessage', (data: { roomId: string; message: string }) => {
             const { roomId, message } = data;
