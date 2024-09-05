@@ -4,6 +4,7 @@ extends Control
 @onready var JoinerLabel = $JoinedLabel
 @onready var RaumLabel = $Raumname
 @onready var NumberOfPlayers = $NumberOfPlayers
+@onready var getRoomRequest = $GetRoom
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.client = SocketIOClient.new(Global.apiURL + "/socket.io", {"token": Global.jwtToken} )
@@ -37,7 +38,7 @@ func on_socket_connect(_payload: Variant, _name_space, error: bool):
 	else:
 		var packet = {"roomId" : Global.rooms[Global.activeRoomID].raum_id, "playerId" : 3}
 		Global.client.socketio_send("joinRoom", packet)
-		SetRoomProperties()
+		UpdateRoom(Global.rooms[Global.activeRoomID].raum_id)
 		self.show()
 		
 func on_socket_ready(_sid: String):
@@ -45,7 +46,7 @@ func on_socket_ready(_sid: String):
 
 func on_socket_event(event_name: String, payload: Variant, _name_space):
 	print("Received ", event_name, " ", payload)
-	SetRoomProperties()
+	UpdateRoom(Global.activeRoom.raum_id)
 	pass
 
 func _on_leave_button_pressed():
@@ -63,7 +64,7 @@ func _on_leave_button_pressed():
 			
 func ChangeNumberOfPlayers():
 	var number
-	if(Global.rooms[Global.activeRoomID].player2 == ""):
+	if(Global.activeRoom.player2 == ""):
 		number = 1
 	else:
 		number = 2
@@ -71,7 +72,49 @@ func ChangeNumberOfPlayers():
 	
 	
 func SetRoomProperties():
-		CreatorLabel.text = Global.rooms[Global.activeRoomID].player1
-		JoinerLabel.text = Global.rooms[Global.activeRoomID].player2
-		RaumLabel.text = Global.rooms[Global.activeRoomID].title
+		CreatorLabel.text = Global.activeRoom.player1
+		JoinerLabel.text = Global.activeRoom.player2
+		RaumLabel.text = Global.activeRoom.title
 		ChangeNumberOfPlayers()
+
+func UpdateRoom(roomID : int):
+	var url = Global.apiURL + "/api/room/" + str(roomID)
+	var token = Global.jwtToken
+	var headers = ["Authorization: Bearer %s" % token]
+	getRoomRequest.request(url, headers, HTTPClient.METHOD_GET)
+
+
+
+func _on_get_room_request_completed(result, response_code, headers, body):
+	print(str(response_code))
+	var room = preload("res://logic/Rooms.gd").new()
+	var body_str = body.get_string_from_utf8()
+	var json = JSON.new()
+	var parse_result = json.parse(body_str)
+	if parse_result == OK:
+		var data = json.get_data()
+		SetRoom(data)
+		SetRoomProperties()
+
+
+func SetRoom(data):
+	var room = preload("res://logic/Rooms.gd").new()
+	room.raum_id = data.get("raum_id", 0)
+	room.spieler_id_1 = data.get("user_id1", 0)
+	var spieler2_id = data.get("user_id2", 0)
+	if(spieler2_id == null):
+		room.spieler_id_2 = ""
+	room.public = data.get("öffentlich", true)
+	var pw = data.get("passwort", "")
+	if(pw == null):
+		room.password = ""
+	else:
+		room.password = pw
+	room.title = data.get("titel", "Rooom")
+	room.player1 = data.get("user1", "Player1")
+	var player2 = data.get("user2", "Player2")
+	if(player2 ==null):
+		room.player2 = ""
+	else:
+		room.player2 = player2
+	Global.activeRoom = room

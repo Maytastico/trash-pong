@@ -24,8 +24,9 @@ func _on_join_room_pressed():
 	if(selected_items.size() <= 0):
 		return
 	else:
-		Global.activeRoomID = selected_items[0]
-		if(!checkForPassword(Global.activeRoomID)):
+		Global.activeRoomID = Global.rooms[selected_items[0]].raum_id
+		Global.activeRoom = Global.rooms[selected_items[0]]
+		if(!checkForPassword(selected_items[0])):
 			var imraum = load("res://im_raum.tscn").instantiate()
 			get_tree().get_root().add_child(imraum)
 			hide()
