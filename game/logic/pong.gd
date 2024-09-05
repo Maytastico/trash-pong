@@ -14,20 +14,10 @@ var score_right = 0
 @onready var winner_right = $WinnerRight
 
 func _ready():
-	# By default, all nodes in server inherit from master,
-	# while all nodes in clients inherit from puppet.
-	# set_multiplayer_authority is tree-recursive by default.
-	if multiplayer.is_server():
-		# For the server, give control of player 2 to the other peer.
-		player2.set_multiplayer_authority(multiplayer.get_peers()[0])
-	else:
-		# For the client, give control of player 2 to itself.
-		player2.set_multiplayer_authority(multiplayer.get_unique_id())
-
-	print("Unique id: ", multiplayer.get_unique_id())
+	pass
 
 
-@rpc("any_peer", "call_local")
+
 func update_score(add_to_left):
 	if add_to_left:
 		score_left += 1
