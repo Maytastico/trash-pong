@@ -4,7 +4,7 @@ import { SECRET_KEY} from '../auth/token';
 import jwt, {JwtPayload} from 'jsonwebtoken';
 import { decodeAccessToken } from '../auth/auth';
 import { User } from '../types/User';
-import { getRoom, getRoomsByPlayerID, joinRoom, updateRoom } from '../database/room';
+import { deleteRoom, getRoom, getRoomsByPlayerID, joinRoom, updateRoom } from '../database/room';
 import { Raum } from '../types/Room';
 import { NextFunction } from 'express';
 
@@ -114,7 +114,7 @@ export function initializeWebSocketServer(server: http.Server): void {
                         return; // Beenden der Funktion, um den Fehler zu behandeln
                       }
                     
-                    ws.to(String(room[0].room_id)).emit("starting_game",JSON.parse("{start_game: true"));
+                    ws.to(String(room[0].room_id)).emit("starting_game",JSON.parse("{'start_game': true"));
                     // Join the room
                     console.log(`User ${player.name} started game ${room[0].room_id}`);
                     
@@ -137,9 +137,11 @@ export function initializeWebSocketServer(server: http.Server): void {
             const token = getToken(ws);
             const player: User = decodeAccessToken(token);
             
-            const rooms = await getRoomsByPlayerID(player.user_id);
+            const rooms: Raum[] = await getRoomsByPlayerID(player.user_id);
 
-            console.log(rooms);
+            rooms.forEach(async (raum) => {
+                await deleteRoom(raum.room_id)
+            });
 
             console.log(`Current rooms: ${Array.from(ws.rooms).join(', ')}`);
         });
