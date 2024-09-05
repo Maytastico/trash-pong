@@ -1,3 +1,4 @@
+import { QueryResult } from "pg";
 import { Raum} from "../types/Room";
 import { pool } from "./conn";
 
@@ -11,6 +12,40 @@ export async function getRoom(id:number): Promise<Raum>{
     client.release();
   }
 }
+
+export async function joinRoom(
+  uid_1: number | undefined, 
+  uid_2: number | undefined, 
+  room_id: number
+): Promise<Raum | null> {
+  const client = await pool.connect();
+  
+  try {
+    const query_all_user = `UPDATE Raum SET user_id1 = $1, user_id2 = $2 WHERE raum_id = $3 RETURNING *;`;
+    const query_uid1 = `UPDATE Raum SET user_id1 = $1 WHERE raum_id = $2 RETURNING *;`;
+    const query_uid2 = `UPDATE Raum SET user_id2 = $1 WHERE raum_id = $2 RETURNING *;`;
+    
+    let res: QueryResult<Raum>;
+    
+    if (typeof uid_1 !== 'undefined' && typeof uid_2 !== 'undefined') {
+      res = await client.query(query_all_user, [uid_1, uid_2, room_id]);
+    } else if (typeof uid_1 !== 'undefined') {
+      res = await client.query(query_uid1, [uid_1, room_id]);
+    } else if (typeof uid_2 !== 'undefined') {
+      res = await client.query(query_uid2, [uid_2, room_id]);
+    } else {
+      // Falls weder `uid_1` noch `uid_2` vorhanden sind, gib `null` zurück.
+      return null;
+    }
+    
+    return res.rows[0] || null;  // Gib das erste Ergebnis oder `null` zurück, falls keine Zeilen zurückgegeben werden.
+    
+  } finally {
+    client.release();
+  }
+}
+
+
 export async function getAllRooms(): Promise<any[]> {
     const client = await pool.connect();
     try {

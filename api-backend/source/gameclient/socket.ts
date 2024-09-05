@@ -4,7 +4,7 @@ import { SECRET_KEY} from '../auth/token';
 import jwt, {JwtPayload} from 'jsonwebtoken';
 import { decodeAccessToken } from '../auth/auth';
 import { User } from '../types/User';
-import { getRoom, updateRoom } from '../database/room';
+import { getRoom, joinRoom, updateRoom } from '../database/room';
 import { Raum } from '../types/Room';
 import { NextFunction } from 'express';
 
@@ -79,7 +79,7 @@ export function initializeWebSocketServer(server: http.Server): void {
             // When the player is not the user that created the room stored in user_id one the 
             // player that joined that game will be associated with user_id2
             if (room.user_id1 !== player.user_id){
-                await updateRoom(room.room_id, room.titel, room.passwort, room.öffentlich, room.user_id1, player.user_id);
+                joinRoom(undefined, player.user_id, roomId)
             }
 
             // Join the room
