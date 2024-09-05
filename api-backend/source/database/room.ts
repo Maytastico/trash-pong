@@ -5,9 +5,10 @@ import { pool } from "./conn";
 export async function getRoom(id:number): Promise<Raum>{
   const client = await pool.connect();
   try {
+    
     const res = await client.query('SELECT r.*, s.name AS user1, sp.name AS user2 FROM Raum r LEFT JOIN "user" s ON s.user_id = r.user_id1 LEFT JOIN "user" sp ON sp.user_id = r.user_id2 WHERE r.raum_id = $1 LIMIT 1; ',[id]);
     console.log(res.rows[0]);
-    return res.rows[0];
+    return res.rows[0] as Raum;
   } finally {
     client.release();
   }
@@ -26,7 +27,7 @@ export async function joinRoom(
     const query_uid2 = `UPDATE Raum SET user_id2 = $1 WHERE raum_id = $2 RETURNING *;`;
     
     let res: QueryResult<Raum>;
-    
+
     if (typeof uid_1 !== 'undefined' && typeof uid_2 !== 'undefined') {
       res = await client.query(query_all_user, [uid_1, uid_2, room_id]);
     } else if (typeof uid_1 !== 'undefined') {
@@ -45,6 +46,18 @@ export async function joinRoom(
   }
 }
 
+export async function getRoomsByPlayerID(
+  uid: number | undefined, 
+): Promise<Raum[]> {
+  const client = await pool.connect();
+  
+  try {
+    const res = await client.query('SELECT r.*, s.name AS user1, sp.name AS user2 FROM Raum r LEFT JOIN "user" s ON s.user_id = r.user_id1 LEFT JOIN "user" sp ON sp.user_id = r.user_id2 WHERE user_id1=$1 or user_id2=$1 LIMIT 1; ',[uid]);
+    return res.rows as Raum[]
+  } finally {
+    client.release();
+  }
+}
 
 export async function getAllRooms(): Promise<any[]> {
     const client = await pool.connect();
