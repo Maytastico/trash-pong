@@ -52,7 +52,7 @@ export async function getRoomsByPlayerID(
   const client = await pool.connect();
   
   try {
-    const res = await client.query('SELECT r.*, s.name AS user1, sp.name AS user2 FROM Raum r LEFT JOIN "user" s ON s.user_id = r.user_id1 LEFT JOIN "user" sp ON sp.user_id = r.user_id2 WHERE user_id1=$1 or user_id2=$1 LIMIT 1; ',[uid]);
+    const res = await client.query('SELECT r.*, s.name AS user1, sp.name AS user2 FROM Raum r LEFT JOIN "user" s ON s.user_id = r.user_id1 LEFT JOIN "user" sp ON sp.user_id = r.user_id2 WHERE user_id1=$1 or user_id2=$1; ',[uid]);
     return res.rows as Raum[]
   } finally {
     client.release();
