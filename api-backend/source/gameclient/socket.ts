@@ -1,4 +1,4 @@
-import { Server as SocketIOServer } from 'socket.io';
+import { Socket, Server as SocketIOServer } from 'socket.io';
 import http from 'http';
 import { SECRET_KEY} from '../auth/token';
 import jwt, {JwtPayload} from 'jsonwebtoken';
@@ -6,6 +6,7 @@ import { decodeAccessToken } from '../auth/auth';
 import { User } from '../types/User';
 import { getRoom, updateRoom } from '../database/room';
 import { Raum } from '../types/Room';
+import { NextFunction } from 'express';
 
 export let io: SocketIOServer;
 
@@ -13,25 +14,30 @@ export interface CustomRequest extends Request {
     token: string | JwtPayload;
 }
 
+function getToken(socket: Socket<any>): string{
+    const headers = socket.request.headers
+
+    let token:  string;
+
+    if(headers['authorization'])
+        token = headers['authorization']
+    else if(socket.handshake.auth.token){
+        token = socket.handshake.auth.token
+    }else{
+        throw new Error("No Bearer Token set in header");
+    }
+    return token;
+}
+
 export function initializeWebSocketServer(server: http.Server): void {
     io = new SocketIOServer(server);
 
     // Middleware zur Validierung der Verbindung
-    io.use((socket, next) => {
+    io.use((socket: Socket<any>, next) => {
 
         try {
 
-            const headers = socket.request.headers
-
-            let token:  string;
-
-            if(headers['authorization'])
-                token = headers['authorization']
-            else if(socket.handshake.auth.token){
-                token = socket.handshake.auth.token
-            }else{
-                throw new Error("No Bearer Token set in header");
-            }
+            const token = getToken(socket)
          
             const decoded = jwt.verify(token, SECRET_KEY);
             console.log(decoded);
@@ -52,17 +58,7 @@ export function initializeWebSocketServer(server: http.Server): void {
         ws.on('joinRoom', async (data: { roomId: number;}) => {
             const { roomId} = data;
 
-            const headers = ws.request.headers
-
-            let token:  string;
-
-            if(headers['authorization'])
-                token = headers['authorization']
-            else if(ws.handshake.auth.token){
-                token = ws.handshake.auth.token
-            }else{
-                throw new Error("No Bearer Token set in header");
-            }
+            const token = getToken(ws);
 
             // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
             let player: User;
@@ -79,7 +75,9 @@ export function initializeWebSocketServer(server: http.Server): void {
             if(!room){
                 throw new Error("Room does not exist");
             }
-
+            
+            // When the player is not the user that created the room stored in user_id one the 
+            // player that joined that game will be associated with user_id2
             if (room.user_id1 !== player.user_id){
                 await updateRoom(room.room_id, room.titel, room.passwort, room.öffentlich, room.user_id1, player.user_id);
             }
@@ -107,6 +105,11 @@ export function initializeWebSocketServer(server: http.Server): void {
         // Handle disconnection
         ws.on('disconnect', () => {
             console.log(`User disconnected: ${ws.id}`);
+            const token = getToken(ws);
+            const player: User = decodeAccessToken(token);
+            
+            
+
             console.log(`Current rooms: ${Array.from(ws.rooms).join(', ')}`);
         });
     });

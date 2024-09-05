@@ -4,7 +4,7 @@ import { pool } from "./conn";
 export async function getRoom(id:number): Promise<Raum>{
   const client = await pool.connect();
   try {
-    const res = await client.query('SELECT r.*,s.name as user1, sp.name as user2 FROM Raum r RIGHT JOIN "user" s on s.user_id=r.user_id1 RIGHT JOIN "user" sp on sp.user_id=r.user_id2 where raum_id = $1 LIMIT 1 ',[id]);
+    const res = await client.query('SELECT r.*, s.name AS user1, sp.name AS user2 FROM Raum r LEFT JOIN "user" s ON s.user_id = r.user_id1 LEFT JOIN "user" sp ON sp.user_id = r.user_id2 WHERE r.raum_id = $1 LIMIT 1; ',[id]);
     console.log(res.rows[0]);
     return res.rows[0];
   } finally {
