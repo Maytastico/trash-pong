@@ -33,6 +33,7 @@ left = true
 [node name="Player2" parent="." instance=ExtResource("3")]
 modulate = Color(1, 0, 1, 1)
 position = Vector2(1830, 540)
+left = null
 
 [node name="You" parent="Player2" index="2"]
 metadata/_edit_use_anchors_ = true

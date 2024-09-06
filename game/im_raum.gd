@@ -8,6 +8,7 @@ extends Control
 
 var paddle_left
 var paddle_right
+var ball
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.client = SocketIOClient.new(Global.apiURL + "/socket.io", {"token": Global.jwtToken} )
@@ -58,13 +59,18 @@ func on_socket_event(event_name: String, payload: Variant, _name_space):
 			get_tree().get_root().add_child(imraum)
 			paddle_left = imraum.get_node("Player1") 
 			paddle_right = imraum.get_node("Player2")  
+			ball = imraum.get_node("Ball")
 			hide()
 	elif event_name == "update_paddle":
+		#print(payload)
 		if payload.username != Global.username:
 			if Global.activeRoom.player1 == payload.username and paddle_left:
-				paddle_left.set_pos_and_motion(Vector2(payload.position.x, payload.position.y), payload.motion)
+				paddle_left.set_pos_and_motion(Vector2(payload.position_x, payload.position_y), payload.motion)
 			elif Global.activeRoom.player2 == payload.username and paddle_right:
-				paddle_right.set_pos_and_motion(Vector2(payload.position.x, payload.position.y), payload.motion)
+				paddle_right.set_pos_and_motion(Vector2(payload.position_x, payload.position_y), payload.motion)
+	elif event_name == "bounce":
+		ball.bounce(payload.left, payload.random)
+	
 	elif  event_name == "error":
 		print(payload)
 func _on_leave_button_pressed():
@@ -155,18 +161,4 @@ func getRoomToken(data):
 	else:
 		return ""
 		
-func getPositonX(data):
-	var json = JSON.new()
-	var parse_result = json.parse(data)
-	if parse_result == OK:
-		var jsonObject = json.get_data()
-		var pos_x = jsonObject.get("position_x", "")
-		return pos_x
-		
-func getPositonY(data):
-	var json = JSON.new()
-	var parse_result = json.parse(data)
-	if parse_result == OK:
-		var jsonObject = json.get_data()
-		var pos_y = jsonObject.get("position_y")
-		return pos_y
+

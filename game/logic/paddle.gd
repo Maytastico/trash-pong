@@ -10,7 +10,7 @@ var _you_hidden = false
 @onready var _screen_size_y = get_viewport_rect().size.y
 
 func _process(delta):
-	# Is the master of the paddle.
+
 	if Global.activeRoom.player1 == Global.username && left:
 		handleMovement()
 	elif Global.activeRoom.player2 == Global.username && !left:
@@ -30,10 +30,10 @@ func handleMovement():
 		_hide_you_label()
 	_motion *= MOTION_SPEED
 	var payload = {"room_token": Global.roomToken, "position_x": position.x, "position_y" :  position.y, "motion": _motion, "username" : Global.username}
-	print(payload)
+
 	Global.client.socketio_send("update_paddle", payload)
 
-#@rpc("unreliable")
+
 func set_pos_and_motion(pos, motion):
 	position = pos
 	_motion = motion
@@ -45,7 +45,16 @@ func _hide_you_label():
 
 
 func _on_paddle_area_enter(area):
-	if is_multiplayer_authority():
+	if Global.activeRoom.player1 == Global.username && left:
+		handleBounce()
+	elif Global.activeRoom.player2 == Global.username && !left:
+		handleBounce()
 		pass
 		# Random for new direction generated checked each peer.
 		#area.bounce.rpc(left, randf())
+
+
+func handleBounce():
+	var random = randf()
+	var payload = {"room_token": Global.roomToken, "left": left, "random" :  random,  "username" : Global.username}
+	Global.client.socketio_send("bounce", payload)
