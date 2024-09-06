@@ -46,15 +46,17 @@ func _hide_you_label():
 
 func _on_paddle_area_enter(area):
 	if Global.activeRoom.player1 == Global.username && left:
-		handleBounce()
+		handleBounce(area)
+		
 	elif Global.activeRoom.player2 == Global.username && !left:
-		handleBounce()
-		pass
+		handleBounce(area)
+		
 		# Random for new direction generated checked each peer.
 		#area.bounce.rpc(left, randf())
 
 
-func handleBounce():
+func handleBounce(area):
 	var random = randf()
 	var payload = {"room_token": Global.roomToken, "left": left, "random" :  random,  "username" : Global.username}
+	area.bounce(left, random)
 	Global.client.socketio_send("bounce", payload)
