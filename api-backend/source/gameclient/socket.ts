@@ -7,6 +7,7 @@ import { User } from '../types/User';
 import { deleteRoom, getRoom, getRoomsByPlayerID, joinRoom, updateRoom } from '../database/room';
 import { Raum, RoomClient } from '../types/Room';
 import { NextFunction } from 'express';
+import { Paddle } from '../types/Game';
 
 export let io: SocketIOServer;
 
@@ -149,25 +150,33 @@ export function initializeWebSocketServer(server: http.Server): void {
             });
         });
         
-        ws.on('game', async (data: {}) => {
+        ws.on('update_paddle', async (data: {token: string, position: [number, number], motion: number}) => {
             const token = getToken(ws);
-            const roomToken = getRoomToken(ws)
+            const roomToken = data.token
             // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
             let player: User;
             let room: Raum;
             try {
                 player = decodeAccessToken(token) as User;
-                room = decodeAccessToken(roomToken) as Raum;
+                if (roomToken){
+                   jwt.verify(roomToken, SECRET_KEY);
+                   room = decodeAccessToken(roomToken) as Raum;
+                }else{
+                    ws.emit('error', 'Invalid room token');
+                    return;
+                }
             } catch (err) {
-                console.error('Invalid token');
                 ws.emit('error', 'Invalid token');
                 return;
             }
             
-            // Join the room
-            console.log(`User ${player.name} started game ${room.raum_id}`);
+            const paddle: Paddle = {
+                username: player.name,
+                position: data.position,
+                motion: data.motion
+            }
             
-            // Notify other users in the room
+            ws.to(room.raum_id.toString()).emit("update_paddle", paddle)
         });
 
         // Handle disconnection
