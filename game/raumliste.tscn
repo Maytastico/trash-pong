@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://logic/raumliste.gd" id="1_djvwx"]
 [ext_resource type="FontFile" uid="uid://baeom0xb31cqk" path="res://ressources/PressStart2P-Regular.ttf" id="1_m7v30"]
-[ext_resource type="Texture2D" path="res://ressources/refresh.png" id="5_68rax"]
+[ext_resource type="Texture2D" uid="uid://ciwjqb74iomju" path="res://ressources/refresh.png" id="5_68rax"]
 
 [node name="Raumliste" type="Control"]
 layout_mode = 3

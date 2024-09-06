@@ -69,6 +69,7 @@ func on_socket_event(event_name: String, payload: Variant, _name_space):
 			elif Global.activeRoom.player2 == payload.username and paddle_right:
 				paddle_right.set_pos_and_motion(Vector2(payload.position_x, payload.position_y), payload.motion)
 	elif event_name == "bounce":
+		print(Global.username + " " +  str(payload))
 		ball.bounce(payload.left, payload.random)
 	
 	elif  event_name == "error":
