@@ -109,9 +109,9 @@ export async function getAllRooms(): Promise<any[]> {
   }
 
   /**
-   * 
+   * searches for a specific room title
    * @param search search string
-   * @returns 
+   * @returns all Rooms matching 
    */
   export async function SearchRooms(search:string){
     const client = await pool.connect();

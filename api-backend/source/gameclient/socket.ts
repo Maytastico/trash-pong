@@ -201,7 +201,6 @@ export function initializeWebSocketServer(server: http.Server): void {
                 random: random
             }
             
-            ws.emit("bounce", bounce);
             ws.to(room.raum_id.toString()).emit("bounce", bounce)
         });
 
