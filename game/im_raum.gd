@@ -154,3 +154,19 @@ func getRoomToken(data):
 		return token
 	else:
 		return ""
+		
+func getPositonX(data):
+	var json = JSON.new()
+	var parse_result = json.parse(data)
+	if parse_result == OK:
+		var jsonObject = json.get_data()
+		var pos_x = jsonObject.get("position_x", "")
+		return pos_x
+		
+func getPositonY(data):
+	var json = JSON.new()
+	var parse_result = json.parse(data)
+	if parse_result == OK:
+		var jsonObject = json.get_data()
+		var pos_y = jsonObject.get("position_y")
+		return pos_y

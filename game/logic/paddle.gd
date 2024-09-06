@@ -29,8 +29,7 @@ func handleMovement():
 	if not _you_hidden and _motion != 0:
 		_hide_you_label()
 	_motion *= MOTION_SPEED
-	var le_string = {"room_token": Global.roomToken, "position": position, "motion": _motion, "username" : Global.username}
-	var payload = JSON.new().stringify(le_string)
+	var payload = {"room_token": Global.roomToken, "position_x": position.x, "position_y" :  position.y, "motion": _motion, "username" : Global.username}
 	print(payload)
 	Global.client.socketio_send("update_paddle", payload)
 
