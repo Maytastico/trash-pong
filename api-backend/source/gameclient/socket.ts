@@ -6,7 +6,7 @@ import { decodeAccessToken, generateRoomToken } from '../auth/auth';
 import { User } from '../types/User';
 import { deleteRoom, getRoom, getRoomsByPlayerID, joinRoom, updateRoom } from '../database/room';
 import { Raum } from '../types/Room';
-import { Bounce, Bounch, Paddle } from '../types/Game';
+import { Bounce, Paddle } from '../types/Game';
 
 export let io: SocketIOServer;
 
