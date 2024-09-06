@@ -3,17 +3,27 @@ import {SECRET_KEY} from './token'
 import { User } from "../types/User";
 import { Raum } from "../types/Room";
 
+
+/**
+ * Possible types of authentication tokens
+ */
 enum TokenType{
     USER_TOKEN = "user_token",
     ROOM_TOKEN = "room_token"
 }
 
+/**
+ * Payload object for user tokens
+ */
 interface UserToken{
     type: TokenType.USER_TOKEN,
     username: string,
     user_id: number
 }
 
+/**
+ * Payload object for room object
+ */
 interface RoomToken{
     type: TokenType.ROOM_TOKEN,
     room_id: number,
@@ -21,8 +31,18 @@ interface RoomToken{
     user_id2: number
 }
 
+/**
+ * Storage Type for temopary encoding of tokens
+ */
 type DecodedToken = UserToken | RoomToken;
 
+
+/**
+ * Creates an access token form a User object, it encodes the username, as well as the user_id
+ * as a base64 string and creates a jwt token out of it.
+ * @param user User object
+ * @returns jwt token
+ */
 export function generateAccessToken(user: User):string {
     const token: UserToken = {
         type: TokenType.USER_TOKEN,
@@ -32,6 +52,13 @@ export function generateAccessToken(user: User):string {
     return jwt.sign(token, SECRET_KEY, { expiresIn: '3200s' });
 }   
 
+
+/**
+ * Creates an access token from a Raum object, encodes the ids and returns it as 
+ * a base64 encoded jwt token
+ * @param room Raum object
+ * @returns jwt token
+ */
 export function generateRoomToken(room: Raum):string {
     const token: RoomToken = {
         type: TokenType.ROOM_TOKEN,
@@ -42,6 +69,14 @@ export function generateRoomToken(room: Raum):string {
     return jwt.sign(token, SECRET_KEY, { expiresIn: '3200s' });
 }   
 
+/**
+ * Decodes the token after a defined type and parses it to a User or Raum object
+ * This object just contains ids from the token. If you want to have more information the
+ * database has to be requested.
+ * 
+ * @param token token from reqest
+ * @returns Raum or User object
+ */
 export function decodeAccessToken(token: string): User | Raum | undefined{
     try {
         const decoded = jwt.decode(token) as DecodedToken;

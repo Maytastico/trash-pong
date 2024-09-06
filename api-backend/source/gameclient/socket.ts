@@ -6,7 +6,7 @@ import { decodeAccessToken, generateRoomToken } from '../auth/auth';
 import { User } from '../types/User';
 import { deleteRoom, getRoom, getRoomsByPlayerID, joinRoom, updateRoom } from '../database/room';
 import { Raum } from '../types/Room';
-import { Paddle } from '../types/Game';
+import { Bounce, Bounch, Paddle } from '../types/Game';
 
 export let io: SocketIOServer;
 
@@ -172,6 +172,39 @@ export function initializeWebSocketServer(server: http.Server): void {
             
             ws.to(room.raum_id.toString()).emit("update_paddle", paddle)
         });
+
+        ws.on('bounce', async (data: {room_token: string, stopped: boolean, direction_x: number, direction_y: number}) => {
+            const token = getToken(ws);
+            const {room_token, stopped, direction_x, direction_y} = data;
+
+            // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
+            let player: User;
+            let room: Raum;
+            try {
+                player = decodeAccessToken(token) as User;
+                console.log(room_token)
+                if (room_token){
+                   jwt.verify(room_token, SECRET_KEY);
+                   room = decodeAccessToken(room_token) as Raum;
+                }else{
+                    ws.emit('error', 'Invalid room token');
+                    return;
+                }
+            } catch (err) {
+                ws.emit('error', 'Invalid token');
+                return;
+            }
+            
+            const bounce: Bounce = {
+                username: player.name,
+                direction_x: direction_x,
+                direction_y: direction_y,
+                stopped: stopped
+            }
+            
+            ws.to(room.raum_id.toString()).emit("update_paddle", bounce)
+        });
+
 
         // Handle disconnection
         ws.on('disconnect', async () => {
