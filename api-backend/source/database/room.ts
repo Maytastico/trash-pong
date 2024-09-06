@@ -73,9 +73,10 @@ export async function joinRoom(
 /**
  * Returns all Rooms, that the ased user has joined
  * 
- * This is used for determine which Rooms a 
+ * This is used for determine which Rooms a user has joined to delete them
+ * or when a user created a room but the websocket, does not have the room information. 
  * @param uid id of the user that joined the asked room
- * @returns 
+ * @returns a list of room a user has joined
  */
 export async function getRoomsByPlayerID(
   uid: number | undefined, 
@@ -90,6 +91,10 @@ export async function getRoomsByPlayerID(
   }
 }
 
+/**
+ * Fetches all exisiting rooms from the database
+ * @returns list of rooms
+ */
 export async function getAllRooms(): Promise<any[]> {
     const client = await pool.connect();
     try {
@@ -102,6 +107,12 @@ export async function getAllRooms(): Promise<any[]> {
       client.release();
     }
   }
+
+  /**
+   * 
+   * @param search search string
+   * @returns 
+   */
   export async function SearchRooms(search:string){
     const client = await pool.connect();
     try {
