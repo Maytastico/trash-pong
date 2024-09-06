@@ -9,9 +9,9 @@ const router = express.Router();
 
 router.get("/room/:id", auth, dbRoom);
 router.get("/room", auth, dbAllRooms);
-router.post("/room", dbCreateRoom);
-router.put("/room/:id",dbUpdateRoom);
-router.delete("/room/:id", dbDeleteRoom);
-router.get("/user/:id", dbUser);
+router.post("/room", auth, dbCreateRoom);
+//router.put("/room/:id",auth, dbUpdateRoom);
+//router.delete("/room/:id",auth, dbDeleteRoom);
+router.get("/user/:id", auth, dbUser);
 
 export default router;
