@@ -29,7 +29,10 @@ func handleMovement():
 	if not _you_hidden and _motion != 0:
 		_hide_you_label()
 	_motion *= MOTION_SPEED
-	Global.client.socketio_send("update_paddle", JSON.new().stringify({"username": Global.username, "position": position, "motion": _motion, "room_token" : Global.roomToken}))
+	var le_string = {"room_token": Global.roomToken, "position": position, "motion": _motion, "username" : Global.username}
+	var payload = JSON.new().stringify(le_string)
+	print(payload)
+	Global.client.socketio_send("update_paddle", payload)
 
 #@rpc("unreliable")
 func set_pos_and_motion(pos, motion):

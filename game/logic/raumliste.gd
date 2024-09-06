@@ -55,7 +55,7 @@ func _on_get_all_se_rooms_request_completed(result, response_code, headers, body
 		if parse_result == OK:
 			var data = json.get_data()
 			fill_room_array(data)
-			printAllRooms()
+			#printAllRooms()
 			fillRoomList()
 	else:
 		print("error")

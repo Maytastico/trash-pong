@@ -48,12 +48,12 @@ func on_socket_ready(_sid: String):
 	Global.client.socketio_connect()
 
 func on_socket_event(event_name: String, payload: Variant, _name_space):
-	print("Received ", event_name, " ", payload)
+	#print("Received ", event_name, " ", payload)
 	if event_name == "notification":
 		UpdateRoom(Global.activeRoom.raum_id)
 	elif event_name == "starting_game":
 			Global.roomToken = getRoomToken(str(payload))
-			print(Global.roomToken)
+			print(Global.username + " " + Global.roomToken)
 			var imraum = load("res://pong.tscn").instantiate()
 			get_tree().get_root().add_child(imraum)
 			paddle_left = imraum.get_node("Player1") 
@@ -65,7 +65,8 @@ func on_socket_event(event_name: String, payload: Variant, _name_space):
 				paddle_left.set_pos_and_motion(Vector2(payload.position.x, payload.position.y), payload.motion)
 			elif Global.activeRoom.player2 == payload.username and paddle_right:
 				paddle_right.set_pos_and_motion(Vector2(payload.position.x, payload.position.y), payload.motion)
-
+	elif  event_name == "error":
+		print(payload)
 func _on_leave_button_pressed():
 	var root = get_tree().get_root()
 	root.remove_child(self)
