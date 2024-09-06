@@ -122,7 +122,7 @@ export function initializeWebSocketServer(server: http.Server): void {
             
             let room: Raum[] = await getRoomsByPlayerID(player.user_id);
             
-            if (room === null || typeof room === 'undefined') {
+            if (room === null || typeof room === 'undefined' || room.length == 0) {
                 // Wenn der Raum nicht existiert, wird der Fehler gefangen und an den Client gesendet
                 ws.emit("error", "No room associated with this user");
                 return; // Beenden der Funktion, um den Fehler zu behandeln
@@ -130,8 +130,8 @@ export function initializeWebSocketServer(server: http.Server): void {
             
             let roomToken = generateRoomToken(room[0])
 
-            ws.emit("starting_game", JSON.parse(`{ "start_game": true, "room_token": ${roomToken} }`));
-            ws.to(room[0].raum_id.toString()).emit("starting_game",JSON.parse(`{"start_game": true, "room_token": ${roomToken}}`));
+            ws.emit("starting_game", {"start_game": true, "room_token": roomToken});
+            ws.to(room[0].raum_id.toString()).emit("starting_game", {"start_game": true, "room_token": roomToken});
             // Join the room
             console.log(`User ${player.name} started game ${room[0].raum_id}`);
             
@@ -149,7 +149,7 @@ export function initializeWebSocketServer(server: http.Server): void {
             });
         });
         
-        ws.on('game', async () => {
+        ws.on('game', async (data: {}) => {
             const token = getToken(ws);
             const roomToken = getRoomToken(ws)
             // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
@@ -164,8 +164,6 @@ export function initializeWebSocketServer(server: http.Server): void {
                 return;
             }
             
-            ws.emit("starting_game", JSON.parse('{ "start_game": true }'));
-            ws.to(room.raum_id.toString()).emit("starting_game",JSON.parse('{"start_game": true}'));
             // Join the room
             console.log(`User ${player.name} started game ${room.raum_id}`);
             
