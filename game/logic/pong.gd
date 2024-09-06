@@ -12,10 +12,11 @@ var score_right = 0
 @onready var score_right_node = $ScoreRight
 @onready var winner_left = $WinnerLeft
 @onready var winner_right = $WinnerRight
-
+@onready var gamefield = $ColorRect
 func _ready():
-	pass
+	gamefield.size = get_viewport().size
 
+	pass
 
 
 func update_score(add_to_left):

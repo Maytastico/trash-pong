@@ -25,6 +25,7 @@ func _ready():
 	#multiplayer.connection_failed.connect(_connected_fail)
 	#multiplayer.server_disconnected.connect(_server_disconnected)
 	username.grab_focus()
+	get_viewport().size = DisplayServer.screen_get_size()
 #### Network callbacks from SceneTree ####
 
 # Callback from SceneTree.

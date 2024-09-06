@@ -5,6 +5,9 @@ extends Control
 @onready var RaumLabel = $Raumname
 @onready var NumberOfPlayers = $NumberOfPlayers
 @onready var getRoomRequest = $GetRoom
+
+var paddle_left
+var paddle_right
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.client = SocketIOClient.new(Global.apiURL + "/socket.io", {"token": Global.jwtToken} )
@@ -48,10 +51,20 @@ func on_socket_event(event_name: String, payload: Variant, _name_space):
 	print("Received ", event_name, " ", payload)
 	if event_name == "notification":
 		UpdateRoom(Global.activeRoom.raum_id)
-	if event_name == "starting_game":
+	elif event_name == "starting_game":
+			Global.roomToken = getRoomToken(payload)
+			print(Global.roomToken)
 			var imraum = load("res://pong.tscn").instantiate()
 			get_tree().get_root().add_child(imraum)
+			paddle_left = imraum.get_node("Player1") 
+			paddle_right = imraum.get_node("Player2")  
 			hide()
+	elif event_name == "update_paddle":
+		if payload.username != Global.username:
+			if Global.activeRoom.player1 == payload.username and paddle_left:
+				paddle_left.set_pos_and_motion(Vector2(payload.position.x, payload.position.y), payload.motion)
+			elif Global.activeRoom.player2 == payload.username and paddle_right:
+				paddle_right.set_pos_and_motion(Vector2(payload.position.x, payload.position.y), payload.motion)
 
 func _on_leave_button_pressed():
 	var root = get_tree().get_root()
@@ -129,3 +142,12 @@ func _on_start_button_pressed():
 	var json_string =  JSON.new().stringify(payload)
 	Global.client.socketio_send("startPressed", json_string)
 	pass 
+
+
+func getRoomToken(data):
+	var json = JSON.new()
+	var parse_result = json.parse(data)
+	if parse_result == OK:
+		var jsonObject = json.get_data()
+		var token = jsonObject.get("token", "")
+		return token
