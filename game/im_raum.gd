@@ -52,7 +52,7 @@ func on_socket_event(event_name: String, payload: Variant, _name_space):
 	if event_name == "notification":
 		UpdateRoom(Global.activeRoom.raum_id)
 	elif event_name == "starting_game":
-			Global.roomToken = getRoomToken(payload)
+			Global.roomToken = getRoomToken(str(payload))
 			print(Global.roomToken)
 			var imraum = load("res://pong.tscn").instantiate()
 			get_tree().get_root().add_child(imraum)
@@ -149,5 +149,7 @@ func getRoomToken(data):
 	var parse_result = json.parse(data)
 	if parse_result == OK:
 		var jsonObject = json.get_data()
-		var token = jsonObject.get("token", "")
+		var token = jsonObject.get("room_token", "")
 		return token
+	else:
+		return ""
