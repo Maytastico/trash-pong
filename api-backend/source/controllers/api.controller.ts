@@ -40,7 +40,7 @@ const dbAllRooms = async (req: Request, res: Response, next: NextFunction) => {
 
     try {
       const { title, pw, oeffentlich} = req.body;
-      let user: User = decodeAccessToken(token);
+      let user: User = decodeAccessToken(token) as User;
       if (!title || oeffentlich === undefined) {
         return res.status(400).json({ error: "title is requiered and room state is requiered" });
       }
