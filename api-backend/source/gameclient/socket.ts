@@ -5,8 +5,7 @@ import jwt, {JwtPayload} from 'jsonwebtoken';
 import { decodeAccessToken, generateRoomToken } from '../auth/auth';
 import { User } from '../types/User';
 import { deleteRoom, getRoom, getRoomsByPlayerID, joinRoom, updateRoom } from '../database/room';
-import { Raum, RoomClient } from '../types/Room';
-import { NextFunction } from 'express';
+import { Raum } from '../types/Room';
 import { Paddle } from '../types/Game';
 
 export let io: SocketIOServer;
@@ -15,6 +14,12 @@ export interface CustomRequest extends Request {
     token: string | JwtPayload;
 }
 
+/**
+ * Get the token either trought headers or by handshake
+ * Used for Godot and Debugging with Postman
+ * @param socket 
+ * @returns 
+ */
 function getToken(socket: Socket<any>): string{
     const headers = socket.request.headers
 
@@ -30,28 +35,12 @@ function getToken(socket: Socket<any>): string{
     return token;
 }
 
-function getRoomToken(socket: Socket<any>): string{
-    const headers = socket.request.headers
-
-    let token:  string;
-
-    if(headers['room_token'])
-        token = headers['room_token'].toString()
-    else if(socket.handshake.auth.token){
-        token = socket.handshake.auth.token
-    }else{
-        throw new Error("No Room Token set in header");
-    }
-    return token;
-}
-
 export function initializeWebSocketServer(server: http.Server): void {
     io = new SocketIOServer(server);
 
     io.use((socket: Socket<any>, next) => {
 
         try {
-
             const token = getToken(socket)
          
             const decoded = jwt.verify(token, SECRET_KEY);
@@ -61,8 +50,7 @@ export function initializeWebSocketServer(server: http.Server): void {
           } catch (err) {
             next(new Error("Invalid Authentication")); // Verbindung ablehnen
           }
-        
-
+    
     });
 
     io.on('connection', (ws) => {
@@ -71,13 +59,13 @@ export function initializeWebSocketServer(server: http.Server): void {
     
         // Handle 'joinRoom' Event
         ws.on('joinRoom', async (data: { roomId: number;}) => {
+            // Holt sich die RaumID vom Payload
             const { roomId} = data;
-
-            const token = getToken(ws);
-
-            // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
             let player: User;
+
+            // Verifiziert den JWT Token und extrhiert die Daten des senders
             try {
+                const token = getToken(ws);
                 player = decodeAccessToken(token) as User;
             } catch (err) {
                 console.error('Invalid token');
@@ -85,12 +73,15 @@ export function initializeWebSocketServer(server: http.Server): void {
                 return;
             }
             
+            // Holt sich die Informationen des Raums
             let room: Raum = await getRoom(roomId);
             
+            // Wenn beim holen der Raum informationen etwas fehlschlägt
+            // Wird ausgegeben, dass der Raum nicht exestiert
             if (room === null || typeof room === 'undefined') {
                 // Wenn der Raum nicht existiert, wird der Fehler gefangen und an den Client gesendet
                 ws.emit('error', 'Room does not exist');
-                return; // Beenden der Funktion, um den Fehler zu behandeln
+                return; 
                 }
             
             // When the player is not the user that created the room stored in user_id one the 
@@ -108,12 +99,11 @@ export function initializeWebSocketServer(server: http.Server): void {
             ws.to(roomId.toString()).emit('notification', `${player.name} has joined the room`);
         });
 
-        ws.on('startPressed', async () => {
-            const token = getToken(ws);
-
+        ws.on('startPressed', async () => {       
             // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
             let player: User;
             try {
+                const token = getToken(ws);
                 player = decodeAccessToken(token) as User;
             } catch (err) {
                 console.error('Invalid token');
@@ -129,8 +119,10 @@ export function initializeWebSocketServer(server: http.Server): void {
                 return; // Beenden der Funktion, um den Fehler zu behandeln
             }
             
+            // Generiert einen neuen Room Token
             let roomToken = generateRoomToken(room[0])
 
+            // Sendet den Room Token an den sender und in den raum
             ws.emit("starting_game", {"start_game": true, "room_token": roomToken});
             ws.to(room[0].raum_id.toString()).emit("starting_game", {"start_game": true, "room_token": roomToken});
             // Join the room
@@ -150,17 +142,18 @@ export function initializeWebSocketServer(server: http.Server): void {
             });
         });
         
-        ws.on('update_paddle', async (data: {token: string, position: [number, number], motion: number}) => {
+        ws.on('update_paddle', async (data: {room_token: string, position: [number, number], motion: number}) => {
             const token = getToken(ws);
-            const roomToken = data.token
+            const {room_token, position, motion} = data;
             // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
             let player: User;
             let room: Raum;
             try {
                 player = decodeAccessToken(token) as User;
-                if (roomToken){
-                   jwt.verify(roomToken, SECRET_KEY);
-                   room = decodeAccessToken(roomToken) as Raum;
+                console.log(room_token)
+                if (room_token){
+                   jwt.verify(room_token, SECRET_KEY);
+                   room = decodeAccessToken(room_token) as Raum;
                 }else{
                     ws.emit('error', 'Invalid room token');
                     return;
@@ -172,8 +165,8 @@ export function initializeWebSocketServer(server: http.Server): void {
             
             const paddle: Paddle = {
                 username: player.name,
-                position: data.position,
-                motion: data.motion
+                position: position,
+                motion: motion          
             }
             
             ws.to(room.raum_id.toString()).emit("update_paddle", paddle)
