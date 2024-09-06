@@ -9,7 +9,6 @@ export interface Paddle extends BasicPayload{
 }
 
 export interface Bounce extends BasicPayload{
-    stopped: boolean,
-    direction_x: number,
-    direction_y: number
+    left: boolean,
+    random: number
 }

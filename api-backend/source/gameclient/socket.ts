@@ -173,9 +173,9 @@ export function initializeWebSocketServer(server: http.Server): void {
             ws.to(room.raum_id.toString()).emit("update_paddle", paddle)
         });
 
-        ws.on('bounce', async (data: {room_token: string, stopped: boolean, direction_x: number, direction_y: number}) => {
+        ws.on('bounce', async (data: {room_token: string, left: boolean, random: number}) => {
             const token = getToken(ws);
-            const {room_token, stopped, direction_x, direction_y} = data;
+            const {room_token, left, random} = data;
 
             // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
             let player: User;
@@ -197,12 +197,11 @@ export function initializeWebSocketServer(server: http.Server): void {
             
             const bounce: Bounce = {
                 username: player.name,
-                direction_x: direction_x,
-                direction_y: direction_y,
-                stopped: stopped
+                left: left,
+                random: random
             }
             
-            ws.to(room.raum_id.toString()).emit("update_paddle", bounce)
+            ws.to(room.raum_id.toString()).emit("bounce", bounce)
         });
 
 

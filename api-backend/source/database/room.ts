@@ -2,18 +2,41 @@ import { QueryResult } from "pg";
 import { Raum} from "../types/Room";
 import { pool } from "./conn";
 
+
+/**
+ * Fetches all informations from a given raum id. It merges the user information with the given raum.
+ * This is used for database request that are found inside the REST API as well as for verification reason inside the game client
+ * websocket
+ * @param id id of the request Raum
+ * @returns Raum as object
+ */
 export async function getRoom(id:number): Promise<Raum>{
   const client = await pool.connect();
   try {
-    
     const res = await client.query('SELECT r.*, s.name AS user1, sp.name AS user2 FROM Raum r LEFT JOIN "user" s ON s.user_id = r.user_id1 LEFT JOIN "user" sp ON sp.user_id = r.user_id2 WHERE r.raum_id = $1 LIMIT 1; ',[id]);
-    console.log(res.rows[0]);
     return res.rows[0] as Raum;
   } finally {
     client.release();
   }
 }
 
+/**
+ * When joining a room the there is the possibility that on or two users will join.
+ * Either uid1, uid2 or both are set when updating the database. When both parameters are not set.
+ * the result will be null
+ * 
+ * Example combinations: 
+ * joinRoom(undefined, 2)
+ * joinRoom(5, undefined)
+ * joinRoom(5, 6)
+ * 
+ * This funciton is used for synchronizing the activity hapening between the gameclient component
+ * and the database
+ * @param uid_1 id of user one (optional)
+ * @param uid_2 id of user two (optional)
+ * @param room_id op
+ * @returns updated Raum object or null when not request is executed
+ */
 export async function joinRoom(
   uid_1: number | undefined, 
   uid_2: number | undefined, 
@@ -39,13 +62,21 @@ export async function joinRoom(
       return null;
     }
     
-    return res.rows[0] || null;  // Gib das erste Ergebnis oder `null` zurück, falls keine Zeilen zurückgegeben werden.
+    return res.rows[0] as Raum || null;  // Gib das erste Ergebnis oder `null` zurück, falls keine Zeilen zurückgegeben werden.
     
   } finally {
     client.release();
   }
 }
 
+
+/**
+ * Returns all Rooms, that the ased user has joined
+ * 
+ * This is used for determine which Rooms a 
+ * @param uid id of the user that joined the asked room
+ * @returns 
+ */
 export async function getRoomsByPlayerID(
   uid: number | undefined, 
 ): Promise<Raum[]> {
