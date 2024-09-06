@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cvdld70iesfj0"]
+[gd_scene load_steps=4 format=3 uid="uid://cvdld70iesfj0"]
 
+[ext_resource type="Script" path="res://create_room.gd" id="1_kx5jo"]
 [ext_resource type="FontFile" uid="uid://baeom0xb31cqk" path="res://ressources/PressStart2P-Regular.ttf" id="1_lrs6h"]
 [ext_resource type="Script" path="res://logic/RequirePassword.gd" id="2_s5wax"]
 
@@ -14,74 +15,136 @@ offset_right = -8.0
 offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_kx5jo")
 
 [node name="Raumname" type="Label" parent="."]
 layout_mode = 0
-offset_left = 64.0
-offset_top = 72.0
-offset_right = 192.0
-offset_bottom = 95.0
+offset_left = 210.0
+offset_top = 234.0
+offset_right = 496.0
+offset_bottom = 260.0
 theme_override_fonts/font = ExtResource("1_lrs6h")
+theme_override_font_sizes/font_size = 26
 text = "Create Room"
 
 [node name="CreateButton" type="Button" parent="."]
-layout_mode = 0
-offset_left = 624.0
-offset_top = 520.0
-offset_right = 952.0
-offset_bottom = 575.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 288.0
+offset_top = 358.0
+offset_right = 616.0
+offset_bottom = 413.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Create Room"
 
 [node name="CancelButton" type="Button" parent="."]
-layout_mode = 0
-offset_left = 184.0
-offset_top = 520.0
-offset_right = 512.0
-offset_bottom = 575.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -595.0
+offset_top = 346.0
+offset_right = -267.0
+offset_bottom = 401.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Cancel"
 
 [node name="RequirePassword" type="CheckButton" parent="."]
-layout_mode = 0
-offset_left = 264.0
-offset_top = 352.0
-offset_right = 568.0
-offset_bottom = 384.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -127.0
+offset_top = 76.0
+offset_right = 177.0
+offset_bottom = 108.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_fonts/font = ExtResource("1_lrs6h")
 text = "Require Password"
 script = ExtResource("2_s5wax")
 
 [node name="PasswordLabel" type="Label" parent="."]
 visible = false
-layout_mode = 0
-offset_left = 128.0
-offset_top = 296.0
-offset_right = 256.0
-offset_bottom = 319.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -289.0
+offset_top = 22.0
+offset_right = -161.0
+offset_bottom = 45.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_fonts/font = ExtResource("1_lrs6h")
 text = "Password"
 
 [node name="Password" type="LineEdit" parent="PasswordLabel"]
-layout_mode = 0
-offset_left = 144.0
-offset_top = -8.0
-offset_right = 440.0
-offset_bottom = 39.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 104.0
+offset_top = -28.5
+offset_right = 400.0
+offset_bottom = 18.5
+grow_horizontal = 2
+grow_vertical = 2
 secret = true
 
 [node name="RoomNameLabel" type="Label" parent="."]
-layout_mode = 0
-offset_left = 136.0
-offset_top = 232.0
-offset_right = 264.0
-offset_bottom = 255.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -278.0
+offset_top = -46.0
+offset_right = -150.0
+offset_bottom = -23.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_fonts/font = ExtResource("1_lrs6h")
 text = "Roomname"
 
 [node name="Roomname" type="LineEdit" parent="RoomNameLabel"]
-layout_mode = 0
-offset_left = 136.0
-offset_top = -8.0
-offset_right = 432.0
-offset_bottom = 39.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 96.0
+offset_top = -18.5
+offset_right = 392.0
+offset_bottom = 28.5
+grow_horizontal = 2
+grow_vertical = 2
+max_length = 25
 
+[node name="ValidateSession" type="HTTPRequest" parent="."]
+
+[node name="CreateRoom" type="HTTPRequest" parent="."]
+
+[node name="GetAllSeRooms" type="HTTPRequest" parent="."]
+
+[connection signal="pressed" from="CreateButton" to="." method="_on_create_button_pressed"]
+[connection signal="pressed" from="CancelButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="toggled" from="RequirePassword" to="RequirePassword" method="_on_toggled"]
+[connection signal="request_completed" from="CreateRoom" to="." method="_on_create_room_request_completed"]
+[connection signal="request_completed" from="GetAllSeRooms" to="." method="_on_get_all_se_rooms_request_completed"]

@@ -11,18 +11,21 @@ const DEFAULT_PORT = 8910
 @onready var status_ok = $StatusOk
 @onready var status_fail = $StatusFail
 
+@onready var pingRequest = %Ping
+@onready var loginRequest = %Login
 
 
-var peer = null
+#var peer = null
 
 func _ready():
 	# Connect all the callbacks related to networking.
-	multiplayer.peer_connected.connect(_player_connected)
-	multiplayer.peer_disconnected.connect(_player_disconnected)
-	multiplayer.connected_to_server.connect(_connected_ok)
-	multiplayer.connection_failed.connect(_connected_fail)
-	multiplayer.server_disconnected.connect(_server_disconnected)
-
+	#multiplayer.peer_connected.connect(_player_connected)
+	#multiplayer.peer_disconnected.connect(_player_disconnected)
+	#multiplayer.connected_to_server.connect(_connected_ok)
+	#multiplayer.connection_failed.connect(_connected_fail)
+	#multiplayer.server_disconnected.connect(_server_disconnected)
+	username.grab_focus()
+	get_viewport().size = DisplayServer.screen_get_size()
 #### Network callbacks from SceneTree ####
 
 # Callback from SceneTree.
@@ -85,22 +88,43 @@ func _set_status(text, isok):
 		status_ok.set_text("")
 		status_fail.set_text(text)
 
-func _canceled():
-	if has_node("/root/imraum"):
-		get_node(^"/root/imraum").free()
-		show()
 
 func _on_host_pressed():
 	if(username.text.strip_edges() == ""):
 		_set_status("Enter a username", false)
 		return
-	
 	_set_status("Connecting...", true)
 	host_button.set_disabled(true)
-	var raumliste = load("res://raumliste.tscn").instantiate()
+	if(_ping() < 0):
+		return
+	if(_login() < 0):
+		return
+	
+	
+func _ping():
+	var url = Global.apiURL + "/health/ping"
+	var err = pingRequest.request(url, [], HTTPClient.METHOD_GET)
+	if err != OK:
+		_set_status("Internal Error", false)
+		print("Failed to send request: ", err)
+		return -1
+	return 0
+	
+func _login():
+	var url = Global.apiURL + "/user/login"
+	Global.username = username.text
+	var json_obj = {"username": Global.username}
+	var json_string =  JSON.new().stringify(json_obj)
 
-	get_tree().get_root().add_child(raumliste)
-	hide()
+	var headers = ["Content-Type: application/json"]
+	
+	var err = loginRequest.request(url, headers, HTTPClient.METHOD_POST, json_string)
+	if err != OK:
+		_set_status("Internal Error", false)
+		print("Failed to send request: ", err)
+		return -1
+	return 0
+		
 	#peer = ENetMultiplayerPeer.new()
 	#var err = peer.create_server(DEFAULT_PORT, 1) # Maximum of 1 peer, since it's a 2-player game.
 	#if err != OK:
@@ -136,3 +160,29 @@ func _on_host_pressed():
 
 
 
+
+
+func _on_ping_request_completed(result, response_code, headers, body):
+	if response_code == 200:
+		return 0
+	else:
+		_set_status("No Connection", false)
+		host_button.set_disabled(false)
+		return -1
+
+
+func _on_login_request_completed(result, response_code, headers, body):
+	if result == OK and response_code == 200:
+		Global.jwtToken = body.get_string_from_utf8()
+		
+		var raumliste = load("res://raumliste.tscn").instantiate()
+		get_tree().get_root().add_child(raumliste)
+		hide()
+	else:
+		_set_status("No Connection", false)
+		host_button.set_disabled(false)
+		return -1
+		
+
+func _on_name_text_submitted(new_text):
+	host_button.emit_signal("pressed")

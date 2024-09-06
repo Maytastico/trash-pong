@@ -9,42 +9,52 @@
 script = ExtResource("1")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-offset_right = 640.0
-offset_bottom = 400.0
+custom_minimum_size = Vector2(1920, 1080)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.141176, 0.152941, 0.164706, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="Separator" type="Sprite2D" parent="."]
-position = Vector2(320, 200)
+position = Vector2(960, 540)
+scale = Vector2(1, 2.65702)
 texture = ExtResource("2")
 
 [node name="Player1" parent="." instance=ExtResource("3")]
 modulate = Color(0, 1, 1, 1)
-position = Vector2(32.49, 188.622)
+position = Vector2(90, 540)
 left = true
 
 [node name="Player2" parent="." instance=ExtResource("3")]
 modulate = Color(1, 0, 1, 1)
-position = Vector2(608.88, 188.622)
+position = Vector2(1830, 540)
+
+[node name="You" parent="Player2" index="2"]
+metadata/_edit_use_anchors_ = true
 
 [node name="Ball" parent="." instance=ExtResource("4")]
-position = Vector2(320.387, 189.525)
+position = Vector2(960, 540)
+scale = Vector2(1, 1.04361)
 
 [node name="ScoreLeft" type="Label" parent="."]
-offset_left = 240.0
-offset_top = 10.0
-offset_right = 280.0
-offset_bottom = 30.0
+offset_left = 731.0
+offset_top = 150.839
+offset_right = 771.0
+offset_bottom = 173.839
 size_flags_horizontal = 2
 size_flags_vertical = 0
 text = "0"
 
 [node name="ScoreRight" type="Label" parent="."]
-offset_left = 360.0
-offset_top = 10.0
-offset_right = 400.0
-offset_bottom = 30.0
+offset_left = 1101.0
+offset_top = 161.839
+offset_right = 1141.0
+offset_bottom = 184.839
 size_flags_horizontal = 2
 size_flags_vertical = 0
 text = "0"
@@ -78,9 +88,6 @@ offset_bottom = 360.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 text = "Exit Game"
-
-[node name="Camera2D" type="Camera2D" parent="."]
-offset = Vector2(320, 200)
 
 [connection signal="pressed" from="ExitGame" to="." method="_on_exit_game_pressed"]
 

@@ -15,7 +15,9 @@ router.use((req: any, res: any, next: Function) => {
     // CORS Policy and headers
     // @ts-ignore
     res.header('Access-Control-Allow-Origin', '*');
+    //res.header('Access-Control-Allow-Headers', 'origin, X-Requested-With, Content-Type, Accept', 'Authorization');
     res.header('Access-Control-Allow-Headers', '*');
+
 
     if(req.method === 'OPTIONS') {
         // @ts-ignore

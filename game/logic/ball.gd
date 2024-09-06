@@ -10,6 +10,7 @@ var _speed = DEFAULT_SPEED
 
 func _process(delta):
 	_speed += delta
+
 	# Ball will move normally for both players,
 	# even if it's sightly out of sync between them,
 	# so each player sees the motion as smooth and not jerky.
@@ -20,28 +21,28 @@ func _process(delta):
 	var ball_pos = position
 	if (ball_pos.y < 0 and direction.y < 0) or (ball_pos.y > _screen_size.y and direction.y > 0):
 		direction.y = -direction.y
-
-	if is_multiplayer_authority():
+	#print(ball_pos)
+	#if is_multiplayer_authority():
 		# Only the master will decide when the ball is out in
 		# the left side (it's own side). This makes the game
 		# playable even if latency is high and ball is going
 		# fast. Otherwise ball might be out in the other
 		# player's screen but not this one.
-		if ball_pos.x < 0:
-			get_parent().update_score.rpc(false)
-			_reset_ball.rpc(false)
-	else:
+		#if ball_pos.x < 0:
+		#	get_parent().update_score.rpc(false)
+		#	_reset_ball.rpc(false)
+	#else:
 		# Only the puppet will decide when the ball is out in
 		# the right side, which is it's own side. This makes
 		# the game playable even if latency is high and ball
 		# is going fast. Otherwise ball might be out in the
 		# other player's screen but not this one.
-		if ball_pos.x > _screen_size.x:
-			get_parent().update_score.rpc(true)
-			_reset_ball.rpc(true)
+		#if ball_pos.x > _screen_size.x:
+		#	get_parent().update_score.rpc(true)
+		#	_reset_ball.rpc(true)
 
 
-@rpc("any_peer", "call_local")
+#@rpc("any_peer", "call_local")
 func bounce(left, random):
 	# Using sync because both players can make it bounce.
 	if left:
@@ -54,12 +55,12 @@ func bounce(left, random):
 	direction = direction.normalized()
 
 
-@rpc("any_peer", "call_local")
+#@rpc("any_peer", "call_local")
 func stop():
 	stopped = true
 
 
-@rpc("any_peer", "call_local")
+#@rpc("any_peer", "call_local")
 func _reset_ball(for_left):
 	position = _screen_size / 2
 	if for_left:

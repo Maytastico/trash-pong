@@ -10,18 +10,11 @@ var _you_hidden = false
 @onready var _screen_size_y = get_viewport_rect().size.y
 
 func _process(delta):
-	# Is the master of the paddle.
-	if is_multiplayer_authority():
-		_motion = Input.get_axis(&"move_up", &"move_down")
 
-		if not _you_hidden and _motion != 0:
-			_hide_you_label()
-
-		_motion *= MOTION_SPEED
-
-		# Using unreliable to make sure position is updated as fast
-		# as possible, even if one of the calls is dropped.
-		set_pos_and_motion.rpc(position, _motion)
+	if Global.activeRoom.player1 == Global.username && left:
+		handleMovement()
+	elif Global.activeRoom.player2 == Global.username && !left:
+		handleMovement()
 	else:
 		if not _you_hidden:
 			_hide_you_label()
@@ -31,9 +24,16 @@ func _process(delta):
 	# Set screen limits.
 	position.y = clamp(position.y, 16, _screen_size_y - 16)
 
+func handleMovement():
+	_motion = Input.get_axis(&"move_up", &"move_down")
+	if not _you_hidden and _motion != 0:
+		_hide_you_label()
+	_motion *= MOTION_SPEED
+	var payload = {"room_token": Global.roomToken, "position_x": position.x, "position_y" :  position.y, "motion": _motion, "username" : Global.username}
 
-# Synchronize position and speed to the other peers.
-@rpc("unreliable")
+	Global.client.socketio_send("update_paddle", payload)
+
+
 func set_pos_and_motion(pos, motion):
 	position = pos
 	_motion = motion
@@ -45,6 +45,18 @@ func _hide_you_label():
 
 
 func _on_paddle_area_enter(area):
-	if is_multiplayer_authority():
+	if Global.activeRoom.player1 == Global.username && left:
+		handleBounce(area)
+		
+	elif Global.activeRoom.player2 == Global.username && !left:
+		handleBounce(area)
+		
 		# Random for new direction generated checked each peer.
-		area.bounce.rpc(left, randf())
+		#area.bounce.rpc(left, randf())
+
+
+func handleBounce(area):
+	var random = randf()
+	var payload = {"room_token": Global.roomToken, "left": left, "random" :  random,  "username" : Global.username}
+	area.bounce(left, random)
+	Global.client.socketio_send("bounce", payload)
