@@ -216,6 +216,7 @@ export function initializeWebSocketServer(server: http.Server): void {
                 username: player.name,
             }
             
+            ws.emit("end", end);
             ws.to(room.raum_id.toString()).emit("end", end)
         });
 
