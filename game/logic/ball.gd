@@ -60,7 +60,7 @@ func bounce(left, random):
 	else:
 		direction.x = -abs(direction.x)
 
-	_speed *= 1.1
+	_speed *= 1.5
 	direction.y = random * 2.0 - 1
 	direction = direction.normalized()
 

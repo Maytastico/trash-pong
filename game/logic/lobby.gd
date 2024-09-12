@@ -168,3 +168,7 @@ func _on_login_request_completed(result, response_code, headers, body):
 
 func _on_name_text_submitted(new_text):
 	host_button.emit_signal("pressed")
+
+
+func _on_button_pressed():
+	get_tree().quit() # Replace with function body.

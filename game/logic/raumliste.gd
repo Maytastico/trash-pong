@@ -156,5 +156,5 @@ func _on_join_button_pressed():
 
 
 func _on_exit_pressed():
-	get_tree().quit()  # Beendet das Spiel
+	get_tree().quit()  
 
