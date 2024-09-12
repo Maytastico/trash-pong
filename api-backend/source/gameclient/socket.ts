@@ -75,6 +75,7 @@ export function initializeWebSocketServer(server: http.Server): void {
             
             // Holt sich die Informationen des Raums
             let room: Raum = await getRoom(roomId);
+ 
             
             // Wenn beim holen der Raum informationen etwas fehlschlägt
             // Wird ausgegeben, dass der Raum nicht exestiert
@@ -84,6 +85,11 @@ export function initializeWebSocketServer(server: http.Server): void {
                 return; 
                 }
             
+            if (room.user_id2 !== undefined){
+                ws.emit('error', 'Room is full');
+                return;
+            }
+
             // When the player is not the user that created the room stored in user_id one the 
             // player that joined that game will be associated with user_id2
             if (room.user_id1 !== player.user_id){
