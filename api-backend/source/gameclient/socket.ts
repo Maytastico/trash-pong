@@ -7,6 +7,7 @@ import { User } from '../types/User';
 import { deleteRoom, getRoom, getRoomsByPlayerID, joinRoom, updateRoom } from '../database/room';
 import { Raum } from '../types/Room';
 import { Bounce, Goal, Paddle } from '../types/Game';
+import { randomUUID } from 'crypto';
 
 export let io: SocketIOServer;
 
@@ -75,6 +76,7 @@ export function initializeWebSocketServer(server: http.Server): void {
             
             // Holt sich die Informationen des Raums
             let room: Raum = await getRoom(roomId);
+
             
             // Wenn beim holen der Raum informationen etwas fehlschlägt
             // Wird ausgegeben, dass der Raum nicht exestiert
@@ -84,6 +86,12 @@ export function initializeWebSocketServer(server: http.Server): void {
                 return; 
                 }
             
+            // When user_id2 which is the second play is decided the reqest sender can not join the room
+            if (room.user_id2 !== null){
+                ws.emit('error', 'Room is full');
+                return;
+            }
+
             // When the player is not the user that created the room stored in user_id one the 
             // player that joined that game will be associated with user_id2
             if (room.user_id1 !== player.user_id){
@@ -240,7 +248,7 @@ export function initializeWebSocketServer(server: http.Server): void {
             const rooms: Raum[] = await getRoomsByPlayerID(player.user_id);
             
             rooms.forEach(async (raum) => {
-                ws.to(raum.raum_id.toString()).emit("game", JSON.parse(`{"disconnected": "${player.user_id}"}`))
+                ws.to(raum.raum_id.toString()).emit("disconnected", JSON.parse(`{"disconnected": "${player.user_id}"}`))
                 await deleteRoom(raum.raum_id)
             });
         });
