@@ -35,9 +35,9 @@ func update_score(add_to_left):
 		winner_right.show()
 		game_ended = true
 
-	#if game_ended:
-	#	$ExitGame.show()
-	#	$Ball.stop.rpc()
+	if game_ended:
+		var payload = {"room_token": Global.roomToken,  "username" : Global.username}
+		Global.client.socketio_send("end", payload)
 
 
 func _on_exit_game_pressed():

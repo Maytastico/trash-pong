@@ -77,6 +77,8 @@ func on_socket_event(event_name: String, payload: Variant, _name_space):
 		pong.update_score(payload.left)
 	elif event_name == "disconnected":
 		getBackToLobby()
+	elif event_name == "end":
+		getBackToLobby()
 	elif  event_name == "error":
 		print(payload)
 		
@@ -152,6 +154,8 @@ func SetRoom(data):
 
 
 func _on_start_button_pressed():
+	if Global.activeRoom.player2 == "":
+		return
 	var payload = {"raum_id" : Global.activeRoom.raum_id}
 	var json_string =  JSON.new().stringify(payload)
 	Global.client.socketio_send("startPressed", json_string)
@@ -175,12 +179,12 @@ func getBackToLobby():
 	if pong:
 		pong.queue_free()  # Entfernt die Pong-Instanz
 		pong = null  
-		var root = get_tree().get_root()
-		root.remove_child(self)
-		Global.client.socketio_disconnect()
-		self.queue_free()
-		for child in root.get_children():
-			if child is Control:
-				if child.name == "CreateRoom":
-					continue
-				child.show()
+	var root = get_tree().get_root()
+	root.remove_child(self)
+	Global.client.socketio_disconnect()
+	self.queue_free()
+	for child in root.get_children():
+		if child is Control:
+			if child.name == "CreateRoom":
+				continue
+			child.show()
