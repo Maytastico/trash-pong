@@ -125,7 +125,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 0
 horizontal_alignment = 1
 
-[node name="Exit" type="Button" parent="."]
+[node name="Exit" type="Button" parent="LobbyPanel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -147,4 +147,4 @@ text = "Exit"
 [connection signal="text_submitted" from="LobbyPanel/Name" to="LobbyPanel" method="_on_name_text_submitted"]
 [connection signal="gui_input" from="LobbyPanel/HostButton" to="LobbyPanel" method="_on_host_button_gui_input"]
 [connection signal="pressed" from="LobbyPanel/HostButton" to="LobbyPanel" method="_on_host_pressed"]
-[connection signal="pressed" from="Exit" to="LobbyPanel" method="_on_button_pressed"]
+[connection signal="pressed" from="LobbyPanel/Exit" to="LobbyPanel" method="_on_button_pressed"]
