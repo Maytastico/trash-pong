@@ -2,7 +2,7 @@ extends Node2D
 
 signal game_finished()
 
-const SCORE_TO_WIN = 10
+const SCORE_TO_WIN = 2
 
 var score_left = 0
 var score_right = 0

@@ -10,6 +10,7 @@ var paddle_left
 var paddle_right
 var ball
 var pong = null
+var timer =null
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.client = SocketIOClient.new(Global.apiURL + "/socket.io", {"token": Global.jwtToken} )
@@ -17,6 +18,10 @@ func _ready():
 	Global.client.on_connect.connect(on_socket_connect)
 	Global.client.on_event.connect(on_socket_event)
 	add_child(Global.client)
+	timer = Timer.new()
+	timer.wait_time = 5  # 5 Sekunden
+	timer.one_shot = true  # Der Timer läuft nur einmal
+	add_child(timer)
 	self.hide()
 
 
@@ -78,6 +83,8 @@ func on_socket_event(event_name: String, payload: Variant, _name_space):
 	elif event_name == "disconnected":
 		getBackToLobby()
 	elif event_name == "end":
+		timer.start()
+		await timer.timeout
 		getBackToLobby()
 	elif  event_name == "error":
 		print(payload)
