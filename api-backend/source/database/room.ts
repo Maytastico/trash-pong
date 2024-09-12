@@ -125,6 +125,16 @@ export async function getAllRooms(): Promise<any[]> {
       client.release();
     }
   }
+
+/**
+ * Creates an specific room
+ * @param title String Title for the new Room
+ * @param pw String Password for the Room (or null)
+ * @param oeffentlich Boolean If the Room is public
+ * @param user_id1 Number User which created the Room
+ * @param user_id2 Number User which joined the Room
+ * @returns the Room ID for the new Room
+ */
 export async function createRoom(title:string,pw:string,oeffentlich:boolean,user_id1:number,user_id2:number | null) {
   const client = await pool.connect();
   try {
@@ -138,6 +148,16 @@ export async function createRoom(title:string,pw:string,oeffentlich:boolean,user
     client.release();
   } 
 }
+/**
+ * Updates a specific Room
+ * @param id Number ID of the Room
+ * @param title String Updated Title
+ * @param pw String Updated Password
+ * @param oeffentlich Boolean Update if the Room is public
+ * @param user_id1 Number User in the Room
+ * @param user_id2 Number User in the Room
+ * @returns the updated Room
+ */
 export async function updateRoom(id: number, title: string, pw: string, oeffentlich: boolean, user_id1: number, user_id2: number): Promise<any> {
   const client = await pool.connect();
   try {
@@ -158,6 +178,11 @@ export async function updateRoom(id: number, title: string, pw: string, oeffentl
     client.release();
   }
 }
+/**
+ * Deletes a Room
+ * @param id Number Id of the deleted Room
+ * @returns the deleted Room
+ */
 export async function deleteRoom(id: number): Promise<any> {
   const client = await pool.connect();
   try {
