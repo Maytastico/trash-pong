@@ -2,7 +2,7 @@ extends Node2D
 
 signal game_finished()
 
-const SCORE_TO_WIN = 2
+const SCORE_TO_WIN = 10
 
 var score_left = 0
 var score_right = 0
@@ -38,6 +38,7 @@ func update_score(add_to_left):
 	if game_ended:
 		var payload = {"room_token": Global.roomToken,  "username" : Global.username}
 		Global.client.socketio_send("end", payload)
+		
 
 
 func _on_exit_game_pressed():
