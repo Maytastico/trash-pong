@@ -9,6 +9,7 @@ extends Control
 var paddle_left
 var paddle_right
 var ball
+var pong
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.client = SocketIOClient.new(Global.apiURL + "/socket.io", {"token": Global.jwtToken} )
@@ -60,6 +61,7 @@ func on_socket_event(event_name: String, payload: Variant, _name_space):
 			paddle_left = imraum.get_node("Player1") 
 			paddle_right = imraum.get_node("Player2")  
 			ball = imraum.get_node("Ball")
+			pong = imraum.get_node("Pong")
 			hide()
 	elif event_name == "update_paddle":
 		#print(payload)
@@ -71,7 +73,9 @@ func on_socket_event(event_name: String, payload: Variant, _name_space):
 	elif event_name == "bounce":
 		print(Global.username + " " +  str(payload))
 		ball.bounce(payload.left, payload.random)
-	
+	elif event_name == "goal":
+		ball._reset_ball(payload.left)
+		pong.update_score(payload.left)
 	elif  event_name == "error":
 		print(payload)
 func _on_leave_button_pressed():

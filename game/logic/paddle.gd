@@ -47,12 +47,10 @@ func _hide_you_label():
 func _on_paddle_area_enter(area):
 	if Global.activeRoom.player1 == Global.username && left:
 		handleBounce(area)
-		
 	elif Global.activeRoom.player2 == Global.username && !left:
 		handleBounce(area)
 		
-		# Random for new direction generated checked each peer.
-		#area.bounce.rpc(left, randf())
+
 
 
 func handleBounce(area):

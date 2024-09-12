@@ -21,7 +21,12 @@ func _process(delta):
 	var ball_pos = position
 	if (ball_pos.y < 0 and direction.y < 0) or (ball_pos.y > _screen_size.y and direction.y > 0):
 		direction.y = -direction.y
-	#print(ball_pos)
+	
+	if Global.activeRoom.player1 == Global.username:
+		handleGoal(false)
+	elif Global.activeRoom.player2 == Global.username:
+		handleGoal(true)
+		
 	#if is_multiplayer_authority():
 		# Only the master will decide when the ball is out in
 		# the left side (it's own side). This makes the game
@@ -41,7 +46,11 @@ func _process(delta):
 		#	get_parent().update_score.rpc(true)
 		#	_reset_ball.rpc(true)
 
-
+func handleGoal(left):
+	var payload = {"room_token": Global.roomToken, "left": left,  "username" : Global.username}
+	Global.client.socketio_send("goal", payload)
+	get_parent().update_score(left)
+	_reset_ball(left)
 #@rpc("any_peer", "call_local")
 func bounce(left, random):
 	# Using sync because both players can make it bounce.

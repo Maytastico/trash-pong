@@ -18,25 +18,12 @@ const DEFAULT_PORT = 8910
 #var peer = null
 
 func _ready():
-	# Connect all the callbacks related to networking.
-	#multiplayer.peer_connected.connect(_player_connected)
-	#multiplayer.peer_disconnected.connect(_player_disconnected)
-	#multiplayer.connected_to_server.connect(_connected_ok)
-	#multiplayer.connection_failed.connect(_connected_fail)
-	#multiplayer.server_disconnected.connect(_server_disconnected)
+
 	username.grab_focus()
 	get_viewport().size = DisplayServer.screen_get_size()
-#### Network callbacks from SceneTree ####
 
-# Callback from SceneTree.
-func _player_connected(_id):
-	# Someone connected, start the game!
-	var pong = load("res://pong.tscn").instantiate()
-	# Connect deferred so we can safely erase it from the callback.
-	pong.game_finished.connect(_end_game, CONNECT_DEFERRED)
 
-	get_tree().get_root().add_child(pong)
-	hide()
+
 
 
 func _player_disconnected(_id):
@@ -52,12 +39,7 @@ func _connected_ok():
 
 
 # Callback from SceneTree, only for clients (not server).
-func _connected_fail():
-	_set_status("Couldn't connect.", false)
 
-	multiplayer.set_multiplayer_peer(null) # Remove peer.
-	host_button.set_disabled(false)
-#	join_button.set_disabled(false)
 
 
 func _server_disconnected():
