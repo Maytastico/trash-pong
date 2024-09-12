@@ -6,7 +6,7 @@ import { decodeAccessToken, generateRoomToken } from '../auth/auth';
 import { User } from '../types/User';
 import { deleteRoom, getRoom, getRoomsByPlayerID, joinRoom, updateRoom } from '../database/room';
 import { Raum } from '../types/Room';
-import { Bounce, Goal, Paddle } from '../types/Game';
+import { Bounce, Goal, Paddle, End } from '../types/Game';
 import { randomUUID } from 'crypto';
 
 export let io: SocketIOServer;
@@ -107,6 +107,7 @@ export function initializeWebSocketServer(server: http.Server): void {
             ws.to(roomId.toString()).emit('notification', `${player.name} has joined the room`);
         });
 
+        // startPressed is executed when the Game two uses 
         ws.on('startPressed', async () => {       
             // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
             let player: User;
@@ -127,6 +128,16 @@ export function initializeWebSocketServer(server: http.Server): void {
                 return; // Beenden der Funktion, um den Fehler zu behandeln
             }
             
+            if (room[0].user_id1 === null){
+                ws.emit("error", "Creator of this room disapeared :O");
+                return;
+            }
+
+            if (room[0].user_id2 === null){
+                ws.emit("error", "You're alone inside this room. You need a second player to join your room to play.");
+                return;
+            }
+
             // Generiert einen neuen Room Token
             let roomToken = generateRoomToken(room[0])
 
@@ -178,6 +189,34 @@ export function initializeWebSocketServer(server: http.Server): void {
             }
             
             ws.to(room.raum_id.toString()).emit("update_paddle", paddle)
+        });
+
+
+        ws.on('end', async (data: {room_token: string}) => {
+            const token = getToken(ws);
+            const {room_token} = data;
+            // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
+            let player: User;
+            let room: Raum;
+            try {
+                player = decodeAccessToken(token) as User;
+                if (room_token){
+                   jwt.verify(room_token, SECRET_KEY);
+                   room = decodeAccessToken(room_token) as Raum;
+                }else{
+                    ws.emit('error', 'Invalid room token');
+                    return;
+                }
+            } catch (err) {
+                ws.emit('error', 'Invalid token');
+                return;
+            }
+            
+            const end: End = {
+                username: player.name,
+            }
+            
+            ws.to(room.raum_id.toString()).emit("end", end)
         });
 
         ws.on('bounce', async (data: {room_token: string, left: boolean, random: number}) => {
