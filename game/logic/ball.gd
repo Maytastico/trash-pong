@@ -21,7 +21,6 @@ func _process(delta):
 	var ball_pos = position
 	if (ball_pos.y < 0 and direction.y < 0) or (ball_pos.y > _screen_size.y and direction.y > 0):
 		direction.y = -direction.y
-	print(ball_pos)
 	if Global.activeRoom.player1 == Global.username:
 		if ball_pos.x < 0:
 			handleGoal(false)
