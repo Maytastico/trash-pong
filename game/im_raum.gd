@@ -9,7 +9,7 @@ extends Control
 var paddle_left
 var paddle_right
 var ball
-var pong
+var pong = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.client = SocketIOClient.new(Global.apiURL + "/socket.io", {"token": Global.jwtToken} )
@@ -56,12 +56,11 @@ func on_socket_event(event_name: String, payload: Variant, _name_space):
 	elif event_name == "starting_game":
 			Global.roomToken = getRoomToken(str(payload))
 			print(Global.username + " " + Global.roomToken)
-			var imraum = load("res://pong.tscn").instantiate()
-			get_tree().get_root().add_child(imraum)
-			paddle_left = imraum.get_node("Player1") 
-			paddle_right = imraum.get_node("Player2")  
-			ball = imraum.get_node("Ball")
-			pong = imraum
+			pong = load("res://pong.tscn").instantiate()
+			get_tree().get_root().add_child(pong)
+			paddle_left = pong.get_node("Player1") 
+			paddle_right = pong.get_node("Player2")  
+			ball = pong.get_node("Ball")
 			hide()
 	elif event_name == "update_paddle":
 		#print(payload)
@@ -76,8 +75,10 @@ func on_socket_event(event_name: String, payload: Variant, _name_space):
 	elif event_name == "goal":
 		ball._reset_ball(payload.left)
 		pong.update_score(payload.left)
-	elif event_name == "game":
-		pass
+	elif event_name == "disconnected":
+		getBackToLobby()
+	elif event_name == "end":
+		getBackToLobby()
 	elif  event_name == "error":
 		print(payload)
 		
@@ -153,6 +154,8 @@ func SetRoom(data):
 
 
 func _on_start_button_pressed():
+	if Global.activeRoom.player2 == "":
+		return
 	var payload = {"raum_id" : Global.activeRoom.raum_id}
 	var json_string =  JSON.new().stringify(payload)
 	Global.client.socketio_send("startPressed", json_string)
@@ -170,3 +173,18 @@ func getRoomToken(data):
 		return ""
 		
 
+
+
+func getBackToLobby():
+	if pong:
+		pong.queue_free()  # Entfernt die Pong-Instanz
+		pong = null  
+	var root = get_tree().get_root()
+	root.remove_child(self)
+	Global.client.socketio_disconnect()
+	self.queue_free()
+	for child in root.get_children():
+		if child is Control:
+			if child.name == "CreateRoom":
+				continue
+			child.show()
