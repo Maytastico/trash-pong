@@ -151,3 +151,8 @@ func _on_join_button_pressed():
 		get_tree().get_root().add_child(imraum)
 		hide()
 	 
+
+
+func _on_exit_pressed():
+	get_tree().quit()  # Beendet das Spiel
+
