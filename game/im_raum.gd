@@ -61,7 +61,7 @@ func on_socket_event(event_name: String, payload: Variant, _name_space):
 			paddle_left = imraum.get_node("Player1") 
 			paddle_right = imraum.get_node("Player2")  
 			ball = imraum.get_node("Ball")
-			pong = imraum.get_node("Pong")
+			pong = imraum
 			hide()
 	elif event_name == "update_paddle":
 		#print(payload)
