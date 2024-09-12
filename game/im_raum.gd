@@ -76,8 +76,11 @@ func on_socket_event(event_name: String, payload: Variant, _name_space):
 	elif event_name == "goal":
 		ball._reset_ball(payload.left)
 		pong.update_score(payload.left)
+	elif event_name == "game":
+		pass
 	elif  event_name == "error":
 		print(payload)
+		
 func _on_leave_button_pressed():
 	var root = get_tree().get_root()
 	root.remove_child(self)
@@ -86,9 +89,9 @@ func _on_leave_button_pressed():
 	
 	for child in root.get_children():
 		if child is Control:
-			if child.name == "CreateRoom":
-				continue
-			child.show()
+			if child.name == "Raumliste":
+				child.show()
+			
 			
 			
 func ChangeNumberOfPlayers():

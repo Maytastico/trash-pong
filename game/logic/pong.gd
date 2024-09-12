@@ -35,9 +35,9 @@ func update_score(add_to_left):
 		winner_right.show()
 		game_ended = true
 
-	if game_ended:
-		$ExitGame.show()
-		$Ball.stop.rpc()
+	#if game_ended:
+	#	$ExitGame.show()
+	#	$Ball.stop.rpc()
 
 
 func _on_exit_game_pressed():

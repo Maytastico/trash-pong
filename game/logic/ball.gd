@@ -1,6 +1,6 @@
 extends Area2D
 
-const DEFAULT_SPEED = 100
+const DEFAULT_SPEED = 200
 
 var direction = Vector2.LEFT
 var stopped = false
@@ -21,11 +21,13 @@ func _process(delta):
 	var ball_pos = position
 	if (ball_pos.y < 0 and direction.y < 0) or (ball_pos.y > _screen_size.y and direction.y > 0):
 		direction.y = -direction.y
-	
+	print(ball_pos)
 	if Global.activeRoom.player1 == Global.username:
-		handleGoal(false)
+		if ball_pos.x < 0:
+			handleGoal(false)
 	elif Global.activeRoom.player2 == Global.username:
-		handleGoal(true)
+		if ball_pos.x > _screen_size.x:
+			handleGoal(true)
 		
 	#if is_multiplayer_authority():
 		# Only the master will decide when the ball is out in

@@ -5,6 +5,7 @@ extends Control
 @onready var RefrshButton = $Refresh
 @onready var PasswordPanel = $EnterPasswordPanel
 @onready var PasswordTextBox = $EnterPasswordPanel/EnterPasswordLabel/InputPassword
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	RefrshButton.disabled = true
@@ -26,7 +27,7 @@ func _on_join_room_pressed():
 	else:
 		Global.activeRoomID = Global.rooms[selected_items[0]].raum_id
 		Global.activeRoom = Global.rooms[selected_items[0]]
-		if(!checkForPassword(selected_items[0])):
+		if(!checkForPassword(Global.activeRoom)):
 			var imraum = load("res://im_raum.tscn").instantiate()
 			get_tree().get_root().add_child(imraum)
 			hide()
@@ -34,8 +35,8 @@ func _on_join_room_pressed():
 
 
 
-func checkForPassword(roomID : int):
-	if(!Global.rooms[roomID].public):
+func checkForPassword(activeRoom):
+	if(!activeRoom.public):
 		PasswordPanel.show()
 		return true
 	return false
@@ -140,3 +141,13 @@ func _on_cancel_pressed():
 	PasswordTextBox.text = ""
 	PasswordPanel.hide()
 	
+
+
+func _on_join_button_pressed():
+	if PasswordTextBox.text == Global.activeRoom.password:
+		PasswordTextBox.text = ""
+		PasswordPanel.hide()
+		var imraum = load("res://im_raum.tscn").instantiate()
+		get_tree().get_root().add_child(imraum)
+		hide()
+	 
