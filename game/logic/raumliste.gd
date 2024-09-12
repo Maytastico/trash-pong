@@ -27,7 +27,8 @@ func _on_join_room_pressed():
 	else:
 		Global.activeRoomID = Global.rooms[selected_items[0]].raum_id
 		Global.activeRoom = Global.rooms[selected_items[0]]
-		if Global.activeRoom.player2 != "":
+		
+		if Global.activeRoom.player2 == "":
 			if(!checkForPassword(Global.activeRoom)):
 				var imraum = load("res://im_raum.tscn").instantiate()
 				get_tree().get_root().add_child(imraum)
