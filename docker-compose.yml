@@ -24,23 +24,18 @@ services:
       PGUSER: testuser
       PGPASSWORD: SicheresPasswort!
       PGDATABASE: pong_daten
-    ports:
-      - "3000:3000"
+    scale: 3
     links:
       - db
     depends_on:
       - db
     restart: always
-  game:
-    build:
-        context: ./game
-        dockerfile: Dockerfile
+  nginx:
+    build: ./nginx 
     ports:
-      - "8080:8080"
-    links:
-      - backend
-    restart: always
+    - "3000:80"
     depends_on:
+      - db
       - backend
 volumes:
   db:
