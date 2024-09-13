@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bhnvjhtyhh65c"]
+[gd_scene load_steps=5 format=3 uid="uid://bhnvjhtyhh65c"]
 
 [ext_resource type="Script" path="res://im_raum.gd" id="1_bwh5w"]
 [ext_resource type="FontFile" uid="uid://baeom0xb31cqk" path="res://ressources/PressStart2P-Regular.ttf" id="1_niiwp"]
+[ext_resource type="AudioStream" uid="uid://btxncrt2vf6cm" path="res://ressources/Click.mp3" id="2_lmnhy"]
+[ext_resource type="Theme" uid="uid://bqe7fuww5f7vh" path="res://ressources/buttontheme.tres" id="3_pic11"]
 
 [node name="ImRaum" type="Control"]
 layout_mode = 3
@@ -11,6 +13,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_bwh5w")
+
+[node name="Click" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_lmnhy")
 
 [node name="Raumname" type="Label" parent="."]
 layout_mode = 1
@@ -41,6 +46,8 @@ offset_right = 635.0
 offset_bottom = 369.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_pic11")
+theme_override_fonts/font = ExtResource("1_niiwp")
 text = "Start Game"
 
 [node name="LeaveButton" type="Button" parent="."]
@@ -56,6 +63,8 @@ offset_right = -303.0
 offset_bottom = 360.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_pic11")
+theme_override_fonts/font = ExtResource("1_niiwp")
 text = "Leave"
 
 [node name="NumberOfPlayers" type="Label" parent="."]

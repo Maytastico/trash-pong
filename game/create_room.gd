@@ -1,13 +1,12 @@
 extends Control
 
-
 @onready var validateSessionRequest = $ValidateSession
 @onready var createRoomRequest = $CreateRoom
 @onready var RoomnameObject = $RoomNameLabel/Roomname
 @onready var PasswordLabel = $PasswordLabel/Password
 @onready var requirePasswordObject = $RequirePassword
 @onready var getRoom = $GetAllSeRooms
-
+@onready var click_sound = $Click
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -21,11 +20,11 @@ func _process(delta):
 
 
 func _on_cancel_button_pressed():
+	click_sound.play()
 	var root = get_tree().get_root()
 	root.remove_child(self)
-
 	self.queue_free()
-	
+
 	for child in root.get_children():
 		if child is Control:
 			child.show()
@@ -33,6 +32,7 @@ func _on_cancel_button_pressed():
 
 
 func _on_create_button_pressed():
+	click_sound.play()
 	var Roomname = RoomnameObject.text
 	var needsPassword = !requirePasswordObject.button_pressed
 	var password = PasswordLabel.text

@@ -5,7 +5,8 @@ const DEFAULT_SPEED = 200
 var direction = Vector2.LEFT
 var stopped = false
 var _speed = DEFAULT_SPEED
-
+@onready var bounce_sound = $Bounce
+@onready var goal_sound = $Goal
 @onready var _screen_size = get_viewport_rect().size
 
 func _process(delta):
@@ -20,6 +21,7 @@ func _process(delta):
 	# Check screen bounds to make ball bounce.
 	var ball_pos = position
 	if (ball_pos.y < 0 and direction.y < 0) or (ball_pos.y > _screen_size.y and direction.y > 0):
+		bounce_sound.play()
 		direction.y = -direction.y
 	if Global.activeRoom.player1 == Global.username:
 		if ball_pos.x < 0:
@@ -27,25 +29,6 @@ func _process(delta):
 	elif Global.activeRoom.player2 == Global.username:
 		if ball_pos.x > _screen_size.x:
 			handleGoal(true)
-		
-	#if is_multiplayer_authority():
-		# Only the master will decide when the ball is out in
-		# the left side (it's own side). This makes the game
-		# playable even if latency is high and ball is going
-		# fast. Otherwise ball might be out in the other
-		# player's screen but not this one.
-		#if ball_pos.x < 0:
-		#	get_parent().update_score.rpc(false)
-		#	_reset_ball.rpc(false)
-	#else:
-		# Only the puppet will decide when the ball is out in
-		# the right side, which is it's own side. This makes
-		# the game playable even if latency is high and ball
-		# is going fast. Otherwise ball might be out in the
-		# other player's screen but not this one.
-		#if ball_pos.x > _screen_size.x:
-		#	get_parent().update_score.rpc(true)
-		#	_reset_ball.rpc(true)
 
 func handleGoal(left):
 	var payload = {"room_token": Global.roomToken, "left": left,  "username" : Global.username}
@@ -54,7 +37,7 @@ func handleGoal(left):
 	_reset_ball(left)
 #@rpc("any_peer", "call_local")
 func bounce(left, random):
-	# Using sync because both players can make it bounce.
+	bounce_sound.play()
 	if left:
 		direction.x = abs(direction.x)
 	else:
@@ -65,13 +48,14 @@ func bounce(left, random):
 	direction = direction.normalized()
 
 
-#@rpc("any_peer", "call_local")
+
 func stop():
 	stopped = true
 
 
-#@rpc("any_peer", "call_local")
+
 func _reset_ball(for_left):
+	goal_sound.play()
 	position = _screen_size / 2
 	if for_left:
 		direction = Vector2.LEFT

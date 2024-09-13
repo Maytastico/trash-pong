@@ -6,7 +6,6 @@ const MOTION_SPEED = 350
 
 var _motion = 0
 var _you_hidden = false
-
 @onready var _screen_size_y = get_viewport_rect().size.y
 
 func _process(delta):
@@ -30,7 +29,6 @@ func handleMovement():
 		_hide_you_label()
 	_motion *= MOTION_SPEED
 	var payload = {"room_token": Global.roomToken, "position_x": position.x, "position_y" :  position.y, "motion": _motion, "username" : Global.username}
-
 	Global.client.socketio_send("update_paddle", payload)
 
 
@@ -50,8 +48,6 @@ func _on_paddle_area_enter(area):
 	elif Global.activeRoom.player2 == Global.username && !left:
 		handleBounce(area)
 		
-
-
 
 func handleBounce(area):
 	var random = randf()

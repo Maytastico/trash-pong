@@ -5,17 +5,15 @@ extends Control
 @onready var RaumLabel = $Raumname
 @onready var NumberOfPlayers = $NumberOfPlayers
 @onready var getRoomRequest = $GetRoom
-
+@onready var click_sound = $Click
 var paddle_left
 var paddle_right
 var ball
 var pong = null
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	#timer = Timer.new()
-	#timer.wait_time = 5  # 5 Sekunden
-	#timer.one_shot = true  # Der Timer läuft nur einmal
-	#add_child(timer)
+
 	Global.client = SocketIOClient.new(Global.apiURL + "/socket.io", {"token": Global.jwtToken} )
 	Global.client.on_engine_connected.connect(on_socket_ready)
 	Global.client.on_connect.connect(on_socket_connect)
@@ -94,8 +92,10 @@ func on_socket_event(event_name: String, payload: Variant, _name_space):
 		getBackToLobby()
 	elif  event_name == "error":
 		print(payload)
-		
+
+
 func _on_leave_button_pressed():
+	click_sound.play()
 	var root = get_tree().get_root()
 	root.remove_child(self)
 	Global.client.socketio_disconnect()
@@ -105,9 +105,9 @@ func _on_leave_button_pressed():
 		if child is Control:
 			if child.name == "Raumliste":
 				child.show()
-			
-			
-			
+
+
+
 func ChangeNumberOfPlayers():
 	var number
 	if(Global.activeRoom.player2 == ""):
@@ -167,6 +167,7 @@ func SetRoom(data):
 
 
 func _on_start_button_pressed():
+	click_sound.play()
 	if Global.activeRoom.player2 == "":
 		return
 	var payload = {"raum_id" : Global.activeRoom.raum_id}
@@ -193,7 +194,8 @@ func getBackToLobby():
 		pong.queue_free()  # Entfernt die Pong-Instanz
 		pong = null  
 	goLobby()
-				
+
+
 func goLobby():
 	var root = get_tree().get_root()
 	root.remove_child(self)

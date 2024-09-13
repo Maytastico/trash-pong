@@ -4,7 +4,7 @@ extends Control
 # Not present on the list of registered or common ports as of December 2022:
 # https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
 const DEFAULT_PORT = 8910
-
+@onready var click_sound = $"../Click"
 @onready var username = $Name
 @onready var host_button = $HostButton
 #@onready var join_button = $JoinButton
@@ -15,50 +15,12 @@ const DEFAULT_PORT = 8910
 @onready var loginRequest = %Login
 
 
-#var peer = null
 
 func _ready():
-
 	username.grab_focus()
 	get_viewport().size = DisplayServer.screen_get_size()
 
 
-
-
-
-func _player_disconnected(_id):
-	if multiplayer.is_server():
-		_end_game("Client disconnected")
-	else:
-		_end_game("Server disconnected")
-
-
-# Callback from SceneTree, only for clients (not server).
-func _connected_ok():
-	pass # This function is not needed for this project.
-
-
-# Callback from SceneTree, only for clients (not server).
-
-
-
-func _server_disconnected():
-	_end_game("Server disconnected.")
-
-##### Game creation functions ######
-
-func _end_game(with_error = ""):
-	if has_node("/root/Pong"):
-		# Erase immediately, otherwise network might show
-		# errors (this is why we connected deferred above).
-		get_node(^"/root/Pong").free()
-		show()
-
-	multiplayer.set_multiplayer_peer(null) # Remove peer.
-	host_button.set_disabled(false)
-#	join_button.set_disabled(false)
-
-	_set_status(with_error, false)
 
 
 func _set_status(text, isok):
@@ -72,6 +34,7 @@ func _set_status(text, isok):
 
 
 func _on_host_pressed():
+	click_sound.play()
 	if(username.text.strip_edges() == ""):
 		_set_status("Enter a username", false)
 		return
@@ -106,41 +69,6 @@ func _login():
 		print("Failed to send request: ", err)
 		return -1
 	return 0
-		
-	#peer = ENetMultiplayerPeer.new()
-	#var err = peer.create_server(DEFAULT_PORT, 1) # Maximum of 1 peer, since it's a 2-player game.
-	#if err != OK:
-		# Is another server running?
-	#	_set_status("Can't host, address in use.",false)
-	#	return
-	#peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
-
-	#multiplayer.set_multiplayer_peer(peer)
-	#host_button.set_disabled(true)
-#	join_button.set_disabled(true)
-	#_set_status("Waiting for player...", true)
-
-	# Only show hosting instructions when relevant.
-	#port_forward_label.visible = true
-	#find_public_ip_button.visible = true
-
-
-#func _on_join_pressed():
-#	var ip = address.get_text()
-#	if not ip.is_valid_ip_address():
-#		_set_status("IP address is invalid.", false)
-#		return
-
-#	peer = ENetMultiplayerPeer.new()
-#	peer.create_client(ip, DEFAULT_PORT)
-#	peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
-#	multiplayer.set_multiplayer_peer(peer)
-
-#	_set_status("Connecting...", true)
-
-
-
-
 
 
 
@@ -171,4 +99,5 @@ func _on_name_text_submitted(new_text):
 
 
 func _on_button_pressed():
+	click_sound.play()
 	get_tree().quit() # Replace with function body.

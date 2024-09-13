@@ -1,6 +1,5 @@
 extends Node2D
 
-signal game_finished()
 
 const SCORE_TO_WIN = 10
 
@@ -41,5 +40,3 @@ func update_score(add_to_left):
 		
 
 
-func _on_exit_game_pressed():
-	game_finished.emit()

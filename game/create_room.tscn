@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://cvdld70iesfj0"]
+[gd_scene load_steps=7 format=3 uid="uid://cvdld70iesfj0"]
 
 [ext_resource type="Script" path="res://create_room.gd" id="1_kx5jo"]
 [ext_resource type="FontFile" uid="uid://baeom0xb31cqk" path="res://ressources/PressStart2P-Regular.ttf" id="1_lrs6h"]
 [ext_resource type="Script" path="res://logic/RequirePassword.gd" id="2_s5wax"]
+[ext_resource type="Theme" uid="uid://bqe7fuww5f7vh" path="res://ressources/buttontheme.tres" id="3_lwctx"]
+[ext_resource type="Theme" uid="uid://ctm1axwp10w3y" path="res://ressources/lineedittheme.tres" id="5_akkeu"]
+[ext_resource type="AudioStream" uid="uid://btxncrt2vf6cm" path="res://ressources/Click.mp3" id="6_q3yc2"]
 
 [node name="CreateRoom" type="Control"]
 layout_mode = 3
@@ -40,6 +43,8 @@ offset_right = 616.0
 offset_bottom = 413.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_lwctx")
+theme_override_fonts/font = ExtResource("1_lrs6h")
 text = "Create Room"
 
 [node name="CancelButton" type="Button" parent="."]
@@ -55,6 +60,8 @@ offset_right = -267.0
 offset_bottom = 401.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_lwctx")
+theme_override_fonts/font = ExtResource("1_lrs6h")
 text = "Cancel"
 
 [node name="RequirePassword" type="CheckButton" parent="."]
@@ -104,6 +111,7 @@ offset_right = 400.0
 offset_bottom = 18.5
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("5_akkeu")
 secret = true
 
 [node name="RoomNameLabel" type="Label" parent="."]
@@ -135,6 +143,8 @@ offset_right = 392.0
 offset_bottom = 28.5
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("5_akkeu")
+theme_override_fonts/font = ExtResource("1_lrs6h")
 max_length = 25
 
 [node name="ValidateSession" type="HTTPRequest" parent="."]
@@ -142,6 +152,9 @@ max_length = 25
 [node name="CreateRoom" type="HTTPRequest" parent="."]
 
 [node name="GetAllSeRooms" type="HTTPRequest" parent="."]
+
+[node name="Click" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_q3yc2")
 
 [connection signal="pressed" from="CreateButton" to="." method="_on_create_button_pressed"]
 [connection signal="pressed" from="CancelButton" to="." method="_on_cancel_button_pressed"]

@@ -5,7 +5,7 @@ extends Control
 @onready var RefrshButton = $Refresh
 @onready var PasswordPanel = $EnterPasswordPanel
 @onready var PasswordTextBox = $EnterPasswordPanel/EnterPasswordLabel/InputPassword
-
+@onready var click_sound = $Click
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	RefrshButton.disabled = true
@@ -21,6 +21,7 @@ func _process(delta):
 
 		
 func _on_join_room_pressed():
+	click_sound.play()
 	var selected_items = RaumListe.get_selected_items()
 	if(selected_items.size() <= 0):
 		return
@@ -44,6 +45,7 @@ func checkForPassword(activeRoom):
 	return false
 
 func _on_create_room_pressed():
+	click_sound.play()
 	var createroom = load("res://create_room.tscn").instantiate()
 	get_tree().get_root().add_child(createroom)
 	hide()
@@ -129,6 +131,7 @@ func fillRoomList():
 
 
 func _on_refresh_pressed():
+	click_sound.play()
 	RefrshButton.disabled = true
 	var url = Global.apiURL + "/api/room"
 	var token = Global.jwtToken
@@ -140,12 +143,14 @@ func _on_refresh_pressed():
 
 
 func _on_cancel_pressed():
+	click_sound.play()
 	PasswordTextBox.text = ""
 	PasswordPanel.hide()
 	
 
 
 func _on_join_button_pressed():
+	click_sound.play()
 	if PasswordTextBox.text == Global.activeRoom.password:
 		PasswordTextBox.text = ""
 		PasswordPanel.hide()
@@ -156,5 +161,6 @@ func _on_join_button_pressed():
 
 
 func _on_exit_pressed():
+	click_sound.play()
 	get_tree().quit()  
 
