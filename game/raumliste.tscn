@@ -176,4 +176,5 @@ stream = ExtResource("5_k1jpf")
 [connection signal="pressed" from="EnterPasswordPanel/JoinButton" to="." method="_on_join_button_pressed"]
 [connection signal="pressed" from="EnterPasswordPanel/Cancel" to="." method="_on_cancel_pressed"]
 [connection signal="pressed" from="Refresh" to="." method="_on_refresh_pressed"]
+[connection signal="button_down" from="Exit" to="." method="_on_exit_button_down"]
 [connection signal="pressed" from="Exit" to="." method="_on_exit_pressed"]

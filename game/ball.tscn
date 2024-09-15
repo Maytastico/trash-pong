@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://bjmldn1x3lpa"]
 
 [ext_resource type="Script" path="res://logic/ball.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://i1imfdcn7ui" path="res://ball.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://i1imfdcn7ui" path="res://ressources/ball.png" id="2"]
 [ext_resource type="AudioStream" uid="uid://bpustsenw5hhk" path="res://ressources/bounce.mp3" id="3_u6qx1"]
 [ext_resource type="AudioStream" uid="uid://blk5nul4nmecu" path="res://ressources/goal.mp3" id="4_ndkkx"]
 
@@ -12,9 +12,11 @@ radius = 5.11969
 script = ExtResource("1")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
 texture = ExtResource("2")
 
 [node name="Shape3D" type="CollisionShape2D" parent="."]
+scale = Vector2(1.7, 1.7)
 shape = SubResource("1")
 
 [node name="Bounce" type="AudioStreamPlayer2D" parent="."]

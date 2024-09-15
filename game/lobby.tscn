@@ -178,4 +178,5 @@ text = "Exit"
 [connection signal="text_submitted" from="LobbyPanel/Name" to="LobbyPanel" method="_on_name_text_submitted"]
 [connection signal="gui_input" from="LobbyPanel/HostButton" to="LobbyPanel" method="_on_host_button_gui_input"]
 [connection signal="pressed" from="LobbyPanel/HostButton" to="LobbyPanel" method="_on_host_pressed"]
+[connection signal="button_down" from="LobbyPanel/Exit" to="LobbyPanel" method="_on_exit_button_down"]
 [connection signal="pressed" from="LobbyPanel/Exit" to="LobbyPanel" method="_on_button_pressed"]

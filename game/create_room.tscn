@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://cvdld70iesfj0"]
 
-[ext_resource type="Script" path="res://create_room.gd" id="1_kx5jo"]
+[ext_resource type="Script" path="res://logic/create_room.gd" id="1_kx5jo"]
 [ext_resource type="FontFile" uid="uid://baeom0xb31cqk" path="res://ressources/PressStart2P-Regular.ttf" id="1_lrs6h"]
 [ext_resource type="Script" path="res://logic/RequirePassword.gd" id="2_s5wax"]
 [ext_resource type="Theme" uid="uid://bqe7fuww5f7vh" path="res://ressources/buttontheme.tres" id="3_lwctx"]
@@ -157,6 +157,7 @@ max_length = 25
 stream = ExtResource("6_q3yc2")
 
 [connection signal="pressed" from="CreateButton" to="." method="_on_create_button_pressed"]
+[connection signal="button_down" from="CancelButton" to="." method="_on_cancel_button_button_down"]
 [connection signal="pressed" from="CancelButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="toggled" from="RequirePassword" to="RequirePassword" method="_on_toggled"]
 [connection signal="request_completed" from="CreateRoom" to="." method="_on_create_room_request_completed"]

@@ -1,3 +1,5 @@
+# Importierte Socket-IO Bibliothek
+# https://github.com/teamclouday/GodotSocketIO
 class_name SocketIOClient extends Node
 
 enum EngineIOPacketType {

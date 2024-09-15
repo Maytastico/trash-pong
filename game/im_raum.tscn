@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bhnvjhtyhh65c"]
 
-[ext_resource type="Script" path="res://im_raum.gd" id="1_bwh5w"]
+[ext_resource type="Script" path="res://logic/im_raum.gd" id="1_bwh5w"]
 [ext_resource type="FontFile" uid="uid://baeom0xb31cqk" path="res://ressources/PressStart2P-Regular.ttf" id="1_niiwp"]
 [ext_resource type="AudioStream" uid="uid://btxncrt2vf6cm" path="res://ressources/Click.mp3" id="2_lmnhy"]
 [ext_resource type="Theme" uid="uid://bqe7fuww5f7vh" path="res://ressources/buttontheme.tres" id="3_pic11"]
@@ -132,5 +132,6 @@ theme_override_fonts/font = ExtResource("1_niiwp")
 [node name="GetRoom" type="HTTPRequest" parent="."]
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="button_down" from="LeaveButton" to="." method="_on_leave_button_button_down"]
 [connection signal="pressed" from="LeaveButton" to="." method="_on_leave_button_pressed"]
 [connection signal="request_completed" from="GetRoom" to="." method="_on_get_room_request_completed"]
