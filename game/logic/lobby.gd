@@ -1,188 +1,104 @@
 extends Control
 
-# Default game server port. Can be any number between 1024 and 49151.
-# Not present on the list of registered or common ports as of December 2022:
-# https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
-const DEFAULT_PORT = 8910
+# Szenen Nodes
+@onready var click_sound = $"../Click"                                    # Klick Sound Node
+@onready var username = $Name                                             # Username Textbox
+@onready var host_button = $HostButton                                    # Connect-Knopf
+@onready var status_ok = $StatusOk                                        # Weiße Status Meldung
+@onready var status_fail = $StatusFail                                    # Rote Statusmeldung
+@onready var pingRequest = %Ping                                          # Ping HTTP-Request
+@onready var loginRequest = %Login                                        # Login HTTP-Request
 
-@onready var username = $Name
-@onready var host_button = $HostButton
-#@onready var join_button = $JoinButton
-@onready var status_ok = $StatusOk
-@onready var status_fail = $StatusFail
-
-@onready var pingRequest = %Ping
-@onready var loginRequest = %Login
-
-
-#var peer = null
-
+# Funktion wird Aufgerufen wenn die Szene Startet
 func _ready():
-	# Connect all the callbacks related to networking.
-	#multiplayer.peer_connected.connect(_player_connected)
-	#multiplayer.peer_disconnected.connect(_player_disconnected)
-	#multiplayer.connected_to_server.connect(_connected_ok)
-	#multiplayer.connection_failed.connect(_connected_fail)
-	#multiplayer.server_disconnected.connect(_server_disconnected)
-	username.grab_focus()
-	get_viewport().size = DisplayServer.screen_get_size()
-#### Network callbacks from SceneTree ####
-
-# Callback from SceneTree.
-func _player_connected(_id):
-	# Someone connected, start the game!
-	var pong = load("res://pong.tscn").instantiate()
-	# Connect deferred so we can safely erase it from the callback.
-	pong.game_finished.connect(_end_game, CONNECT_DEFERRED)
-
-	get_tree().get_root().add_child(pong)
-	hide()
+	username.grab_focus()                                                 # Focus wird auf die Textbox gesetzt (man muss nicht mehr mit der Maus extra drauf drücken) 
+	get_viewport().size = DisplayServer.screen_get_size()                 # Fenstergröße wird auf Vollbild gesetzt
 
 
-func _player_disconnected(_id):
-	if multiplayer.is_server():
-		_end_game("Client disconnected")
-	else:
-		_end_game("Server disconnected")
 
-
-# Callback from SceneTree, only for clients (not server).
-func _connected_ok():
-	pass # This function is not needed for this project.
-
-
-# Callback from SceneTree, only for clients (not server).
-func _connected_fail():
-	_set_status("Couldn't connect.", false)
-
-	multiplayer.set_multiplayer_peer(null) # Remove peer.
-	host_button.set_disabled(false)
-#	join_button.set_disabled(false)
-
-
-func _server_disconnected():
-	_end_game("Server disconnected.")
-
-##### Game creation functions ######
-
-func _end_game(with_error = ""):
-	if has_node("/root/Pong"):
-		# Erase immediately, otherwise network might show
-		# errors (this is why we connected deferred above).
-		get_node(^"/root/Pong").free()
-		show()
-
-	multiplayer.set_multiplayer_peer(null) # Remove peer.
-	host_button.set_disabled(false)
-#	join_button.set_disabled(false)
-
-	_set_status(with_error, false)
-
-
+# Funktion um Fehlernachrichten anzuzeigen
 func _set_status(text, isok):
-	# Simple way to show status.
-	if isok:
+	if isok:                                                              # Enntweder roter oder weißer Text
 		status_ok.set_text(text)
 		status_fail.set_text("")
 	else:
 		status_ok.set_text("")
 		status_fail.set_text(text)
 
-
+# Wenn der Connect-Knopf gedrückt wird
 func _on_host_pressed():
-	if(username.text.strip_edges() == ""):
+	click_sound.play()                                                     # Click Sound wird abgespielt
+	if(username.text.strip_edges() == ""):                                 # Textfeld darf nicht leer sein
 		_set_status("Enter a username", false)
 		return
-	_set_status("Connecting...", true)
-	host_button.set_disabled(true)
-	if(_ping() < 0):
+	_set_status("Connecting...", true)                                     
+	host_button.set_disabled(true)                                         # Knopf wird deaktiviert um mehrere Anfragen zu vermeiden
+	if(_ping() < 0):                                                       # Es wird geschaut ob der Server online ist
 		return
-	if(_login() < 0):
+	if(_login() < 0):                                                      # Wenn Server Online ist, wird Login versuch gestartet
 		return
 	
-	
+# Funktion Sendet einen Asyncronen Ping Request an den Server
+# Wenn der Request erfolgt ist wird die _on_ping_request_completed() Funktion aufgerufen
 func _ping():
 	var url = Global.apiURL + "/health/ping"
-	var err = pingRequest.request(url, [], HTTPClient.METHOD_GET)
-	if err != OK:
+	var err = pingRequest.request(url, [], HTTPClient.METHOD_GET)         # Neuer HTTP-GET-Request ohne Header & Payload wird verschickt
+	if err != OK:                                                         # Wenn in der Libary was schief gegangen ist wird nicht weitergemacht
 		_set_status("Internal Error", false)
 		print("Failed to send request: ", err)
 		return -1
 	return 0
-	
+
+
+# Funktion Sendet einen Asyncronen Request an den Server um sich zu registrieren
+# Wenn der Request erfolgt ist wird die _on_login_request_completed() Funktion aufgerufen
 func _login():
 	var url = Global.apiURL + "/user/login"
-	Global.username = username.text
-	var json_obj = {"username": Global.username}
-	var json_string =  JSON.new().stringify(json_obj)
+	Global.username = username.text                                               # Der Username aus der Textbox wird in eine Globale Variable gespeichert
+	var json_obj = {"username": Global.username}                                  # Username wird in ein JSON-Objekt gepackt
+	var json_string =  JSON.new().stringify(json_obj)                             # und geparsed
 
-	var headers = ["Content-Type: application/json"]
+	var headers = ["Content-Type: application/json"]                              # ist selbsterklärend...
 	
-	var err = loginRequest.request(url, headers, HTTPClient.METHOD_POST, json_string)
-	if err != OK:
-		_set_status("Internal Error", false)
+	var err = loginRequest.request(url, headers, HTTPClient.METHOD_POST, json_string) # neier HTTP-POST-Request mit dem Username und dem Json Header wird an den Server gesendet
+	if err != OK:                                                                 # Wenn in der Libary was schief gegangen ist wird nicht weitergemacht
+		_set_status("Internal Error", false)      
 		print("Failed to send request: ", err)
 		return -1
 	return 0
-		
-	#peer = ENetMultiplayerPeer.new()
-	#var err = peer.create_server(DEFAULT_PORT, 1) # Maximum of 1 peer, since it's a 2-player game.
-	#if err != OK:
-		# Is another server running?
-	#	_set_status("Can't host, address in use.",false)
-	#	return
-	#peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
-
-	#multiplayer.set_multiplayer_peer(peer)
-	#host_button.set_disabled(true)
-#	join_button.set_disabled(true)
-	#_set_status("Waiting for player...", true)
-
-	# Only show hosting instructions when relevant.
-	#port_forward_label.visible = true
-	#find_public_ip_button.visible = true
 
 
-#func _on_join_pressed():
-#	var ip = address.get_text()
-#	if not ip.is_valid_ip_address():
-#		_set_status("IP address is invalid.", false)
-#		return
-
-#	peer = ENetMultiplayerPeer.new()
-#	peer.create_client(ip, DEFAULT_PORT)
-#	peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
-#	multiplayer.set_multiplayer_peer(peer)
-
-#	_set_status("Connecting...", true)
-
-
-
-
-
-
-
+# Funktion wird nach dem Ping-Request ausgeführt
 func _on_ping_request_completed(result, response_code, headers, body):
-	if response_code == 200:
+	if response_code == 200:                                                    # Verbindung steht, können so weiter machen
 		return 0
 	else:
-		_set_status("No Connection", false)
-		host_button.set_disabled(false)
+		_set_status("No Connection", false)                                     # Keine Verbindung :(
+		host_button.set_disabled(false)                                         # Connect Knopf wird wieder Aktiviert, falls man es erneut versuchen will
 		return -1
 
-
+# Funktion wird nach dem Login-Request ausgeführt
 func _on_login_request_completed(result, response_code, headers, body):
-	if result == OK and response_code == 200:
-		Global.jwtToken = body.get_string_from_utf8()
-		
-		var raumliste = load("res://raumliste.tscn").instantiate()
-		get_tree().get_root().add_child(raumliste)
-		hide()
-	else:
-		_set_status("No Connection", false)
-		host_button.set_disabled(false)
+	if result == OK and response_code == 200:                                   # Login hat Funktioniert und es steht was in der Response
+		Global.jwtToken = body.get_string_from_utf8()                           # JWT-Token wird aus der Response genommen und in einer Globalen Variable abgespeichert
+		var raumliste = load("res://raumliste.tscn").instantiate()              # Die Raumliste (Szene) wird geladen
+		get_tree().get_root().add_child(raumliste)                              # und wird dem Baum angehängt
+		hide()                                                                  # Die jetzige Szene wird versteckt (Ist ja der Root, sonst könnte man die auch löschen)
+	else:                                                                       # Login hat nicht geklappt
+		_set_status("Login failed", false)
+		host_button.set_disabled(false)                                         # Knopf wird wieder aktiviert, falls man es erneur versuchen möchte
 		return -1
 		
 
+# Funktion wird aufgerufen, wenn man beim Textfeld Enter-drückt
 func _on_name_text_submitted(new_text):
-	host_button.emit_signal("pressed")
+	host_button.emit_signal("pressed")                                         # Das 'pressed' Signal wird ausgelöst, sodass man mit dem Enter Knopf sich verbinden kann
+
+# Exit Knopf 
+func _on_button_pressed():
+	get_tree().quit()                                                          # Spiel wird beendet
+
+# Exit Knopf
+func _on_exit_button_down():
+	click_sound.play()                                                         # Klick sound wird abgespielt 
+																			   # Wird der sound im _pressed() Event gecallt, wird der nicht abgespielt da die Instanz schon vorher zerstört wurde

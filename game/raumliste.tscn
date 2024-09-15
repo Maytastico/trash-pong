@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://b5lvnuaqvpiw2"]
+[gd_scene load_steps=6 format=3 uid="uid://b5lvnuaqvpiw2"]
 
 [ext_resource type="Script" path="res://logic/raumliste.gd" id="1_djvwx"]
 [ext_resource type="FontFile" uid="uid://baeom0xb31cqk" path="res://ressources/PressStart2P-Regular.ttf" id="1_m7v30"]
+[ext_resource type="Theme" uid="uid://bqe7fuww5f7vh" path="res://ressources/buttontheme.tres" id="3_vnpvm"]
 [ext_resource type="Texture2D" uid="uid://ciwjqb74iomju" path="res://ressources/refresh.png" id="5_68rax"]
+[ext_resource type="AudioStream" uid="uid://btxncrt2vf6cm" path="res://ressources/Click.mp3" id="5_k1jpf"]
 
 [node name="Raumliste" type="Control"]
 layout_mode = 3
@@ -58,6 +60,7 @@ offset_left = 1541.0
 offset_top = 363.0
 offset_right = 1725.0
 offset_bottom = 403.0
+theme = ExtResource("3_vnpvm")
 theme_override_fonts/font = ExtResource("1_m7v30")
 theme_override_font_sizes/font_size = 16
 text = "Create Room"
@@ -68,6 +71,7 @@ offset_left = 1547.0
 offset_top = 447.0
 offset_right = 1723.0
 offset_bottom = 487.0
+theme = ExtResource("3_vnpvm")
 theme_override_fonts/font = ExtResource("1_m7v30")
 theme_override_font_sizes/font_size = 16
 text = "Join Room"
@@ -92,10 +96,10 @@ max_text_lines = 100
 [node name="EnterPasswordPanel" type="Panel" parent="."]
 visible = false
 layout_mode = 0
-offset_left = 424.0
-offset_top = 256.0
-offset_right = 670.0
-offset_bottom = 428.0
+offset_left = 827.0
+offset_top = 430.0
+offset_right = 1073.0
+offset_bottom = 602.0
 
 [node name="EnterPasswordLabel" type="Label" parent="EnterPasswordPanel"]
 layout_mode = 0
@@ -142,10 +146,35 @@ offset_left = 1344.0
 offset_top = 270.0
 offset_right = 1382.0
 offset_bottom = 308.0
+theme = ExtResource("3_vnpvm")
 icon = ExtResource("5_68rax")
+icon_alignment = 1
+
+[node name="Exit" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 595.0
+offset_top = 169.0
+offset_right = 758.0
+offset_bottom = 222.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_vnpvm")
+theme_override_fonts/font = ExtResource("1_m7v30")
+text = "Exit"
+
+[node name="Click" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_k1jpf")
 
 [connection signal="request_completed" from="GetAllSeRooms" to="." method="_on_get_all_se_rooms_request_completed"]
 [connection signal="pressed" from="Create Room" to="." method="_on_create_room_pressed"]
 [connection signal="pressed" from="Join Room" to="." method="_on_join_room_pressed"]
+[connection signal="pressed" from="EnterPasswordPanel/JoinButton" to="." method="_on_join_button_pressed"]
 [connection signal="pressed" from="EnterPasswordPanel/Cancel" to="." method="_on_cancel_pressed"]
 [connection signal="pressed" from="Refresh" to="." method="_on_refresh_pressed"]
+[connection signal="button_down" from="Exit" to="." method="_on_exit_button_down"]
+[connection signal="pressed" from="Exit" to="." method="_on_exit_pressed"]

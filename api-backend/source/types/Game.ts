@@ -12,3 +12,11 @@ export interface Bounce extends BasicPayload{
     left: boolean,
     random: number
 }
+
+export interface Goal extends BasicPayload{
+    left: boolean,
+}
+
+export interface End extends BasicPayload{
+    
+}
