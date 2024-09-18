@@ -8,6 +8,13 @@ import { getUser } from "../database/user";
 import { decodeAccessToken } from "../auth/auth";
 import { User } from "../types/User";
 
+/**
+ * Gets Room if it exists
+ * @param req HTTP Request Object
+ * @param res HTTP Response Object
+ * @param next Callback to pass control to the next middleware function
+ * @returns Room Json or 404 if no Room is found
+ */
 const dbRoom = async (req: Request, res: Response, next: NextFunction) =>{
     const roomId = parseInt(req.params.id, 10);
     const room = await getRoom(roomId);
@@ -18,6 +25,13 @@ const dbRoom = async (req: Request, res: Response, next: NextFunction) =>{
     }
 }
 
+/**
+ * Gets all Rooms
+ * @param req HTTP Request Object
+ * @param res HTTP Response Object
+ * @param next Callback to pass control to the next middleware function
+ * @returns Rooms Json of 404 if no Room is found
+ */
 const dbAllRooms = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const rooms = await getAllRooms();
@@ -29,6 +43,13 @@ const dbAllRooms = async (req: Request, res: Response, next: NextFunction) => {
   
   export { dbRoom, dbAllRooms };
 
+  /**
+   * Creates a new Room
+   * @param req HTTP Request Object
+   * @param res HTTP Response Object
+   * @param next Callback to pass control to the next middleware function
+   * @returns Json new Room or 401/400
+   */
   const dbCreateRoom = async (req: Request, res: Response, next: NextFunction) => {
     const reqHeader = req.header('Authorization')
     let token:string
@@ -55,6 +76,13 @@ const dbAllRooms = async (req: Request, res: Response, next: NextFunction) => {
   }
 export{dbCreateRoom}; 
 
+/**
+ * Updates a Room
+   * @param req HTTP Request Object
+   * @param res HTTP Response Object
+   * @param next Callback to pass control to the next middleware function
+ * @returns Json updated Room or 404
+ */
 const dbUpdateRoom = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const roomId = parseInt(req.params.id, 10);
@@ -77,6 +105,13 @@ const dbUpdateRoom = async (req: Request, res: Response, next: NextFunction) => 
 }
 export{dbUpdateRoom}
 
+/**
+ * Deletes a Room
+   * @param req HTTP Request Object
+   * @param res HTTP Response Object
+   * @param next Callback to pass control to the next middleware function
+ * @returns Json deleted Room or 404
+ */
 const dbDeleteRoom = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const roomId = parseInt(req.params.id, 10);
@@ -94,6 +129,13 @@ const dbDeleteRoom = async (req: Request, res: Response, next: NextFunction) => 
 
 export { dbDeleteRoom };
 
+/**
+ * Selects a User
+   * @param req HTTP Request Object
+   * @param res HTTP Response Object
+   * @param next Callback to pass control to the next middleware function
+ * @returns Json User or 404
+ */
 const dbUser = async (req: Request, res: Response, next: NextFunction) =>{
   const userId = parseInt(req.params.id, 10);
   const user = await getUser(userId);

@@ -1,6 +1,11 @@
 import { pool } from "./conn";
 import { User } from "../types/User";
 
+/**
+ * Selects a user from the database by their ID
+ * @param id Id of the user
+ * @returns User
+ */
 export async function getUser(id:number):Promise<User>{
   const client = await pool.connect();
   try {
@@ -12,6 +17,11 @@ export async function getUser(id:number):Promise<User>{
   }
 }
 
+/**
+ * Selects a user from the database by their Name
+ * @param name Name of the User
+ * @returns User
+ */
 export async function getUserByName(name: string): Promise<User> {
   const client = await pool.connect();
   try {
@@ -29,7 +39,11 @@ export async function getUserByName(name: string): Promise<User> {
   }
 }
 
-
+/**
+ * Checks if a User exists by their name
+ * @param name Name of the User
+ * @returns Boolean
+ */
 export async function doesUserExist(name:string):Promise<boolean>{
   const client = await pool.connect();
   try {
@@ -44,6 +58,11 @@ export async function doesUserExist(name:string):Promise<boolean>{
   }
 }
 
+/**
+ * Creates a new User
+ * @param name Name of the new User
+ * @returns User
+ */
 export async function registerUser(name:string) {
   const client = await pool.connect();
   try {
@@ -61,6 +80,12 @@ export async function registerUser(name:string) {
   } 
 }
 
+/**
+ * Updates User sets Token
+ * @param user_id Id of the User
+ * @param token Token of the User
+ * @returns Rows updated
+ */
 export async function registerAuthtoken(user_id: number, token: string) {
   const client = await pool.connect();
   try {
@@ -84,7 +109,11 @@ export async function registerAuthtoken(user_id: number, token: string) {
   } 
 }
 
-
+/**
+ * Updates User sets Token null
+ * @param user_id Id from User
+ * @returns Rows updated
+ */
 export async function revokeAuthtoken(user_id:number) {
   const client = await pool.connect();
   try {

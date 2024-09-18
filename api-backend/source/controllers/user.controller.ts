@@ -4,6 +4,13 @@ import { doesUserExist, getUser, getUserByName, registerAuthtoken, registerUser 
 import { dbUser } from "./api.controller";
 import { User } from "../types/User";
 
+/**
+ * Authenticates a User with Credentials
+ * @param req HTTP Request Object
+ * @param res HTTP Response Object
+ * @param next Callback to pass control to the next middleware function
+ * @returns Token of the User oder 400
+ */
 export const login = async (req: Request, res: Response, next: NextFunction) =>{
     let username: string = req.body.username
     res.setHeader('Content-Type', 'text/plain');

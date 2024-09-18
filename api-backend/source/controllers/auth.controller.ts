@@ -7,6 +7,12 @@ export interface CustomRequest extends Request {
     token: string | JwtPayload;
 }
 
+/**
+ *  Authenticates the User
+ * @param req HTTP Request Object
+ * @param res HTTP Response Object
+ * @param next Callback to pass control to the next middleware function
+ */
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const token = req.header('Authorization')?.replace('Bearer ', '');
