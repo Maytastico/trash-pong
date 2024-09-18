@@ -8,7 +8,7 @@
 \usepackage{lmodern}
 \usepackage{iftex}
 \usepackage{graphicx}
-
+\usepackage{float}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
@@ -87,6 +87,12 @@
 
 \subsection{Allgemein}  
 Beschreibung der grundlegenden Struktur der Lösung.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth ]{resources/Client-Server.drawio.png}
+	\caption{Kontext-Sicht der Client-Server-Architektur des Pong Spiels}
+	\label{fig:clientserer}
+\end{figure}
 \subsection{Architektural Decision}
 Erklärung, warum diese Architektur gewählt wurde (z. B. Skalierbarkeit, Modularität, Sicherheit).
 
@@ -140,6 +146,12 @@ Erklärung, warum diese Architektur gewählt wurde (z. B. Skalierbarkeit, Modula
     \item \textbf{Umsetzung der Architektur}: Beschreibung der Implementierung der einzelnen Komponenten und ihrer Interaktionen.
     \item \textbf{Schwierigkeiten und Lösungen}: Was waren die technischen Herausforderungen und wie wurden sie bewältigt?
 \end{itemize}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth ]{resources/Event-Based-Spielablauf.png}
+	\caption{Eventbasierter Ablauf des Spiels über einen Socket-IO Websocket. Es handelt sich um eine Vereinfachte Ansicht. Beide Seiten können die jeweiligen Events an den Server senden.}
+	\label{fig:ablaufdiagramm-spiel}
+\end{figure}
 
 \subsection{Mögliche Alternativen}
 \begin{itemize}
