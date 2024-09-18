@@ -1,0 +1,66 @@
+{
+  "name": "api-backend",
+  "version": "1.0.0",
+  "description": "Restful API Backend for Pong Reimagined",
+  "main": "source/server.ts",
+  "scripts": {
+    "dev": "cross-env PGHOST=127.0.0.1 PGUSER=testuser PGPASSWORD=SicheresPasswort! PGDATABASE=pong_daten nodemon source/server.ts",
+    "dev-virtual-machine": "cross-env PGHOST=192.168.1.1 PGUSER=testuser PGPASSWORD=SicheresPasswort! PGDATABASE=pong_daten nodemon source/server.ts",
+    "debug": "cross-env  PGUSER=testuser PGPASSWORD=SicheresPasswort! PGDATABASE=pong_daten nodemon --exec 'node --inspect=0.0.0.0:9229 --require ts-node/register source/server.ts' ",
+    "build": "rm -rf ./dist && tsc",
+    "test": "jest",
+    "start": "node dist/server.js",
+    "deploy": "docker compose -f ../docker-compose.yml up  --build "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Maytastico/pong-reimagined.git"
+  },
+  "keywords": [
+    "distributed",
+    "system",
+    "docker",
+    "game",
+    "pong"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Maytastico/pong-reimagined/issues"
+  },
+  "homepage": "https://github.com/Maytastico/pong-reimagined#readme",
+  "dependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/morgan": "^1.9.9",
+    "@types/pg": "^8.11.6",
+    "@types/socket.io": "^3.0.1",
+    "cross-env": "^7.0.3",
+    "express": "^4.19.2",
+    "express-validator": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.4",
+    "pg": "^8.12.0",
+    "postgres": "^3.4.4",
+    "socket.io": "^4.7.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.9",
+    "@babel/preset-env": "^7.24.8",
+    "@babel/preset-typescript": "^7.24.7",
+    "@jest/globals": "^29.7.0",
+    "@types/cors": "^2.8.17",
+    "@types/jest": "^29.5.12",
+    "@types/supertest": "^6.0.2",
+    "@types/ws": "^8.5.12",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.3"
+  }
+}
