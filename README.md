@@ -56,7 +56,7 @@ https://tree.taiga.io/project/aronse1-verteiltes-pong/backlog
 3. **Benutzerfreundlichkeit:**
     - Die Benutzeroberfläche des Spiels sollte intuitiv und leicht zu bedienen sein. Neue Spieler sollten sich schnell zurechtfinden und das Spiel ohne umfangreiche Anleitungen verstehen können.
 4. **Datensparsamkeit**
-- Die Datenerhebung und -speicherung wird nur im notwendigen Maß durchgeführt. 
+   - Die Datenerhebung und -speicherung wird nur im notwendigen Maß durchgeführt. 
      Ziel ist es, nur die Daten zu erfassen und zu speichern, die für den Betrieb und die Funktionalität des Systems unbedingt erforderlich sind. 
      Dies trägt zum Schutz der Privatsphäre der Nutzer bei und reduziert das Risiko von Datenmissbrauch und -verlust.
      Deshalb sollen nur der Nutzername und die Punkte gespeichert werden.
