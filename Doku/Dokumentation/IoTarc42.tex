@@ -73,14 +73,89 @@
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 
-\title{ Template}
+\title{\includegraphics{resources/header.png} Projektbericht Trashpong}
 \author{}
 \date{Januar 2023}
 
 \begin{document}
 \maketitle
+
 % DOCUMENT STARTS HERE
 \hypertarget{section-introduction-and-goals}{%
-\section{Einführung und Ziele}\label{section-introduction-and-goals}}
+\section{Architektur}\label{section-introduction-and-goals}}
+
+
+\subsection{Allgemein}  
+Beschreibung der grundlegenden Struktur der Lösung.
+\subsection{Architektural Decision}
+Erklärung, warum diese Architektur gewählt wurde (z. B. Skalierbarkeit, Modularität, Sicherheit).
+
+\section{Systemkomponenten}
+
+\subsection{Anforderungen}
+\begin{center}
+  \begin{tabular}{|p{\linewidth}|}
+    \hline
+    \textbf{Spieler-Registrierung und -Login (FA1)} \\
+    Beschreibung: Benutzer müssen sich mit ihren Namen anmelden können, um am Spiel teilzunehmen.
+    Die Nutzung sollte niederschwelling sein. Ein Benutzer muss deshalb kein Konto anlegenc \\ \\
+    \hline
+    \textbf{Echtzeit-Multiplayer-Funktionalität (FA2)} \\
+    Beschreibung: Das Spiel muss in der Lage sein, mehrere Spieler in Echtzeit zu verbinden und ein synchronisiertes Spiel zu ermöglichen. Die Bewegungen der Schläger und der Ball müssen in Echtzeit zwischen den Spielern synchronisiert werden.\\ \\
+    \hline
+    \textbf{Punkteverwaltung (FA3)} \\
+    Beschreibung: Das System muss die Punkte der Spieler während des Spiels erfassen und verwalten können. Nach jedem Spiel sollte ein Punktestand angezeigt werden, der den Gewinner ermittelt. \\ \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{|p{\linewidth}|}
+    \hline
+    \textbf{Leistung und Skalierbarkeit (NF1)} \\
+    Beschreibung: Das Spiel sollte auch bei hoher Benutzerzahl flüssig und ohne Verzögerungen laufen. Das System muss skalierbar sein, um eine große Anzahl von gleichzeitigen Spielern zu unterstützen. \\ \\
+    \hline
+    \textbf{Sicherheit (NF2)} \\
+    Beschreibung: Die Benutzerdaten, einschließlich Anmeldedaten und Spielstatistiken, müssen sicher gespeichert und übertragen werden. Das System sollte gegen häufige Sicherheitsbedrohungen wie SQL-Injektionen und Cross-Site-Scripting geschützt sein.\\ \\
+    \hline
+    \textbf{Datensparsamkeit (NF3)} \\
+     Beschreibung:
+     Die Datenerhebung und -speicherung wird nur im notwendigen Maß durchgeführt. 
+     Ziel ist es, nur die Daten zu erfassen und zu speichern, die für den Betrieb und die Funktionalität des Systems unbedingt erforderlich sind. 
+     Dies trägt zum Schutz der Privatsphäre der Nutzer bei und reduziert das Risiko von Datenmissbrauch und -verlust.
+     Deshalb sollen nur der Nutzername und die Punkte gespeichert werden.
+    \\ \\
+    \hline
+    \textbf{Benutzerfreundlichkeit (NF4)} \\
+    Beschreibung: Die Benutzeroberfläche des Spiels sollte intuitiv und leicht zu bedienen sein. Neue Spieler sollten sich schnell zurechtfinden und das Spiel ohne umfangreiche Anleitungen verstehen können.\\ \\
+    \\ \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\section{Umsetzung}
+
+\subsection{Implementierung}
+\begin{itemize}
+    \item \textbf{Umsetzung der Architektur}: Beschreibung der Implementierung der einzelnen Komponenten und ihrer Interaktionen.
+    \item \textbf{Schwierigkeiten und Lösungen}: Was waren die technischen Herausforderungen und wie wurden sie bewältigt?
+\end{itemize}
+
+\subsection{Mögliche Alternativen}
+\begin{itemize}
+    \item \textbf{Architektur- und Technologiealternativen}: Überlegungen zu möglichen anderen Architekturen und Technologien sowie deren Vor- und Nachteile.
+\end{itemize}
+
+\section{Reflexion}
+
+\subsection{Rückblick}
+\begin{itemize}
+    \item \textbf{Änderungen nach dem Projekt}: Was würde man im Nachhinein anders machen, um das System zu verbessern?
+\end{itemize}
+
+\subsection{Herausforderungen}
+\begin{itemize}
+    \item \textbf{Größte Herausforderungen}: Rückblick auf die bedeutendsten Schwierigkeiten und wie sie gelöst wurden.
+\end{itemize}
 
 \end{document}
