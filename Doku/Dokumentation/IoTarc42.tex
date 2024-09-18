@@ -73,6 +73,11 @@
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 
+\usepackage[citestyle=numeric, sorting=none]{biblatex}
+
+
+\addbibresource{Literatur.bib}
+
 \title{\includegraphics{resources/header.png} Projektbericht Trashpong}
 \author{}
 \date{Januar 2023}
@@ -84,14 +89,15 @@
 \hypertarget{section-introduction-and-goals}{%
 \section{Architektur}\label{section-introduction-and-goals}}
 
+Im Rahmen der Architektur wird eine zentralisierte Architektur verwendet, wobei es sich um eine Client-Server-Architektur handelt (vgl. Abbildung \ref{fig:clientserver}).
+Die Programmteile werden in zwei separate Einheiten unterteilt, um eine klare Trennung zu gewährleisten. Der Server stellt einen bestimmten Service bereit und leitet die Anfragen an die Clients weiter. Die Clients empfangen diese Anfragen.\cite{tanenbaum2007distributed}
 
-\subsection{Allgemein}  
-Beschreibung der grundlegenden Struktur der Lösung.
+Der Client ist eine kompilierte Executable, geschrieben in der Open-Source Godot Engine \cite{godot}. Dort befindet sich die Gesamte Spiel Logik über die der Benutzer das Spiel spielen kann. Der Server befindet sich in einem Docker Compose bestehend aus einer Posgres Datenbank, einem Load Balancer und beliebig skalierbare Spieleserver welche die Anfragen der Clients verarbeitet. 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth ]{resources/Client-Server.drawio.png}
 	\caption{Kontext-Sicht der Client-Server-Architektur des Pong Spiels}
-	\label{fig:clientserer}
+	\label{fig:clientserver}
 \end{figure}
 \subsection{Architektural Decision}
 Erklärung, warum diese Architektur gewählt wurde (z. B. Skalierbarkeit, Modularität, Sicherheit).
@@ -169,5 +175,6 @@ Erklärung, warum diese Architektur gewählt wurde (z. B. Skalierbarkeit, Modula
 \begin{itemize}
     \item \textbf{Größte Herausforderungen}: Rückblick auf die bedeutendsten Schwierigkeiten und wie sie gelöst wurden.
 \end{itemize}
-
+\newpage
+ \printbibliography[title={Quellen}]
 \end{document}
