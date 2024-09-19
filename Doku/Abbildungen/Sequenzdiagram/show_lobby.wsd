@@ -9,20 +9,19 @@ skinparam sequenceMessageFontSize 30
 skinparam titleFontSize 30
 actor player
 box "game services"
-participant "auth.ts" as auth
 participant "api controller" as gs
+participant "auth.ts" as auth
 participant "raum.ts" as lo
 end box
 database database as db
 
-player -> auth: /api/raum/\nAuthorization: Bearer <token>
+player -> gs: /api/raum/\nAuthorization: Bearer <token>
+activate gs
+gs -> auth: verify(token)
 activate auth
-auth -> auth: verify(token)
+auth -> gs: token valid
 alt token valid
-    auth -> player: token valid
     deactivate auth
-    player -> gs: show_lobby(filters)
-    activate gs
     gs -> lo: dbAllRooms()
     activate lo
     lo -> db: SELECT r.*,s.name as user1, sp.name as user2 FROM\n Raum r \n LEFT JOIN "user" s  on s.user_id=r.user_id1 \n LEFT  JOIN "user" sp on sp.user_id=r.user_id2;
@@ -32,9 +31,8 @@ alt token valid
     lo -> gs: lobbies[]
     deactivate lo
     gs -> player: lobbies[]
-    deactivate gs
 else token invalid
-    auth -> player: Please authenticate
-    deactivate auth
+    gs -> player: Please authenticate
+    deactivate gs
 end
 @enduml
