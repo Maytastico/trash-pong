@@ -92,13 +92,14 @@
 Im Rahmen der Architektur wird eine zentralisierte Architektur verwendet, wobei es sich um eine Client-Server-Architektur handelt (vgl. Abbildung \ref{fig:clientserver}).
 Die Programmteile werden in zwei separate Einheiten unterteilt, um eine klare Trennung zu gewährleisten. Der Server stellt einen bestimmten Service bereit und leitet die Anfragen an die Clients weiter. Die Clients empfangen diese Anfragen.\cite{tanenbaum2007distributed}
 
-Der Client ist eine kompilierte Executable, geschrieben in der Open-Source Godot Engine \cite{godot}. Dort befindet sich die Gesamte Spiel Logik über die der Benutzer das Spiel spielen kann. Der Server befindet sich in einem Docker Compose bestehend aus einer Posgres Datenbank, einem Load Balancer und beliebig skalierbare Spieleserver welche die Anfragen der Clients verarbeitet. 
+Der Client ist eine kompilierte Executable, geschrieben in der Open-Source Godot Engine \cite{godot}. Dort befindet sich die Gesamte Spiel Logik über die der Benutzer das Spiel spielen kann. Der Server befindet sich in einem Docker Compose bestehend aus einer Posgres Datenbank, einem Load Balancer und beliebig skalierbare Spieleserver welche die Anfragen der Clients verarbeiten. 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth ]{resources/Client-Server.drawio.png}
 	\caption{Kontext-Sicht der Client-Server-Architektur des Pong Spiels}
 	\label{fig:clientserver}
 \end{figure}
+Die Datenbank speichert die Räume in der die Spieler ihr Spiel spielen. Jeder Spieler kann Räume erstellen und ihnen beitreten und gehört somit diesen Räumen an (vgl. Abbildung \ref{fig:ER-Modell}). Ein Spieler kann zwar mehrere Räume erstellen, zum Zeitpunkt des Spiels befindet sich dieser nur in einem einzigen Raum.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth ]{resources/ER-Modell.png}
