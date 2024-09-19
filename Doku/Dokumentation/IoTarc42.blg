@@ -1,17 +1,17 @@
 [0] Config.pm:307> INFO - This is Biber 2.19
 [0] Config.pm:310> INFO - Logfile is 'IoTarc42.blg'
-[151] biber-MSWIN64:340> INFO - === 
-[224] Biber.pm:419> INFO - Reading 'IoTarc42.bcf'
-[310] Biber.pm:979> INFO - Found 4 citekeys in bib section 0
-[322] Biber.pm:4419> INFO - Processing section 0
-[349] Biber.pm:4610> INFO - Looking for bibtex file 'Literatur.bib' for section 0
-[397] bibtex.pm:1713> INFO - LaTeX decoding ...
-[411] bibtex.pm:1519> INFO - Found BibTeX data source 'Literatur.bib'
-[527] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[527] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[527] Biber.pm:4239> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'en-US'
-[527] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
-[559] bbl.pm:660> INFO - Writing 'IoTarc42.bbl' with encoding 'UTF-8'
-[560] bbl.pm:763> INFO - Output to IoTarc42.bbl
-[561] Biber.pm:131> WARN - BibTeX subsystem: C:\Users\ZOASEIDL\AppData\Local\Temp\biber_tmp_AdSM\fe6d16e8a0935a16f008a64fa11444f8_25500.utf8, line 30, warning: 32 characters of junk seen at toplevel
-[561] Biber.pm:133> INFO - WARNINGS: 1
+[99] biber-MSWIN64:340> INFO - === 
+[132] Biber.pm:419> INFO - Reading 'IoTarc42.bcf'
+[219] Biber.pm:979> INFO - Found 4 citekeys in bib section 0
+[231] Biber.pm:4419> INFO - Processing section 0
+[242] Biber.pm:4610> INFO - Looking for bibtex file 'Literatur.bib' for section 0
+[298] bibtex.pm:1713> INFO - LaTeX decoding ...
+[308] bibtex.pm:1519> INFO - Found BibTeX data source 'Literatur.bib'
+[367] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[367] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[367] Biber.pm:4239> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'en-US'
+[367] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[373] bbl.pm:660> INFO - Writing 'IoTarc42.bbl' with encoding 'UTF-8'
+[375] bbl.pm:763> INFO - Output to IoTarc42.bbl
+[375] Biber.pm:131> WARN - BibTeX subsystem: C:\Users\ZOASEIDL\AppData\Local\Temp\biber_tmp_rBoW\fe6d16e8a0935a16f008a64fa11444f8_12976.utf8, line 30, warning: 32 characters of junk seen at toplevel
+[375] Biber.pm:133> INFO - WARNINGS: 1

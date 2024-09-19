@@ -110,7 +110,7 @@ Die Datenbank speichert die Räume in der die Spieler ihr Spiel spielen. Jeder S
 Dieser verwaltet die Daten der Spieler und die Spielstände. Außerdem werden die Daten für die Räume gespeichert.
 Die REST API ist in einem Docker Container gehostet und kann beliebig skaliert werden. 
 Ein NGINX Load Balancer verteilt die Anfragen auf die einzelnen Server.
-"Viele Client-Server-Anwendung sind grundsetzlich aus drei unterschiedlichen Komponenten zusammengesetzt[...]" \cite[S.57 ff.]{tanenbaum2007distributed}.
+\glqq Viele Client-Server-Anwendung sind grundsetzlich aus drei unterschiedlichen Komponenten zusammengesetzt[...]\grqq{} \cite[S.57 ff.]{tanenbaum2007distributed}.
 So interagieren auch die Clients mit einer Benutzerschnittstelle, der REST API.
 Diese wird verwendet um Daten über Nutzer oder Räume zu erhalten.
 Daten werden dabei über das HTTP Protokoll ausgetauscht. 
@@ -146,7 +146,7 @@ Erklärung, warum diese Architektur gewählt wurde (z. B. Skalierbarkeit, Modula
 
 Innerhalb der Server Applikation setzen wir auf zwei Paradigmen. Einerseits haben wir uns bei der Datenhaltung
 für ein zentrlisiertes Client Server Modell entschieden. 
-Dabei ist der Server "ein Prozess der einen bestimmt Dienst implementiert" \cite[S.55 ff.]{tanenbaum2007distributed}.
+Dabei ist der Server \glqq ein Prozess der einen bestimmt Dienst implementiert\grqq{} \cite[S.55 ff.]{tanenbaum2007distributed}.
 In Fall von Trash Pong ist dies eine REST API, die für die Datenhaltung zuständig ist.
 
 Die zentralisierte Form hilft dabei 
