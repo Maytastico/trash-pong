@@ -65,14 +65,6 @@
       \field{note}{Zuletzt Aufgerufen 19.09.2024}
       \field{title}{Godot Engine}
     \endentry
-    \entry{SocketIORooms}{misc}{}
-      \field{sortinit}{4}
-      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
-      \field{labeltitlesource}{title}
-      \field{howpublished}{\url{https://socket.io/docs/v3/rooms/}}
-      \field{note}{Zuletzt Aufgerufen 19.09.2024}
-      \field{title}{SocketIO Rooms}
-    \endentry
     \entry{gordon2001distributed}{book}{}
       \name{author}{4}{}{%
         {{hash=d2ea9aebe225402a7f97031ca2a6a51d}{%
@@ -105,8 +97,8 @@
       \strng{authorbibnamehash}{61d7e54b20f9475333a8f5686c67867c}
       \strng{authornamehash}{61d7e54b20f9475333a8f5686c67867c}
       \strng{authorfullhash}{1349cbd8efd285a20fd6746ad54e5fe6}
-      \field{sortinit}{5}
-      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{9780132143011}
