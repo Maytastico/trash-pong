@@ -1,0 +1,71 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global}
+    \entry{tanenbaum2007distributed}{book}{}
+      \name{author}{2}{}{%
+        {{hash=92bc8f2b5a926e6cc80dfae03d2751e5}{%
+           family={Tanenbaum},
+           familyi={T\bibinitperiod},
+           given={A.S.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=0b5c695d6cb5456cde890afe3b8b2111}{%
+           family={Steen},
+           familyi={S\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Pearson Prentice Hall}%
+      }
+      \strng{namehash}{a376a1d929d198fbbf636b1685724fd6}
+      \strng{fullhash}{a376a1d929d198fbbf636b1685724fd6}
+      \strng{bibnamehash}{a376a1d929d198fbbf636b1685724fd6}
+      \strng{authorbibnamehash}{a376a1d929d198fbbf636b1685724fd6}
+      \strng{authornamehash}{a376a1d929d198fbbf636b1685724fd6}
+      \strng{authorfullhash}{a376a1d929d198fbbf636b1685724fd6}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{9780136135531}
+      \field{title}{Distributed Systems: Principles and Paradigms}
+      \field{year}{2007}
+      \verb{urlraw}
+      \verb https://books.google.de/books?id=UKDjLQAACAAJ
+      \endverb
+      \verb{url}
+      \verb https://books.google.de/books?id=UKDjLQAACAAJ
+      \endverb
+    \endentry
+    \entry{godot}{misc}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://godotengine.org/}}
+      \field{note}{Zuletzt Aufgerufen 19.09.2024}
+      \field{title}{Godot Engine}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
