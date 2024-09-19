@@ -107,8 +107,51 @@ Die Datenbank speichert die Räume in der die Spieler ihr Spiel spielen. Jeder S
 	\label{fig:ER-Modell}
 \end{figure}
 
-\subsection{Architektural Decision}
+Dieser verwaltet die Daten der Spieler und die Spielstände. Außerdem werden die Daten für die Räume gespeichert.
+Die REST API ist in einem Docker Container gehostet und kann beliebig skaliert werden. 
+Ein NGINX Load Balancer verteilt die Anfragen auf die einzelnen Server.
+"Viele Client-Server-Anwendung sind grundsetzlich aus drei unterschiedlichen Komponenten zusammengesetzt[...]" \cite[S.57 ff.]{tanenbaum2007distributed}.
+So interagieren auch die Clients mit einer Benutzerschnittstelle, der REST API.
+Diese wird verwendet um Daten über Nutzer oder Räume zu erhalten.
+Daten werden dabei über das HTTP Protokoll ausgetauscht. 
+Die REST API kann dabei verwendet werde um Räume zu erstellen.
+Die REST Schnittstelle interagiert dabei mit Controllern, die die Logik der Anwendung implementieren und welche dann
+mit der Datenhaltung interagieren. Damit kann eine klare Trennung von Datenhaltung und Logik erreicht werden, welches die Anwendung
+modular macht. Es können dadurch andere Datenbanksysteme verwendet werden, ohne dass die Logik der Anwendung angepasst werden muss.
+
+Die Abbildung \ref{fig:ablaufdiagramm-show_lobby} zeigt den Ablauf einer REST Anfrage um die Räume zu erhalten.
+Hierbei interagiert der Client mit der REST API, welche die Anfrage an den Controller weiterleitet.
+Der Controller interagiert dann mit der Datenbank um die Räume zu erhalten. Anschließend werden die Daten an den Client zurückgegeben.
+
+Die Verteilung der Anwendungslogik auf Client und Server wird durch die Abbildung \ref{fig:destribution-of-logic} verdeutlicht.
+Diese ist ein ausschnitt aus der Abbildung 2.5(c) aus \cite[S.41]{tanenbaum2007distributed}
+
+Die Benutzerschnittstelle ist hierbei die kompilierte Godot Anwendung, welche die Spiellogik implementiert.
+Um Daten zu erhalten, sendet die Anwendung Anfragen an die REST API, welche Anwendungslogik implementiert hat um mit der Datenbank zu interagieren.
+Die Benutzeranwendung muss zudem eigene Logik implementieren, da diese aufgrund von Echtzeit Anforderungen nicht auf einen Server warten kann.
+Komponenten mit Echtzeit Anforderungen, die das Rendering, die übernahme von Benutzer eingaben müssen auf dem Client Computer ausgeführt werden.
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth ]{resources/server_client.pdf}
+	\caption{Aufteilung der Anwendungslogik in Client und Server}
+	\label{fig:destribution-of-logic}
+\end{figure}
+
+
+\hypertarget{section-achitactural-decision}{%
+\subsection{Architektur Entscheidung}}
 Erklärung, warum diese Architektur gewählt wurde (z. B. Skalierbarkeit, Modularität, Sicherheit).
+
+Innerhalb der Server Applikation setzen wir auf zwei Paradigmen. Einerseits haben wir uns bei der Datenhaltung
+für ein zentrlisiertes Client Server Modell entschieden. 
+Dabei ist der Server "ein Prozess der einen bestimmt Dienst implementiert" \cite[S.55 ff.]{tanenbaum2007distributed}.
+In Fall von Trash Pong ist dies eine REST API, die für die Datenhaltung zuständig ist.
+
+Die zentralisierte Form hilft dabei 
+
+
 
 \section{Systemkomponenten}
 

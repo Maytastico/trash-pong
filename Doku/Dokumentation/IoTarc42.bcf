@@ -2363,7 +2363,10 @@
   <bcf:section number="0">
     <bcf:citekey order="1" intorder="1">tanenbaum2007distributed</bcf:citekey>
     <bcf:citekey order="2" intorder="1">godot</bcf:citekey>
-    <bcf:citekey order="3" intorder="1">gordon2001distributed</bcf:citekey>
+    <bcf:citekey order="3" intorder="1">tanenbaum2007distributed</bcf:citekey>
+    <bcf:citekey order="4" intorder="1">tanenbaum2007distributed</bcf:citekey>
+    <bcf:citekey order="5" intorder="1">tanenbaum2007distributed</bcf:citekey>
+    <bcf:citekey order="6" intorder="1">gordon2001distributed</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">
