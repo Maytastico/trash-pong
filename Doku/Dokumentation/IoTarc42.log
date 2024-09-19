@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 23.1) (preloaded format=pdflatex 2023.4.14)  19 SEP 2024 12:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 23.1) (preloaded format=pdflatex 2023.4.14)  19 SEP 2024 14:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -174,6 +174,12 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \@float@everytoks=\toks23
 \@floatcapt=\box54
 )
+(C:\Users\ZOASEIDL\AppData\Local\Programs\MiKTeX\tex/generic/german\ngerman.sty
+v2.5e 1998-07-08
+Package: ngerman 1998/07/08 v2.5e Support for writing german texts (br)
+\grmnU@D=\dimen152
+ngerman -- \language number for naustrian undefined, default 48 used.
+)
 (C:\Users\ZOASEIDL\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
 Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
 LaTeX Font Info:    Trying to load font information for T1+lmr on input line 11
@@ -211,7 +217,7 @@ LaTeX Info: Redefining \leftprotrusion on input line 1060.
 \MT@prot@toks=\toks27
 LaTeX Info: Redefining \rightprotrusion on input line 1078.
 LaTeX Info: Redefining \textls on input line 1368.
-\MT@outer@kern=\dimen152
+\MT@outer@kern=\dimen153
 LaTeX Info: Redefining \textmicrotypecontext on input line 1988.
 \MT@listname@count=\count274
 
@@ -323,7 +329,7 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count275
 )
-\@linkdim=\dimen153
+\@linkdim=\dimen154
 \Hy@linkcounter=\count276
 \Hy@pagecounter=\count277
 
@@ -357,7 +363,7 @@ Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4425.
 \c@Hy@tempcnt=\count279
 LaTeX Info: Redefining \url on input line 4763.
-\XeTeXLinkMargin=\dimen154
+\XeTeXLinkMargin=\dimen155
 
 (C:\Users\ZOASEIDL\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
@@ -368,8 +374,8 @@ Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
 \Fld@menulength=\count280
-\Field@Width=\dimen155
-\Fld@charsize=\dimen156
+\Field@Width=\dimen156
+\Fld@charsize=\dimen157
 Package hyperref Info: Hyper figures OFF on input line 6042.
 Package hyperref Info: Link nesting OFF on input line 6047.
 Package hyperref Info: Hyper index ON on input line 6050.
@@ -426,7 +432,7 @@ Package: longtable 2021-09-01 v4.17 Multi-page Table package (DPC)
 \LTpre=\skip57
 \LTpost=\skip58
 \LTchunksize=\count287
-\LTcapwidth=\dimen157
+\LTcapwidth=\dimen158
 \LT@head=\box56
 \LT@firsthead=\box57
 \LT@foot=\box58
@@ -441,28 +447,28 @@ Package: longtable 2021-09-01 v4.17 Multi-page Table package (DPC)
 (C:\Users\ZOASEIDL\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.st
 y
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
-\heavyrulewidth=\dimen158
-\lightrulewidth=\dimen159
-\cmidrulewidth=\dimen160
-\belowrulesep=\dimen161
-\belowbottomsep=\dimen162
-\aboverulesep=\dimen163
-\abovetopsep=\dimen164
-\cmidrulesep=\dimen165
-\cmidrulekern=\dimen166
-\defaultaddspace=\dimen167
+\heavyrulewidth=\dimen159
+\lightrulewidth=\dimen160
+\cmidrulewidth=\dimen161
+\belowrulesep=\dimen162
+\belowbottomsep=\dimen163
+\aboverulesep=\dimen164
+\abovetopsep=\dimen165
+\cmidrulesep=\dimen166
+\cmidrulekern=\dimen167
+\defaultaddspace=\dimen168
 \@cmidla=\count292
 \@cmidlb=\count293
-\@aboverulesep=\dimen168
-\@belowrulesep=\dimen169
+\@aboverulesep=\dimen169
+\@belowrulesep=\dimen170
 \@thisruleclass=\count294
 \@lastruleclass=\count295
-\@thisrulewidth=\dimen170
+\@thisrulewidth=\dimen171
 ) (C:\Users\ZOASEIDL\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.sty
 Package: array 2022/09/04 v2.5g Tabular extension package (FMi)
-\col@sep=\dimen171
+\col@sep=\dimen172
 \ar@mcellbox=\box61
-\extrarowheight=\dimen172
+\extrarowheight=\dimen173
 \NC@list=\toks29
 \extratabsurround=\skip59
 \backup@length=\skip60
@@ -472,8 +478,8 @@ Package: array 2022/09/04 v2.5g Tabular extension package (FMi)
 Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
 \calc@Acount=\count296
 \calc@Bcount=\count297
-\calc@Adimen=\dimen173
-\calc@Bdimen=\dimen174
+\calc@Adimen=\dimen174
+\calc@Bdimen=\dimen175
 \calc@Askip=\skip61
 \calc@Bskip=\skip62
 LaTeX Info: Redefining \setlength on input line 80.
@@ -485,7 +491,7 @@ LaTeX Info: Redefining \addtolength on input line 81.
 tehyper.sty
 Package: footnotehyper 2021/08/13 v1.1e hyperref aware footnote.sty (JFB)
 \FNH@notes=\box63
-\FNH@width=\dimen175
+\FNH@width=\dimen176
 \FNH@toks=\toks30
 )
 (C:\Users\ZOASEIDL\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\biblatex.st
@@ -747,36 +753,36 @@ Package: blx-case-expl3 2023/03/05 v3.19 expl3 case changing code for biblatex
  (IoTarc42.aux)
 \openout1 = `IoTarc42.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
 
 (C:\Users\ZOASEIDL\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf
 .mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count428
-\scratchdimen=\dimen176
+\scratchdimen=\dimen177
 \scratchbox=\box65
 \nofMPsegments=\count429
 \nofMParguments=\count430
 \everyMPshowfont=\toks31
 \MPscratchCnt=\count431
-\MPscratchDim=\dimen177
+\MPscratchDim=\dimen178
 \MPnumerator=\count432
 \makeMPintoPDFobject=\count433
 \everyMPtoPDFconversion=\toks32
@@ -791,19 +797,19 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 s.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-LaTeX Info: Redefining \microtypecontext on input line 85.
-Package microtype Info: Applying patch `item' on input line 85.
-Package microtype Info: Applying patch `toc' on input line 85.
-Package microtype Info: Applying patch `eqnum' on input line 85.
-Package microtype Info: Applying patch `footnote' on input line 85.
-Package microtype Info: Applying patch `verbatim' on input line 85.
+LaTeX Info: Redefining \microtypecontext on input line 86.
+Package microtype Info: Applying patch `item' on input line 86.
+Package microtype Info: Applying patch `toc' on input line 86.
+Package microtype Info: Applying patch `eqnum' on input line 86.
+Package microtype Info: Applying patch `footnote' on input line 86.
+Package microtype Info: Applying patch `verbatim' on input line 86.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 85.
+LaTeX Info: Redefining \showhyphens on input line 86.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -812,7 +818,7 @@ Package microtype Info: No adjustment of character kerning.
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-Package hyperref Info: Link coloring OFF on input line 85.
+Package hyperref Info: Link coloring OFF on input line 86.
 Package biblatex Info: Trying to load language 'english'...
 Package biblatex Info: ... file 'english.lbx' found.
 
@@ -828,44 +834,44 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'IoTarc42.bbl' found.
  (IoTarc42.bbl)
-Package biblatex Info: Reference section=0 on input line 85.
-Package biblatex Info: Reference segment=0 on input line 85.
+Package biblatex Info: Reference section=0 on input line 86.
+Package biblatex Info: Reference segment=0 on input line 86.
 <resources/header.png, id=3, 579.16376pt x 426.59375pt>
 File: resources/header.png Graphic file (type png)
 <use resources/header.png>
-Package pdftex.def Info: resources/header.png  used on input line 87.
+Package pdftex.def Info: resources/header.png  used on input line 88.
 (pdftex.def)             Requested size: 344.99997pt x 254.11609pt.
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 8
-7.
+8.
 
 (C:\Users\ZOASEIDL\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 8
-7.
+8.
 
 (C:\Users\ZOASEIDL\AppData\Local\Programs\MiKTeX\tex/latex/lm\omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-87.
+88.
 
 (C:\Users\ZOASEIDL\AppData\Local\Programs\MiKTeX\tex/latex/lm\omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-87.
+88.
 
 (C:\Users\ZOASEIDL\AppData\Local\Programs\MiKTeX\tex/latex/lm\omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 87.
+(Font)              <12> on input line 88.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 87.
+(Font)              <8> on input line 88.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 87.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 87.
+(Font)              <6> on input line 88.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 88.
 
 
 (C:\Users\ZOASEIDL\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
@@ -874,7 +880,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (C:\Users\ZOASEIDL\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 87.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 88.
 
  (C:\Users\ZOASEIDL\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -959,48 +965,34 @@ File: resources/start_game.pdf Graphic file (type pdf)
 Package pdftex.def Info: resources/start_game.pdf  used on input line 184.
 (pdftex.def)             Requested size: 345.00003pt x 478.73706pt.
 [6 <./resources/show_lobby.pdf>] [7 <./resources/join_lobby.pdf>]
-<resources/Event-Based-Spielablauf.png, id=110, 2011.515pt x 2734.215pt>
+<resources/Event-Based-Spielablauf.png, id=112, 2011.515pt x 2734.215pt>
 File: resources/Event-Based-Spielablauf.png Graphic file (type png)
 <use resources/Event-Based-Spielablauf.png>
 Package pdftex.def Info: resources/Event-Based-Spielablauf.png  used on input l
-ine 191.
-(pdftex.def)             Requested size: 344.99165pt x 468.94075pt.
- [8 <./resources/start_game.pdf>]
-
-LaTeX Warning: Citation 'gordon2001distributed' on page 9 undefined on input li
-ne 197.
-
-[9 <./resources/Event-Based-Spielablauf.png>]
-Underfull \hbox (badness 2521) in paragraph at lines 208--209
-[]\T1/lmr/bx/n/10 (+20) Gröÿte Her-aus-forderun-gen\T1/lmr/m/n/10 (+20) : Rück-
-blick auf die be-deu-tend-sten
- []
-
-[10]
+ine 192.
+(pdftex.def)             Requested size: 304.9984pt x 414.57867pt.
+ [8 <./resources/start_game.pdf>] [9 <./resources/Event-Based-Spielablauf.png>]
+ [10]
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/lmr/m/sc/10'.
 (microtype)             Ignoring protrusion settings for this character.
- [11] (IoTarc42.aux)
+ [11]
+(IoTarc42.aux)
 
-LaTeX Warning: There were undefined references.
-
-
-Package biblatex Warning: Please (re)run Biber on the file:
-(biblatex)                IoTarc42
-(biblatex)                and rerun LaTeX afterwards.
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
 Package logreq Info: Writing requests to 'IoTarc42.run.xml'.
 \openout1 = `IoTarc42.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 20813 strings out of 476326
- 366599 string characters out of 5786306
- 1858660 words of memory out of 5000000
- 40825 multiletter control sequences out of 15000+600000
- 569488 words of font info for 124 fonts, out of 8000000 for 9000
+ 21019 strings out of 476326
+ 369638 string characters out of 5786306
+ 1859660 words of memory out of 5000000
+ 41003 multiletter control sequences out of 15000+600000
+ 570481 words of font info for 135 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 77i,8n,81p,1007b,1257s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 77i,8n,81p,1007b,1406s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {C:/Users/ZOASEIDL/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc
 }{C:/Users/ZOASEIDL/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc
 }<C:/Users/ZOASEIDL/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.
@@ -1011,9 +1003,9 @@ lm/lmr10.pfb><C:/Users/ZOASEIDL/AppData/Local/Programs/MiKTeX/fonts/type1/publi
 c/lm/lmr12.pfb><C:/Users/ZOASEIDL/AppData/Local/Programs/MiKTeX/fonts/type1/pub
 lic/lm/lmr17.pfb><C:/Users/ZOASEIDL/AppData/Local/Programs/MiKTeX/fonts/type1/p
 ublic/lm/lmri10.pfb>
-Output written on IoTarc42.pdf (11 pages, 922443 bytes).
+Output written on IoTarc42.pdf (11 pages, 929539 bytes).
 PDF statistics:
- 227 PDF objects out of 1000 (max. 8388607)
- 33 named destinations out of 1000 (max. 500000)
+ 238 PDF objects out of 1000 (max. 8388607)
+ 35 named destinations out of 1000 (max. 500000)
  32889 words of extra memory for PDF output out of 35830 (max. 10000000)
 

@@ -9,6 +9,7 @@
 \usepackage{iftex}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{ngerman}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
@@ -91,7 +92,6 @@
 
 Im Rahmen der Architektur wird eine zentralisierte Architektur verwendet, wobei es sich um eine Client-Server-Architektur handelt (vgl. Abbildung \ref{fig:clientserver}).
 Die Programmteile werden in zwei separate Einheiten unterteilt, um eine klare Trennung zu gewährleisten. Der Server stellt einen bestimmten Service bereit und leitet die Anfragen an die Clients weiter. Die Clients empfangen diese Anfragen.\cite{tanenbaum2007distributed}
-
 Der Client ist eine kompilierte Executable, geschrieben in der Open-Source Godot Engine \cite{godot}. Dort befindet sich die Gesamte Spiel Logik über die der Benutzer das Spiel spielen kann. Der Server befindet sich in einem Docker Compose bestehend aus einer Posgres Datenbank, einem Load Balancer und beliebig skalierbare Spieleserver welche die Anfragen der Clients verarbeiten. 
 \begin{figure}[H]
 	\centering
@@ -186,19 +186,29 @@ Erklärung, warum diese Architektur gewählt wurde (z. B. Skalierbarkeit, Modula
 	\label{fig:ablaufdiagramm-start_game}
 \end{figure}
 
+Wurde das Spiel gestartet wird bei jedem Client die Pong Instanz geladen. Die Kommunikation passiert über einen Socket-IO Websocket. Über den Socket senden die Clients dann verschiedene Events (ähnlich wie bei einem Publisher/Subscriber Prinzip \cite{tanenbaum2007distributed}) welche dann auf der anderen Seite interpretiert werden. Die Clients senden nun die Positionen ihrer Paddles an den Server welcher diese an die Clients weitergibt. Prallt ein Ball an einem Paddle ab meldet der Client an dem der Ball abgeprallt ist dass dieser abprallt ist. Genauso passiert das wenn ein Tor geschossen wird (vgl. Abbildung \ref{fig:ablaufdiagramm-spiel}). 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth ]{resources/Event-Based-Spielablauf.png}
+	\includegraphics[width=\textwidth -40pt ]{resources/Event-Based-Spielablauf.png}
 	\caption{Eventbasierter Ablauf des Spiels über einen Socket-IO Websocket. Es handelt sich um eine Vereinfachte Ansicht. Beide Seiten können die jeweiligen Events an den Server senden.}
 	\label{fig:ablaufdiagramm-spiel}
 \end{figure}
+Einer der Schwierigkeiten waren \glqq stockende\grqq{} Bewegungen beim Spielablauf. Um dem Problem entgegenzuwirken Rendert jeder Client den Ball für sich selbst und nur die Änderungen, z.B. beim Aufprall werden übertragen. 
+Außerdem musste sichergestellt werden, dass jeder Raum über einen sepearaten Channel kommuniziert. Hierfür eignete sich das Raum-Management Feature von Socket-IO , da die Verbindung \& Synchronisation schon übernommen wurde und man einfach die Raum ID's aus der Datenbank sehr einfach einbinden konnte. So konnte ein höherer Programmieraufwand und damit Potenzielle Fehler vermieden werden \cite{SocketIORooms}. 
 
 \subsection{Mögliche Alternativen}
 Anstelle einer zentralisierten Architektur wäre ein dezentralisierter Ansatz möglich. Es könnte ein Peer-To-Peer System Implementiert werden. Anstelle von einem zentralen System ist jeder Client miteinander direkt verbunden \cite{gordon2001distributed}. Im folgenden werden die Vor- und Nachteile eines Peer-To-Peer Systems erläutert:
 
 \textbf{Vorteile}
 \begin{itemize}
-\item hey
+\item \textbf{Geringere Latenz} wenn die zwei Spieler eine direkte Verbindung zueinander herstellen
+\item \textbf{Load Balancer} wird nicht benötigt da jeder Client seine eigenen Ressourcen mitbringt und die Spiellogik dann von Peer to Peer abläuft
+\end{itemize}
+
+\textbf{Nachteile}
+\begin{itemize}
+\item \textbf{Synchronisation} ist bei einem P2P-Netzwerk komplexer herzustellen, anstatt mit einem zentralisiertem Server
+\item \textbf{Firewalls} \glqq erschweren\grqq{} den Datenaustausch wenn ein Client keine Verbindung zulässt \cite{gordon2001distributed}
 \end{itemize}
 
 \section{Reflexion}
