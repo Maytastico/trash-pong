@@ -65,29 +65,29 @@ end
 
 alt if player is not room creator
     note right of jR: Überprüfen, ob der Spieler der Raumersteller ist.\nDer Raumbeitritt sollte nur ausgeführt werden, wenn der Benutzer der zweite Spieler ist.\nDer erste Benutzer wird in der Datenbank gesetzt, wenn der Raum erstellt wird.
-    jR -> raum: joinRoom(undefined, player.user_id, roomId)
+    jR -> raum: joinRoom\n(undefined,\n player.user_id,\n roomId)
     activate raum
     alt if both user_id1 and user_id2 are defined
-        raum -> db: UPDATE Raum SET user_id1 = user_id1,\nuser_id2 = player.user_id WHERE raum_id = roomId  ING *
+        raum -> db: UPDATE Raum \nSET user_id1 = user_id1,\nuser_id2 = player.user_id\n WHERE raum_id = roomId  RET *
         activate db
     else if only user_id1 is defined
-        raum -> db: UPDATE Raum SET user_id1 = user_id1\nWHERE raum_id = roomId  ING *
+        raum -> db: UPDATE Raum \nSET user_id1 = user_id1\nWHERE raum_id = roomId  RET *
     else if only user_id2 is defined
-        raum -> db: UPDATE Raum SET user_id2 = player.user_id\nWHERE raum_id = roomId  ING *
+        raum -> db: UPDATE Raum \nSET user_id2 = player.user_id\nWHERE raum_id = roomId  RET     *
     else
         raum -> jR: null
          
     end
     db -> raum: room
     deactivate db
-    raum -> jR: Raum(raum_id, titel, user_id1, user_id2,\nöffentlich, passwort, user1, user2)
+    raum -> jR: Raum(\nraum_id,\n titel,\n user_id1,\n user_id2,\nöffentlich,\n passwort,\n user1,\n user2)
     deactivate raum
 end
 note right of jR: Socket.io-Raum mit einer gültigen Raum-ID beitreten
-jR -> ws: join(Raum.raum_id.toString())
+jR -> ws: join(Raum.raum_id.\ntoString())
 activate ws
 note right of jR: Eine Benachrichtigung an alle Clients im Raum senden
-jR -> ws: to(roomId.toString()).emit('notification', `${player.name} hat den Raum betreten`)
+jR -> ws: to\n(roomId.toString())\n.emit(\n'notification', \n`${player.name}\n hat den Raum betreten`)
 deactivate ws
 
 @enduml
