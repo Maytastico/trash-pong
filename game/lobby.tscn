@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://f85s2avde6r4"]
+[gd_scene load_steps=7 format=3 uid="uid://f85s2avde6r4"]
 
 [ext_resource type="Script" path="res://logic/lobby.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://detolbhnpxynm" path="res://ressources/lobbyBG.jpg" id="1_4qxuq"]
 [ext_resource type="FontFile" uid="uid://baeom0xb31cqk" path="res://ressources/PressStart2P-Regular.ttf" id="1_sxk5a"]
+[ext_resource type="AudioStream" uid="uid://btxncrt2vf6cm" path="res://ressources/Click.mp3" id="4_m8hwg"]
+[ext_resource type="Theme" uid="uid://bqe7fuww5f7vh" path="res://ressources/buttontheme.tres" id="5_l43tc"]
+[ext_resource type="Theme" uid="uid://ctm1axwp10w3y" path="res://ressources/lineedittheme.tres" id="5_mkveb"]
 
 [node name="Lobby" type="Control"]
 layout_mode = 3
@@ -31,6 +34,9 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_4qxuq")
 expand_mode = 3
+
+[node name="Click" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_m8hwg")
 
 [node name="LobbyPanel" type="Panel" parent="."]
 layout_mode = 1
@@ -68,11 +74,18 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="EnterNameLabel" type="Label" parent="LobbyPanel"]
-layout_mode = 0
-offset_left = 136.0
-offset_top = 72.0
-offset_right = 384.0
-offset_bottom = 104.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -124.0
+offset_top = -67.0
+offset_right = 124.0
+offset_bottom = -35.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 2
 size_flags_vertical = 0
 theme_override_fonts/font = ExtResource("1_sxk5a")
@@ -80,26 +93,43 @@ theme_override_font_sizes/font_size = 16
 text = "Enter your name"
 
 [node name="Name" type="LineEdit" parent="LobbyPanel"]
-layout_mode = 0
-offset_left = 64.0
-offset_top = 104.0
-offset_right = 448.0
-offset_bottom = 136.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -23.0
+offset_right = 192.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
+theme = ExtResource("5_mkveb")
 theme_override_fonts/font = ExtResource("1_sxk5a")
 theme_override_font_sizes/font_size = 16
 placeholder_text = "Thomas Kircher"
+alignment = 1
 max_length = 20
 
 [node name="HostButton" type="Button" parent="LobbyPanel"]
-layout_mode = 0
-offset_left = 184.0
-offset_top = 152.0
-offset_right = 321.0
-offset_bottom = 190.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -68.5
+offset_top = 24.0
+offset_right = 68.5
+offset_bottom = 62.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
+theme = ExtResource("5_l43tc")
 theme_override_fonts/font = ExtResource("1_sxk5a")
 theme_override_font_sizes/font_size = 16
 text = "Connect"
@@ -132,12 +162,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -47.0
-offset_top = 75.0
-offset_right = 38.0
-offset_bottom = 109.0
+offset_left = -46.0
+offset_top = 72.5
+offset_right = 46.0
+offset_bottom = 109.5
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("5_l43tc")
 theme_override_fonts/font = ExtResource("1_sxk5a")
 text = "Exit"
 
@@ -147,4 +178,5 @@ text = "Exit"
 [connection signal="text_submitted" from="LobbyPanel/Name" to="LobbyPanel" method="_on_name_text_submitted"]
 [connection signal="gui_input" from="LobbyPanel/HostButton" to="LobbyPanel" method="_on_host_button_gui_input"]
 [connection signal="pressed" from="LobbyPanel/HostButton" to="LobbyPanel" method="_on_host_pressed"]
+[connection signal="button_down" from="LobbyPanel/Exit" to="LobbyPanel" method="_on_exit_button_down"]
 [connection signal="pressed" from="LobbyPanel/Exit" to="LobbyPanel" method="_on_button_pressed"]

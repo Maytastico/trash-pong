@@ -1,5 +1,6 @@
 extends Resource
 
+# Raum Klasse
 @export  var raum_id : int
 @export  var spieler_id_1 : int
 @export  var spieler_id_2 : int

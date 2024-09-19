@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bafoh1ief0147"]
 
 [ext_resource type="Script" path="res://logic/pong.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://b10swafhe08oj" path="res://separator.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://b10swafhe08oj" path="res://ressources/separator.png" id="2"]
 [ext_resource type="PackedScene" uid="uid://cpw46256eirwq" path="res://paddle.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://bjmldn1x3lpa" path="res://ball.tscn" id="4"]
 
@@ -48,15 +48,17 @@ offset_right = 771.0
 offset_bottom = 173.839
 size_flags_horizontal = 2
 size_flags_vertical = 0
+theme_override_font_sizes/font_size = 31
 text = "0"
 
 [node name="ScoreRight" type="Label" parent="."]
-offset_left = 1101.0
-offset_top = 161.839
-offset_right = 1141.0
-offset_bottom = 184.839
+offset_left = 1099.0
+offset_top = 154.0
+offset_right = 1139.0
+offset_bottom = 196.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
+theme_override_font_sizes/font_size = 30
 text = "0"
 
 [node name="WinnerLeft" type="Label" parent="."]
@@ -71,10 +73,10 @@ text = "The Winner!"
 
 [node name="WinnerRight" type="Label" parent="."]
 visible = false
-offset_left = 380.0
+offset_left = 1544.0
 offset_top = 170.0
-offset_right = 457.0
-offset_bottom = 184.0
+offset_right = 1638.0
+offset_bottom = 193.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 text = "The Winner!"
