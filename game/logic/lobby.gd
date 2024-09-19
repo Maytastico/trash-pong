@@ -8,13 +8,19 @@ extends Control
 @onready var status_fail = $StatusFail                                    # Rote Statusmeldung
 @onready var pingRequest = %Ping                                          # Ping HTTP-Request
 @onready var loginRequest = %Login                                        # Login HTTP-Request
-
+@onready var ServerURLLabel = $"../ServerURL"
 # Funktion wird Aufgerufen wenn die Szene Startet
 func _ready():
 	username.grab_focus()                                                 # Focus wird auf die Textbox gesetzt (man muss nicht mehr mit der Maus extra drauf drücken) 
 	get_viewport().size = DisplayServer.screen_get_size()                 # Fenstergröße wird auf Vollbild gesetzt
+	getServerURLFromEnv()                                                 # Andere URL aus Umgebungsvariablen bekommen
+	ServerURLLabel.text = Global.apiURL                                   # DEBUG LABEL oben Links
 
-
+func getServerURLFromEnv():
+	var env_api_url = OS.get_environment("PONG_SERVER_URL")
+	var env_api_port = OS.get_environment("PONG_SERVER_PORT")
+	if env_api_url != "" && env_api_port != "":
+		Global.apiURL = env_api_url + ":" + str(env_api_port)
 
 # Funktion um Fehlernachrichten anzuzeigen
 func _set_status(text, isok):

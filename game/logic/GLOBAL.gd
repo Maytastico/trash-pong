@@ -1,7 +1,7 @@
 extends Node
 ############################ GLOBALE VARIABLEN ####################################
 
-const apiURL = "http://localhost:3000" 								# Server URL
+var apiURL = "http://localhost:3000" 								# Server URL
 #const apiURL = "http://192.168.2.104:3000" 						# Server URL
 @onready var jwtToken: String  =""       							# JWT Token zum Authentifizieren
 @onready var username: String = ""									# Username der beim Login gesetzt wird
