@@ -1,100 +1,93 @@
 @startuml
-title "join lobby   "
+title "join lobby"
 actor player
-box "game services"
-collections "game services" as gs
-participant "Lobby Model" as lo
+skinparam defaultFontSize 30
+skinparam componentFontSize 30
+skinparam actorFontSize 30
+skinparam noteFontSize 30
+skinparam sequenceParticipantFontSize 30
+skinparam sequenceMessageFontSize 30
+skinparam titleFontSize 30
+box "game socket.io server" #LightBlue
+participant "socket.io" as ws
+collections "joinRoom" as jR
+end box
+box "user api" #LightYellow
+participant "raum.ts" as raum
+collections "auth.ts" as auth
 end box
 database database as db
 
-player -> gs: join_lobby\n(lobby_uuid,user_uuid)
-activate gs
-gs-> lo: fetch_lobby(lobby_uuid)
-activate lo
-lo->db: select * from lobby\n where uuid Is lobby_uuid
+note right of player: Das JWT-Token wird entweder während des Handshakes gesetzt\noder durch Setzen eines Headers vor dem Herstellen der Verbindung.\nHeader-Struktur:\n authorization: <token>
+player -> ws: connect()
+activate ws
+player -> jR: joinRoom(roomId)
+activate jR
+jR -> ws: getToken(ws)
+activate ws
+ws -> jR: token
+deactivate ws
+jR -> auth: decodeAccessToken(token)
+activate auth
+auth -> jR: UserToken(type, username, user_id)
+deactivate auth
+alt if token is invalid
+    jR -> ws: ThrowEror('Ungültiges Token')
+    deactivate jR
+    ws -> player: error('Ungültiges Token')
+    deactivate ws
+     
+end
+
+jR -> raum: getRoom(roomId)
+
+activate raum
+activate jR
+raum -> db: SELECT r.*, s.name AS user1, sp.name AS user2 FROM\n Raum r LEFT JOIN "user" s \n ON s.user_id = r.user_id1 \n LEFT JOIN "user" sp ON sp.user_id = r.user_id2 \n WHERE r.raum_id = roomId LIMIT 1;
 activate db
-db->lo: lobbies[]
+db -> raum: room
 deactivate db
+raum -> jR: room
+deactivate raum
+alt if room does not exist
+    jR -> player: error('Raum existiert nicht')
+    deactivate raum
+    deactivate ws
+     
+end
+deactivate raum
 
-alt lobbies.lenght<1
-    lo->gs: Null
-else
-    create participant Lobby
-    lo -> Lobby: Lobby(lobbies[0])
-    lo->gs:<<ref>> Lobby()
-    deactivate lo
+alt if room is full
+    jR -> player: error('Raum ist voll')
+    deactivate ws
+     
 end
 
-gs->Lobby: password_enabled()
-activate Lobby
-Lobby->gs: this.password_enabled
-deactivate Lobby
-
-gs->Lobby: whitelist()
-activate Lobby
-Lobby->gs: this.whitelist()
-deactivate Lobby
-
-alt password_enabled
-    gs->Lobby: check_password(pw)
-    activate Lobby
-    create participant bcrypt
-    Lobby->bcrypt: brcypt()
-    Lobby->bcrypt: hash_password(pw)
-    activate bcrypt
-    bcrypt->Lobby: hashed_pw
-    deactivate bcrypt
-    Lobby->bcrypt: validate_hash(hashed_pw, pw)
-    activate bcrypt
-    bcrypt->Lobby: result
-    deactivate bcrypt
-    Lobby->gs: result
-    deactivate Lobby
-    alt !result
-        gs->player: ThrowHTTPException(401)
+alt if player is not room creator
+    note right of jR: Überprüfen, ob der Spieler der Raumersteller ist.\nDer Raumbeitritt sollte nur ausgeführt werden, wenn der Benutzer der zweite Spieler ist.\nDer erste Benutzer wird in der Datenbank gesetzt, wenn der Raum erstellt wird.
+    jR -> raum: joinRoom(undefined, player.user_id, roomId)
+    activate raum
+    alt if both user_id1 and user_id2 are defined
+        raum -> db: UPDATE Raum SET user_id1 = user_id1,\nuser_id2 = player.user_id WHERE raum_id = roomId  ING *
+        activate db
+    else if only user_id1 is defined
+        raum -> db: UPDATE Raum SET user_id1 = user_id1\nWHERE raum_id = roomId  ING *
+    else if only user_id2 is defined
+        raum -> db: UPDATE Raum SET user_id2 = player.user_id\nWHERE raum_id = roomId  ING *
+    else
+        raum -> jR: null
+         
     end
-    destroy bcrypt
+    db -> raum: room
+    deactivate db
+    raum -> jR: Raum(raum_id, titel, user_id1, user_id2,\nöffentlich, passwort, user1, user2)
+    deactivate raum
 end
-
-
-
-
-alt whitelist
-    gs->Lobby: lobby.is_user_authorized(user_uuid)
-    activate Lobby
-    
-    Lobby->Lobby: this.whitelist.exists(user_uuid)
-    activate Lobby
-    Lobby->Lobby: exists_in_whitelist
-    deactivate Lobby
-    Lobby->gs: exists_in_whitelist
-    deactivate Lobby
-    alt !exists_in_whitelist
-        gs->player: ThrowHTTPException(401)
-    end
-end    
-
-
-alt Spieler-ID1 != Null and Spieler-ID2 != Null
-    gs->player:ThrowException("Lobby Full")
-end
-
-gs->Lobby: add_user_to_lobby(user_uuid)
-activate Lobby
-Lobby->Lobby: users.append(user_uuid)
-Lobby->gs
-deactivate Lobby
-
-gs->lo: update_lobby(Lobby)
-activate lo
-lo->gs: result
-deactivate lo
-
-alt !result
-    gs->player: ThrowHTTPException(500)
-end
-
-gs->player: Lobby.json_serialized()
-deactivate gs
+note right of jR: Socket.io-Raum mit einer gültigen Raum-ID beitreten
+jR -> ws: join(Raum.raum_id.toString())
+activate ws
+note right of jR: Eine Benachrichtigung an alle Clients im Raum senden
+jR -> ws: to(roomId.toString()).emit('notification', `${player.name} hat den Raum betreten`)
+deactivate ws
 
 @enduml

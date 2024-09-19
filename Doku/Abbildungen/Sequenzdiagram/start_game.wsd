@@ -1,3 +1,79 @@
 @startuml
+title "start game"
+skinparam defaultFontSize 30
+skinparam componentFontSize 30
+skinparam actorFontSize 30
+skinparam noteFontSize 30
+skinparam sequenceParticipantFontSize 30
+skinparam sequenceMessageFontSize 30
+skinparam titleFontSize 30
 
+actor player
+
+box "game socket.io server" #LightBlue
+participant "socket.io" as ws
+collections "startGame" as sG
+end box
+
+box "user api" #LightYellow
+participant "raum.ts" as raum
+collections "auth.ts" as auth
+end box
+
+database database as db
+
+note right of player
+    Das JWT-Token wird entweder während des Handshakes\n
+    gesetzt oder durch Setzen eines Headers vor dem\n
+    Aufbau der Verbindung. Eine Verbindung kann bereits\n
+    bestehen oder neu aufgebaut werden. Daher wird die\n
+    connect-Methode aufgerufen, um eine Verbindung\n
+    herzustellen. Header-Struktur:\n
+    authorization: <token>
+end note
+player -> ws: connect()
+activate ws
+player -> sG: startPressed()
+activate sG
+sG -> ws: getToken(ws)
+activate ws
+ws -> sG: token
+deactivate ws
+
+sG -> auth: decodeAccessToken(token)
+activate auth
+auth -> sG: UserToken\n(type, username, user_id)
+deactivate auth
+
+alt if token is invalid
+        sG -> ws: ThrowError\n('Invalid token')
+        ws -> player: error('Invalid token')
+end
+
+sG -> raum: getRoomsByPlayerID\n(player.user_id)
+activate raum
+raum -> db: SELECT * \n FROM Raum WHERE \n user_id1 = player.user_id\n OR user_id2 = player.user_id
+activate db
+    db -> raum: rooms
+deactivate db
+raum -> sG: rooms
+deactivate raum
+
+alt if no room associated with user
+        sG -> ws: error('No room associated with this user')
+end
+
+alt if second player is null
+        sG -> ws: error\n('You need a second \nplayer to join your\n room to play.')
+end
+
+sG -> auth: generateRoomToken(room[0])
+activate auth
+return roomToken
+
+sG -> player: starting_game(\n{"start_game": true, \n"room_token": roomToken}\n)
+sG -> ws: to(room[0].raum_id.toString())\n.emit(\n"starting_game",\n{"start_game": true, \n"room_token": roomToken}\n)
+
+deactivate sG
+deactivate ws
 @enduml
