@@ -244,14 +244,14 @@ Anstelle einer zentralisierten Architektur wäre ein dezentralisierter Ansatz m�
 
 \textbf{Vorteile}
 \begin{itemize}
-\item \textbf{Geringere Latenz} wenn die zwei Spieler eine direkte Verbindung zueinander herstellen
-\item \textbf{Load Balancer} wird nicht benötigt da jeder Client seine eigenen Ressourcen mitbringt und die Spiellogik dann von Peer to Peer abläuft
+\item Geringere Latenz wenn die zwei Spieler eine direkte Verbindung zueinander herstellen
+\item Ein Load Balancer wird nicht benötigt da jeder Client seine eigenen Ressourcen mitbringt und die Spiellogik dann von Peer to Peer abläuft
 \end{itemize}
 
 \textbf{Nachteile}
 \begin{itemize}
-\item \textbf{Synchronisation} ist bei einem P2P-Netzwerk komplexer herzustellen, anstatt mit einem zentralisiertem Server
-\item \textbf{Firewalls} \glqq erschweren\grqq{} den Datenaustausch wenn ein Client keine Verbindung zulässt \cite{gordon2001distributed}
+\item Synchronisation ist bei einem P2P-Netzwerk komplexer herzustellen, anstatt mit einem zentralisiertem Server
+\item Firewalls \glqq erschweren\grqq{} den Datenaustausch wenn ein Client keine Verbindung zulässt \cite{gordon2001distributed}
 \end{itemize}
 
 \section{Reflexion}
@@ -260,7 +260,7 @@ Anstelle einer zentralisierten Architektur wäre ein dezentralisierter Ansatz m�
 \begin{itemize}
     \item \textbf{Änderungen nach dem Projekt}: Was würde man im Nachhinein anders machen, um das System zu verbessern?
 \end{itemize}
-
+Rückblickend gesehen wäre es besser gewsesen die gesamte Logik der Raumliste mit Websockets aufzubauen. Anstatt die Räume mit einer REST-API abzufragen, könnten aktualisierungen der Räume in Echtzeit übertragen werden. So müsste der Benutzer nicht Manuell die Räume abfragen und potenzielle Race-Conditions, wie beim Raumbeitritt könnten vermieden werden. Außerdem müssten damit nicht die gesamten Räume vom Server gefetcht werden sondern es könnte zu Beginn einmal alles gefetcht werden und nur noch Änderungen müssten Übertragen werden.   
 \subsection{Herausforderungen}
 \begin{itemize}
     \item \textbf{Größte Herausforderungen}: Rückblick auf die bedeutendsten Schwierigkeiten und wie sie gelöst wurden.
