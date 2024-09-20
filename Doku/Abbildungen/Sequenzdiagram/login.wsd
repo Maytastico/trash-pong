@@ -15,7 +15,7 @@ participant "user.ts" as usr
 end box
 database database as db
 
-note right of player: Ein Auth Bearer Token wird im Header gesetzt:\nAuthorization: Bearer <token>
+note right of player: Der Nutzer benötigt keine Authentifizierung. \nEher wird nach Abschluss der Registrierung ein JWT-Token\n generiert, mit dem sich der Nutzer\n authentifizieren kann.
 player -> ps: /user/login\nbody: {"username": name}
 activate ps
 ps -> usr: getUserByName(name)

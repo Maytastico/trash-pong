@@ -10,6 +10,7 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{ngerman}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
@@ -85,7 +86,7 @@
     Projektbericht Trashpong
   \end{center}
 }
-\author{}
+\author{Aron Seidl, Maylis Grune, Carolin Enderlein}
 \date{Januar 2023}
 
 \begin{document}
@@ -262,25 +263,25 @@ Ein weitere Vorteil ist die eingebaute Replikationsfunktion, welche die Datenban
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth ]{resources/login.pdf}
-	\caption{Dein TExt hier}
+	\caption{Zeigt den Ablauf einer Nutzerregestrierung.}
 	\label{fig:ablaufdiagramm-login}
 \end{figure}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth ]{resources/show_lobby.pdf}
-	\caption{Dein TExt hier}
+	\caption{Zeigt den Ablauf der Abfrage aller Räume in der Datenbank. welche nach dem Login ausgeführt wird. Hier wir ein JWT-Token benötigt um die Anfrage zu autorisieren.}
 	\label{fig:ablaufdiagramm-show_lobby}
 \end{figure}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth ]{resources/join_lobby.pdf}
-	\caption{Dein TExt hier}
+	\caption{Der Nutzer tritt einem Raum bei. Hierbei wird ein JWT-Token benötigt um die Anfrage zu autorisieren. Der Nutzer verbindet sich mit dem Websocket und sendet eine joinRoom Anfrage. Der Server prüft ob der Nutzer die nötigen Berechtigungen hat um in den Raum beizutretten. Wenn der Nutzer alle Berechtigungen hat wird er in den Raum hinzugefügt und empfängt nun Nachrichten von anderen Nutzer.}
 	\label{fig:ablaufdiagramm-join_lobby}
 \end{figure}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth ]{resources/start_game.pdf}
-	\caption{Dein TExt hier}
+	\caption{Drückt einer der Nutzer den Start-Button in der Benutzeroberfläche wird ein Event an den Server gesendet. Dieser Prüft ob der Nutzer innerhalb eines Raumes regestriert wurde. Wenn der Nutzer alle Berechtigungen erfüllt wird diesem ein Room Token übermittelt mit dem der Nutzer weitere Informationen authentifieren kann.}
 	\label{fig:ablaufdiagramm-start_game}
 \end{figure}
 

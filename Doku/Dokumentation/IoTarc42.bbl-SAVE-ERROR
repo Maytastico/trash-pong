@@ -103,8 +103,8 @@
       \strng{authorbibnamehash}{e4728f444b24839e3f80adf3829bcba9}
       \strng{authornamehash}{e4728f444b24839e3f80adf3829bcba9}
       \strng{authorfullhash}{e4728f444b24839e3f80adf3829bcba9}
-      \field{sortinit}{9}
-      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{note}{Zuletzt Aufgerufen 19.09.2024}
@@ -172,7 +172,6 @@
       \endverb
     \endentry
   \enddatalist
-  \missing{tanenbaum2007distribute}
 \endrefsection
 \endinput
 
