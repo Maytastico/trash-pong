@@ -79,7 +79,12 @@
 
 \addbibresource{Literatur.bib}
 
-\title{\includegraphics{resources/header.png} Projektbericht Trashpong}
+\title{
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{resources/header.png} \\
+    Projektbericht Trashpong
+  \end{center}
+}
 \author{}
 \date{Januar 2023}
 
@@ -91,15 +96,79 @@
 \section{Architektur}\label{section-introduction-and-goals}}
 
 Im Rahmen der Architektur wird eine zentralisierte Architektur verwendet, wobei es sich um eine Client-Server-Architektur handelt (vgl. Abbildung \ref{fig:clientserver}).
-Die Programmteile werden in zwei separate Einheiten unterteilt, um eine klare Trennung zu gewährleisten. Der Server stellt einen bestimmten Service bereit und leitet die Anfragen an die Clients weiter. Die Clients empfangen diese Anfragen.\cite{tanenbaum2007distributed}
-Der Client ist eine kompilierte Executable, geschrieben in der Open-Source Godot Engine \cite{godot}. Dort befindet sich die Gesamte Spiel Logik über die der Benutzer das Spiel spielen kann. Der Server befindet sich in einem Docker Compose bestehend aus einer Posgres Datenbank, einem Load Balancer und beliebig skalierbare Spieleserver welche die Anfragen der Clients verarbeiten. 
+Die Programmteile werden in zwei Einheiten unterteilt, um eine klare Trennung zu gewährleisten. 
+Der Server stellt einen bestimmten Service bereit und leitet die Anfragen an die Clients weiter. 
+Die Clients empfangen diese Anfragen.\cite{tanenbaum2007distributed}
+Der Client ist eine kompilierte Anwendung, geschrieben in der Open-Source Godot Engine \cite{godot}, welcher die
+Services des Servers nutzt. 
+Die Verteilung der Anwendungslogik, auf Client und Server, wird durch die (Abbildung \ref{fig:destribution-of-logic}) verdeutlicht.
+Der Client besitzt dabei die gesamte Spiellogik, über die der Benutzer das Spiel spielen kann. 
+Die Benutzerschnittstelle ist hierbei die kompilierte Godot Anwendung, welche die Spiellogik implementiert.
+
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth ]{resources/Client-Server.drawio.png}
+	\includegraphics[width=0.8\textwidth ]{resources/Client-Server.drawio.png}
 	\caption{Kontext-Sicht der Client-Server-Architektur des Pong Spiels}
 	\label{fig:clientserver}
 \end{figure}
-Die Datenbank speichert die Räume in der die Spieler ihr Spiel spielen. Jeder Spieler kann Räume erstellen und ihnen beitreten und gehört somit diesen Räumen an (vgl. Abbildung \ref{fig:ER-Modell}). Ein Spieler kann zwar mehrere Räume erstellen, zum Zeitpunkt des Spiels befindet sich dieser nur in einem einzigen Raum.
+
+
+Um Daten zu erhalten, sendet die Anwendung Anfragen an die REST API, welche Anwendungslogik implementiert hat um mit der Datenbank zu interagieren.
+Die Benutzeranwendung muss zudem eigene Logik implementieren, da diese aufgrund von Echtzeit Anforderungen nicht auf einen Server warten kann.
+Komponenten mit Echtzeit Anforderungen, die das  Rendering, die Übernahme von Benutzereingaben müssen auf dem Client Computer ausgeführt werden.
+Server wie auch Client besitzen demnach ihre eigene Anwendungslogik, die sich auf die jeweiligen Anforderungen spezialisiert haben.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth ]{resources/server_client.pdf}
+	\caption{Aufteilung der Anwendungslogik in Client und Server}
+	\label{fig:destribution-of-logic}
+\end{figure}
+
+Der Server kann über eine Docker Compose bereitgestellt werden.
+Innerhalb dieses Deployments wird eine Postgres-Datenbank, 
+ein Nginx-Load-Balancer und ein beliebig skalierbarer Spieleserver, welcher die Anfragen der Clients verarbeitet, bereitgestellt.
+
+
+
+\subsection{Server Architektur}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth ]{resources/game_server.pdf}
+	\caption{Komponentensicht der Serveranwendung}
+	\label{fig:server}
+\end{figure}
+
+Der Server besteht aus zwei Komponenten, dem HTTP Server und dem Game Server.
+Der HTTP Server verfolgt dabei eine \glqq  [..] client-server Interaktion, auch bekannt als 
+request-reply Verhalten [..]\grqq{}\cite[S.37 ff.]{tanenbaum2007distributed}.
+Diese Komponente, wie sie in (Abbildung \ref{fig:server}) dargestellt ist,
+bietet dem Client Benutzerschnittstellen an um sich anzumelden, Räume zu erstellen und diesen beizutreten.
+Der HTTP Server ist dabei verbindungslos, das bedeutet, 
+dass der Server nachdem er die Anfrage bearbeitet hat, die Verbindung schließt.
+Der Server hat dabei keine Referenz zu dem Client, der die Anfrage gestellt hat.
+Was für Anwendung, die Daten bereitstellen sollen die einfachste Form der Kommunikation dargestellt.
+
+Innerhalb des Spiels, sind verbindungslose Protokolle nicht ausreichend, da hier eine Echtzeitkommunikation benötigt wird.
+Websockets wären hier ein Protokoll, welches einen verbindungsorientierten Ansatz verfolgt.
+Diese \glqq [..] verwenden eine einzelne TCP-Verbindung für den Datenverkehr in beide Richtungen. 
+\grqq{} \cite[Kapitel 1.1]{rfc-websocket}.
+Somit kann mit Websockets ein bidirektionaler Kommunikationskanal aufgebaut werden mit dem die Clients 
+und der Server in Echtzeit kommunizieren können.
+Spieleinformationen können so zwischen den Clients ausgetascht werden. 
+Der Server wird dabei als Vermittler verwendet. Um dies zu ermöglichen wird die Socket.io Bibliothek verwendet.
+Socket.io ergänzt das Websocket Protokoll und ermöglicht es Räume zu erstellen und zu verwalten.
+Damit können mehrere Clients innerhalb eines Raums miteinander kommunizieren.
+
+
+
+
+Die Datenbank speichert die Räume, in denen die Spieler ihr Spiel spielen. 
+Jeder Spieler kann Räume erstellen und ihnen beitreten und gehört somit diesen 
+Räumen an (vgl. Abbildung \ref{fig:ER-Modell}).
+Ein Spieler kann dabei mehrere Räume erstellen, so ist es diesem auch möglich, in mehreren Räumen gleichzeitig zu sein.
+Zum Zeitpunkt des Spiels kann der Spieler nur in einem Raum sein.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth ]{resources/ER-Modell.png}
@@ -107,11 +176,10 @@ Die Datenbank speichert die Räume in der die Spieler ihr Spiel spielen. Jeder S
 	\label{fig:ER-Modell}
 \end{figure}
 
-Dieser verwaltet die Daten der Spieler und die Spielstände. Außerdem werden die Daten für die Räume gespeichert.
-Die REST API ist in einem Docker Container gehostet und kann beliebig skaliert werden. 
-Ein NGINX Load Balancer verteilt die Anfragen auf die einzelnen Server.
+
+Als Vertielungsmechanismus wird IP-Hashing verwendet.
 \glqq Viele Client-Server-Anwendung sind grundsetzlich aus drei unterschiedlichen Komponenten zusammengesetzt[...]\grqq{} \cite[S.57 ff.]{tanenbaum2007distributed}.
-So interagieren auch die Clients mit einer Benutzerschnittstelle, der REST API.
+Die Clients interagieren daher auch mit einer Benutzerschnittstelle. Dabei handelt es sich um ein HTTP Server, der
 Diese wird verwendet um Daten über Nutzer oder Räume zu erhalten.
 Daten werden dabei über das HTTP Protokoll ausgetauscht. 
 Die REST API kann dabei verwendet werde um Räume zu erstellen.
@@ -123,33 +191,24 @@ Die Abbildung \ref{fig:ablaufdiagramm-show_lobby} zeigt den Ablauf einer REST An
 Hierbei interagiert der Client mit der REST API, welche die Anfrage an den Controller weiterleitet.
 Der Controller interagiert dann mit der Datenbank um die Räume zu erhalten. Anschließend werden die Daten an den Client zurückgegeben.
 
-Die Verteilung der Anwendungslogik auf Client und Server wird durch die Abbildung \ref{fig:destribution-of-logic} verdeutlicht.
-Diese ist ein ausschnitt aus der Abbildung 2.5(c) aus \cite[S.41]{tanenbaum2007distributed}
-
-Die Benutzerschnittstelle ist hierbei die kompilierte Godot Anwendung, welche die Spiellogik implementiert.
-Um Daten zu erhalten, sendet die Anwendung Anfragen an die REST API, welche Anwendungslogik implementiert hat um mit der Datenbank zu interagieren.
-Die Benutzeranwendung muss zudem eigene Logik implementieren, da diese aufgrund von Echtzeit Anforderungen nicht auf einen Server warten kann.
-Komponenten mit Echtzeit Anforderungen, die das  Rendering, die übernahme von Benutzer eingaben müssen auf dem Client Computer ausgeführt werden.
 
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\textwidth ]{resources/server_client.pdf}
-	\caption{Aufteilung der Anwendungslogik in Client und Server}
-	\label{fig:destribution-of-logic}
-\end{figure}
 
 
 \hypertarget{section-achitactural-decision}{%
 \subsection{Architektur Entscheidung}}
 Erklärung, warum diese Architektur gewählt wurde (z. B. Skalierbarkeit, Modularität, Sicherheit).
 
-Innerhalb der Server Applikation setzen wir auf zwei Paradigmen. Einerseits haben wir uns bei der Datenhaltung
-für ein zentrlisiertes Client Server Modell entschieden. 
+Innerhalb der Server Applikation wird auf zwei Paradigmen.
+Die HTTP Schnittstelle verfügt dabei über zwei 
 Dabei ist der Server \glqq ein Prozess der einen bestimmt Dienst implementiert\grqq{} \cite[S.55 ff.]{tanenbaum2007distributed}.
 In Fall von Trash Pong ist dies eine REST API, die für die Datenhaltung zuständig ist.
 
-Die zentralisierte Form hilft dabei 
+Nach Tannenbaum eigenen sich relationale Datenbanken um Anwendungslogik von den Daten zu trennen.
+\glqq Die Verwendung relationaler Datenbanken im Client-Server-Modell hilft dabei, 
+die Verarbeitungsebene von der Datenebene zu trennen, da Verarbeitung und Daten als unabhängig betrachtet werden.\grqq{} \cite[S. 40 ff.]{tanenbaum2007distributed}
+Zudem ermöglichen relationale Datenbanken eine einfache Skalierung, der Serveranwendungen.
+Ein weitere Vorteil ist die eingebaute Replikationsfunktion, welche die Datenbanken synchronisiert und hohe Verfügbarkeit gewährleistet.\cite[Chapter 27]{postgresql-high-availability}
 
 
 \section{(Nicht-)Funktionale Anforderungen}
@@ -259,6 +318,9 @@ Anstelle einer zentralisierten Architektur wäre ein dezentralisierter Ansatz m�
 \end{itemize}
 Rückblickend gesehen wäre es besser gewsesen die gesamte Logik der Raumliste mit Websockets aufzubauen. Anstatt die Räume mit einer REST-API abzufragen, könnten Aktualisierungen der Räume in Echtzeit übertragen werden. So müsste der Benutzer nicht Manuell die Räume abfragen und potenzielle Race-Conditions, wie beim Raumbeitritt könnten vermieden werden. Außerdem müssten damit nicht die gesamten Räume vom Server gefetcht werden sondern es könnte zu Beginn einmal alles gefetcht werden und nur noch Änderungen müssten übertragen werden.   
 Eine große Herausforderung war außerdem die Verwendung der Programmiersprache Typescript. Da alle Teilnehmer des Projektes nahezu keine Erfahrung mit Typescript hatten, ist viel Zeit drauf gegangen um Bugs zu fixen welche aufgrund vom Datentypen handling der Programmiersprache entstanden sind. In Zukunft wird für das Backend eine andere Sprache verwendet.
+
+Für die Verwaltung von Daten wäre eine objektorientierte Datenbank wie z.B. MongoDB besser geeignet gewesen, da 
+Trash Pong die Komplextät für eine relationale Datenbank nicht mitbringt. 
 \newpage
  \printbibliography[title={Quellen}]
 \end{document}
