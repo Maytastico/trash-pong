@@ -6,10 +6,6 @@ services:
     build:
         context: ./Datenbank
         dockerfile: Dockerfile
-    environment:
-      POSTGRES_USER: testuser
-      POSTGRES_PASSWORD: SicheresPasswort!
-      POSTGRES_DB: pong_daten
     ports:
       - "5432:5432"
     restart: always
@@ -19,11 +15,6 @@ services:
         dockerfile: Dockerfile
     volumes:
       - ./:/usr/src/app
-    environment:
-      PGHOST: db
-      PGUSER: testuser
-      PGPASSWORD: SicheresPasswort!
-      PGDATABASE: pong_daten
     scale: 3
     links:
       - db
