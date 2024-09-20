@@ -152,10 +152,7 @@ In Fall von Trash Pong ist dies eine REST API, die für die Datenhaltung zustän
 Die zentralisierte Form hilft dabei 
 
 
-
-\section{Systemkomponenten}
-
-\subsection{Anforderungen}
+\section{(Nicht-)Funktionale Anforderungen}
 \begin{center}
   \begin{tabular}{|p{\linewidth}|}
     \hline
@@ -198,7 +195,6 @@ Die zentralisierte Form hilft dabei
 
 \section{Umsetzung}
 
-\subsection{Implementierung}
 \begin{itemize}
     \item \textbf{Umsetzung der Architektur}: Beschreibung der Implementierung der einzelnen Komponenten und ihrer Interaktionen.
     \item \textbf{Schwierigkeiten und Lösungen}: Was waren die technischen Herausforderungen und wie wurden sie bewältigt?
@@ -232,7 +228,7 @@ Die zentralisierte Form hilft dabei
 Wurde das Spiel gestartet wird bei jedem Client die Pong Instanz geladen. Die Kommunikation passiert über einen Socket-IO Websocket. Über den Socket senden die Clients dann verschiedene Events (ähnlich wie bei einem Publisher/Subscriber Prinzip \cite{tanenbaum2007distributed}) welche dann auf der anderen Seite interpretiert werden. Die Clients senden nun die Positionen ihrer Paddles an den Server welcher diese an die Clients weitergibt. Prallt ein Ball an einem Paddle ab meldet der Client an dem der Ball abgeprallt ist dass dieser abprallt ist. Genauso passiert das wenn ein Tor geschossen wird (vgl. Abbildung \ref{fig:ablaufdiagramm-spiel}). 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth -40pt ]{resources/Event-Based-Spielablauf.png}
+	\includegraphics[width=\textwidth -80pt ]{resources/Event-Based-Spielablauf.png}
 	\caption{Eventbasierter Ablauf des Spiels über einen Socket-IO Websocket. Es handelt sich um eine Vereinfachte Ansicht. Beide Seiten können die jeweiligen Events an den Server senden.}
 	\label{fig:ablaufdiagramm-spiel}
 \end{figure}
@@ -244,27 +240,25 @@ Anstelle einer zentralisierten Architektur wäre ein dezentralisierter Ansatz m�
 
 \textbf{Vorteile}
 \begin{itemize}
-\item \textbf{Geringere Latenz} wenn die zwei Spieler eine direkte Verbindung zueinander herstellen
-\item \textbf{Load Balancer} wird nicht benötigt da jeder Client seine eigenen Ressourcen mitbringt und die Spiellogik dann von Peer to Peer abläuft
+\item Geringere Latenz wenn die zwei Spieler eine direkte Verbindung zueinander herstellen
+\item Ein Load Balancer wird nicht benötigt da jeder Client seine eigenen Ressourcen mitbringt und die Spiellogik dann von Peer to Peer abläuft
 \end{itemize}
 
 \textbf{Nachteile}
 \begin{itemize}
-\item \textbf{Synchronisation} ist bei einem P2P-Netzwerk komplexer herzustellen, anstatt mit einem zentralisiertem Server
-\item \textbf{Firewalls} \glqq erschweren\grqq{} den Datenaustausch wenn ein Client keine Verbindung zulässt \cite{gordon2001distributed}
+\item Synchronisation ist bei einem P2P-Netzwerk komplexer herzustellen, anstatt mit einem zentralisiertem Server
+\item Firewalls \glqq erschweren\grqq{} den Datenaustausch wenn ein Client keine Verbindung zulässt \cite{gordon2001distributed}
 \end{itemize}
 
 \section{Reflexion}
 
-\subsection{Rückblick}
+\subsection{Rückblick \& Hearusforderungen}
 \begin{itemize}
     \item \textbf{Änderungen nach dem Projekt}: Was würde man im Nachhinein anders machen, um das System zu verbessern?
+      \item \textbf{Größte Herausforderungen}: Rückblick auf die bedeutendsten Schwierigkeiten und wie sie gelöst wurden.
 \end{itemize}
-
-\subsection{Herausforderungen}
-\begin{itemize}
-    \item \textbf{Größte Herausforderungen}: Rückblick auf die bedeutendsten Schwierigkeiten und wie sie gelöst wurden.
-\end{itemize}
+Rückblickend gesehen wäre es besser gewsesen die gesamte Logik der Raumliste mit Websockets aufzubauen. Anstatt die Räume mit einer REST-API abzufragen, könnten Aktualisierungen der Räume in Echtzeit übertragen werden. So müsste der Benutzer nicht Manuell die Räume abfragen und potenzielle Race-Conditions, wie beim Raumbeitritt könnten vermieden werden. Außerdem müssten damit nicht die gesamten Räume vom Server gefetcht werden sondern es könnte zu Beginn einmal alles gefetcht werden und nur noch Änderungen müssten übertragen werden.   
+Eine große Herausforderung war außerdem die Verwendung der Programmiersprache Typescript. Da alle Teilnehmer des Projektes nahezu keine Erfahrung mit Typescript hatten, ist viel Zeit drauf gegangen um Bugs zu fixen welche aufgrund vom Datentypen handling der Programmiersprache entstanden sind. In Zukunft wird für das Backend eine andere Sprache verwendet.
 \newpage
  \printbibliography[title={Quellen}]
 \end{document}
