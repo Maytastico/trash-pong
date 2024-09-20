@@ -117,7 +117,7 @@ export const SECRET_KEY:string = "09f26e402586e2faa8da4c98a35f1b20d6b033c6097bef
 
 #### Nutzer Endpunkte
 
-- **`POST /user/login`**: Fügt einen neuen Temperaturwert hinzu.
+- **`POST /user/login`**: Regestriert den Nutzer und gibt einen JWT Token zurück mitdem die anderen Routen verwendet werden können
     - **Anfragekörper**:
         - `username` (Pflichtfeld): Der Benutzername.
     - **Antworten**:
@@ -127,7 +127,7 @@ export const SECRET_KEY:string = "09f26e402586e2faa8da4c98a35f1b20d6b033c6097bef
 
 ### Sicherheit
 
-Die API verwendet Bearer Token für die Authentifizierung. Stellen Sie sicher, dass Sie ein gültiges JWT-Token in den Header Ihrer Anfragen einfügen.
+Die API verwendet Bearer Token für die Authentifizierung. Dieser kann über die Route ``/user/login`` generiert werden.
 
 ### Beispielanfrage
 
