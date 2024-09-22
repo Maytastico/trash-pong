@@ -2,7 +2,6 @@ import http from 'http';
 import express, { Express } from 'express';
 import morgan from 'morgan';    
 import routes from './routes/index';
-import WebSocket from 'ws';
 import { initializeWebSocketServer } from './gameclient/socket';
 
 const router: Express = express();

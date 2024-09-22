@@ -1,4 +1,6 @@
 import { Socket, Server as SocketIOServer } from 'socket.io';
+import { createAdapter } from "@socket.io/postgres-adapter";
+import { pool } from '../database/conn';
 import http from 'http';
 import { SECRET_KEY} from '../auth/token';
 import jwt, {JwtPayload} from 'jsonwebtoken';
@@ -7,13 +9,15 @@ import { User } from '../types/User';
 import { deleteRoom, getRoom, getRoomsByPlayerID, joinRoom, updateRoom } from '../database/room';
 import { Raum } from '../types/Room';
 import { Bounce, Goal, Paddle, End } from '../types/Game';
-import { randomUUID } from 'crypto';
 
 export let io: SocketIOServer;
 
 export interface CustomRequest extends Request {
     token: string | JwtPayload;
 }
+
+
+
 
 /**
  * Get the token either trought headers or by handshake
@@ -36,8 +40,10 @@ function getToken(socket: Socket<any>): string{
     return token;
 }
 
-export function initializeWebSocketServer(server: http.Server): void {
+export async function initializeWebSocketServer(server: http.Server): Promise<void> {
     io = new SocketIOServer(server);
+
+    io.adapter(createAdapter(pool));
 
     io.use((socket: Socket<any>, next) => {
 
@@ -161,6 +167,7 @@ export function initializeWebSocketServer(server: http.Server): void {
             });
         });
         
+        // Handle 'update_paddle' Event
         ws.on('update_paddle', async (data: {room_token: string, position_x: number, position_y: number, motion: number}) => {
             const token = getToken(ws);
             const {room_token, position_x, position_y, motion} = data;
@@ -191,7 +198,7 @@ export function initializeWebSocketServer(server: http.Server): void {
             ws.to(room.raum_id.toString()).emit("update_paddle", paddle)
         });
 
-
+        // Handle 'end' Event, wenn das Spiel beendet wird
         ws.on('end', async (data: {room_token: string}) => {
             const token = getToken(ws);
             const {room_token} = data;
@@ -220,6 +227,7 @@ export function initializeWebSocketServer(server: http.Server): void {
             ws.to(room.raum_id.toString()).emit("end", end)
         });
 
+        // Handle 'bounce' Event, wenn der Ball vom Schläger abprallt
         ws.on('bounce', async (data: {room_token: string, left: boolean, random: number}) => {
             const token = getToken(ws);
             const {room_token, left, random} = data;
@@ -251,6 +259,7 @@ export function initializeWebSocketServer(server: http.Server): void {
             ws.to(room.raum_id.toString()).emit("bounce", bounce)
         });
 
+        // Handle 'goal' Event, wenn ein Tor erzielt wird
         ws.on('goal', async (data: {room_token: string, left: boolean}) => {
             const token = getToken(ws);
             const {room_token, left} = data;
