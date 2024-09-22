@@ -10,7 +10,7 @@ Um den Pong Server zu Starten kann man im root-Verzeichnis folgenden Command Aus
 docker-compose up -d --build
 ```
 
-Standardmäßg ist der Server über den Port 5000 erreichbar. 
+Standardmäßg ist der Server über den Port 3000 erreichbar. 
 
 ### Spiel
 Die Executables sind im Verzeichnis ```/game/export``` zu finden und sind für x86-64 Linux, Windows (und Mac - wahrscheinlich nicht) unterstützt. 
@@ -24,7 +24,7 @@ Hier ein Beispiel auf einem Windows System:
 2. In der Konsole müssen dann die Umgebungsvariablen gesetzt werden
    ```bash
    set PONG_SERVER_URL=http://localhost
-   set PONG_SERVER_PORT=5000
+   set PONG_SERVER_PORT=3000
    ```
 3. In der selben Konsolen Session muss dann die Executable ausgeführt werden
    ```bash
