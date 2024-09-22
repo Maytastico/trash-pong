@@ -113,7 +113,6 @@ Die Benutzerschnittstelle ist hierbei die kompilierte Godot Anwendung, welche di
 	\label{fig:clientserver}
 \end{figure}
 
-
 Um Daten zu erhalten, sendet die Anwendung Anfragen an die REST API, welche Anwendungslogik implementiert hat um mit der Datenbank zu interagieren.
 Die Benutzeranwendung muss zudem eigene Logik implementieren, da diese aufgrund von Echtzeit Anforderungen nicht auf einen Server warten kann.
 Komponenten mit Echtzeit Anforderungen, die das  Rendering, die Übernahme von Benutzereingaben müssen auf dem Client Computer ausgeführt werden.
@@ -129,8 +128,6 @@ Server wie auch Client besitzen demnach ihre eigene Anwendungslogik, die sich au
 Der Server kann über eine Docker Compose bereitgestellt werden.
 Innerhalb dieses Deployments wird eine Postgres-Datenbank, 
 ein Nginx-Load-Balancer und ein beliebig skalierbarer Spieleserver, welcher die Anfragen der Clients verarbeitet, bereitgestellt.
-
-
 
 \subsection{Server Architektur}
 \begin{figure}[H]
@@ -161,14 +158,19 @@ Der Server wird dabei als Vermittler verwendet. Um dies zu ermöglichen wird die
 Socket.io ergänzt das Websocket Protokoll und ermöglicht es Räume zu erstellen und zu verwalten.
 Damit können mehrere Clients innerhalb eines Raums miteinander kommunizieren.
 
-
-
-
 Die Datenbank speichert die Räume, in denen die Spieler ihr Spiel spielen. 
 Jeder Spieler kann Räume erstellen und ihnen beitreten und gehört somit diesen 
 Räumen an (vgl. Abbildung \ref{fig:ER-Modell}).
 Ein Spieler kann dabei mehrere Räume erstellen, so ist es diesem auch möglich, in mehreren Räumen gleichzeitig zu sein.
 Zum Zeitpunkt des Spiels kann der Spieler nur in einem Raum sein.
+
+Zum Ausgleichen von Anfragen wird ein Nginx Load Balancer verwendet.
+Dieser verteilt die Anfragen auf die verschiedenen Serverinstanzen.
+Da für die Echtzeitkommunikation Websockets verwendet werden, ist es notwendig,
+dass der Verbindung eines Clients immer auf die gleiche Serverinstanz leiten.
+Dafür wird für die Verteilung der Anfragen IP-Hashing verwendet.
+Der Load Balancer speichert dabei die IP-Adresse des Clients und 
+leitet die Anfragen immer an die gleiche Serverinstanz weiter.
 
 \begin{figure}[H]
 	\centering
@@ -178,19 +180,8 @@ Zum Zeitpunkt des Spiels kann der Spieler nur in einem Raum sein.
 \end{figure}
 
 
-Als Vertielungsmechanismus wird IP-Hashing verwendet.
-\glqq Viele Client-Server-Anwendung sind grundsetzlich aus drei unterschiedlichen Komponenten zusammengesetzt[...]\grqq{} \cite[S.57 ff.]{tanenbaum2007distributed}.
-Die Clients interagieren daher auch mit einer Benutzerschnittstelle. Dabei handelt es sich um ein HTTP Server, der
-Diese wird verwendet um Daten über Nutzer oder Räume zu erhalten.
-Daten werden dabei über das HTTP Protokoll ausgetauscht. 
-Die REST API kann dabei verwendet werde um Räume zu erstellen.
-Die REST Schnittstelle interagiert dabei mit Controllern, die die Logik der Anwendung implementieren und welche dann
-mit der Datenhaltung interagieren. Damit kann eine klare Trennung von Datenhaltung und Logik erreicht werden, welches die Anwendung
-modular macht. Es können dadurch andere Datenbanksysteme verwendet werden, ohne dass die Logik der Anwendung angepasst werden muss.
 
-Die Abbildung \ref{fig:ablaufdiagramm-show_lobby} zeigt den Ablauf einer REST Anfrage um die Räume zu erhalten.
-Hierbei interagiert der Client mit der REST API, welche die Anfrage an den Controller weiterleitet.
-Der Controller interagiert dann mit der Datenbank um die Räume zu erhalten. Anschließend werden die Daten an den Client zurückgegeben.
+
 
 
 
@@ -200,10 +191,30 @@ Der Controller interagiert dann mit der Datenbank um die Räume zu erhalten. Ans
 \subsection{Architektur Entscheidung}}
 Erklärung, warum diese Architektur gewählt wurde (z. B. Skalierbarkeit, Modularität, Sicherheit).
 
+\glqq Viele Client-Server-Anwendung sind grundsetzlich aus drei unterschiedlichen Komponenten zusammengesetzt[...]\grqq{} \cite[S.57 ff.]{tanenbaum2007distributed}.
+Die Clients interagieren daher auch mit einer Benutzerschnittstelle. Dabei handelt es sich um ein HTTP Server, der die Anfragen der Clients entgegennimmt.
+Der HTTP Server unterstützen dabei HTTP Anfragen, genauso wie Websocketverbindungen.
+Diese wiederum interagiert dabei mit \glqq Controllern \grqq{}, die die Logik der Anwendung implementieren und welche dann
+mit der Datenhaltung interagieren. Damit kann eine klare Trennung von Datenhaltung und Logik erreicht werden, welches die Anwendung
+modular macht. Es können dadurch andere Datenbanksysteme verwendet werden, ohne dass die Logik der Anwendung angepasst werden muss.
+
 Innerhalb der Server Applikation wird auf zwei Paradigmen.
-Die HTTP Schnittstelle verfügt dabei über zwei 
-Dabei ist der Server \glqq ein Prozess der einen bestimmt Dienst implementiert\grqq{} \cite[S.55 ff.]{tanenbaum2007distributed}.
-In Fall von Trash Pong ist dies eine REST API, die für die Datenhaltung zuständig ist.
+Einerseits wird auf das request-replay Paradigma gesetzt, um Nutzer zu autorisieren, Räume zu erstellen und zu verwalten.
+Hierbei ist keine Echtzeitkommunikation notwendig, da die Anfragen nur einmalig durchgeführt werden.
+Auf der Game Server Seite wurde sich dabei für eine nachrichtenbasierte Kommunikation entschieden, 
+um die Anforderungen der Echtzeitkommunikation zu erfüllen. Diese Entscheidung wurde getroffen, 
+weil synchrone Kommunikationsmethoden wie RPCs (Remote Procedure Calls) nicht immer geeignet 
+sind, insbesondere in Szenarien, in denen die empfangende Seite möglicherweise nicht sofort 
+verfügbar ist. 
+
+\glqq Insbesondere, wenn nicht davon ausgegangen werden kann, 
+dass die empfangende Seite zum Zeitpunkt der Anforderung ausgeführt wird, 
+sind alternative Kommunikationsdienste erforderlich. 
+Ebenso muss die inhärent synchrone Natur von RPCs, 
+bei der ein Client blockiert wird, bis seine Anforderung verarbeitet wurde, 
+manchmal durch etwas anderes ersetzt werden.\grqq{} \cite[S. 140 ff.]{tanenbaum2007distributed}
+
+
 
 Nach Tannenbaum eigenen sich relationale Datenbanken um Anwendungslogik von den Daten zu trennen.
 \glqq Die Verwendung relationaler Datenbanken im Client-Server-Modell hilft dabei, 
