@@ -191,7 +191,6 @@ Der Client besteht aus 4 Komponenten. Im Login Screen authentifiziert sich der C
 
 \hypertarget{section-achitactural-decision}{
 \subsection{Architektur Entscheidung}}
-Erklärung, warum diese Architektur gewählt wurde (z. B. Skalierbarkeit, Modularität, Sicherheit).
 
 \glqq Viele Client-Server-Anwendung sind grundsetzlich aus drei unterschiedlichen Komponenten zusammengesetzt[...]\grqq{} \cite[S.57 ff.]{tanenbaum2007distributed}.
 Die Clients interagieren daher auch mit einer Benutzerschnittstelle. Dabei handelt es sich um ein HTTP Server, der die Anfragen der Clients entgegennimmt.
@@ -201,7 +200,7 @@ mit der Datenhaltung interagieren. Damit kann eine klare Trennung von Datenhaltu
 modular macht. Es können dadurch andere Datenbanksysteme verwendet werden, ohne dass die Logik der Anwendung angepasst werden muss.
 
 Innerhalb der Server Applikation wird auf zwei Paradigmen.
-Einerseits wird auf das request-replay Paradigma gesetzt, um Nutzer zu autorisieren, Räume zu erstellen und zu verwalten.
+Einerseits wird auf das request-reply Paradigma gesetzt, um Nutzer zu autorisieren, Räume zu erstellen und zu verwalten.
 Hierbei ist keine Echtzeitkommunikation notwendig, da die Anfragen nur einmalig durchgeführt werden.
 Auf der Game Server Seite wurde sich dabei für eine nachrichtenbasierte Kommunikation entschieden, 
 um die Anforderungen der Echtzeitkommunikation zu erfüllen. Diese Entscheidung wurde getroffen, 
@@ -216,7 +215,23 @@ Ebenso muss die inhärent synchrone Natur von RPCs,
 bei der ein Client blockiert wird, bis seine Anforderung verarbeitet wurde, 
 manchmal durch etwas anderes ersetzt werden.\grqq{} \cite[S. 140 ff.]{tanenbaum2007distributed}
 
-  
+Deshalb kam für die Nachrichtenbassierde Kommunikation Socket.io zum Einsatz,
+welches die Funktionen von Websockets erweitert.
+Das unter dem Socket.io liegenden Engine.IO ermöglicht dabei latenzarme Kommunikation
+mit geringen Overhead.\cite[]{engine-io-protocol}
+
+Socket.io bietet zudem eine einfache Möglichkeit zur Skalierung. Durch die integration
+eines Adapters können nun verschiedene Socket.io Server miteinander kommunizieren.
+Damit erhalten mehrere Server die Möglichkeit, ihre Zustände zu synchronisieren.
+Dies wird mithilfe des Postgres Adapters implementiert, welche auf die Listen und Notify
+Funktionen von Postgres zurückgreift. \cite[]{postgres-adapter}
+
+Zur Authentifizierung werden JWT-Token verwendet. Dabei ist der Vorteil, dass der Server keine Session speichern muss.
+Der Übertragende Token, kann dabei vom Client gespeichert werden. Die Informationen im Token sind
+dabei signiert und würden bei einer Manipulation des Tokens nicht mehr gültig sein.
+Übertragen wird ein Token für den Nutzercund sobald der Start Game Button gedrückt wird, wird auch 
+ein Token für den Raum erstellt, den beide Nutzer empfangen.
+Mit diesem können diese dann Nachrichten innerhalb des Raumes senden.
 
 Nach Tannenbaum eigenen sich relationale Datenbanken um Anwendungslogik von den Daten zu trennen.
 \glqq Die Verwendung relationaler Datenbanken im Client-Server-Modell hilft dabei, 
