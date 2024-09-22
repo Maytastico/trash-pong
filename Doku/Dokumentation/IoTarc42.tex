@@ -192,11 +192,17 @@ Die Abbildung \ref{fig:ablaufdiagramm-show_lobby} zeigt den Ablauf einer REST An
 Hierbei interagiert der Client mit der REST API, welche die Anfrage an den Controller weiterleitet.
 Der Controller interagiert dann mit der Datenbank um die Räume zu erhalten. Anschließend werden die Daten an den Client zurückgegeben.
 
+\subsection{Client Architektur}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth ]{resources/Client-Architektur.png}
+	\caption{Komponentensicht des Clients.}
+	\label{fig:clientarchitektur}
+\end{figure}
+Der Client besteht aus 4 Komponenten. Im Login Screen authentifiziert sich der Client mit dem Server verbindungslos. Auch das erstellen und betreten der Räume ist nur über REST-Anfragen gehandlet. Erst wenn ein Spieler den Raum beitritt wird mit Websockets ein bi-direktionaler Kommunikationskanal erstellt (vgl. Server Architektur). Über diesen Kanal werden dann die Spielelemente des Pong Spiels gesteuert. 
 
 
-
-
-\hypertarget{section-achitactural-decision}{%
+\hypertarget{section-achitactural-decision}{
 \subsection{Architektur Entscheidung}}
 Erklärung, warum diese Architektur gewählt wurde (z. B. Skalierbarkeit, Modularität, Sicherheit).
 
