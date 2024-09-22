@@ -10,7 +10,7 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{ngerman}
-\usepackage[a4paper, total={6in, 8in}]{geometry}
+% \usepackage[a4paper, total={6in, 8in}]{geometry}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
@@ -287,19 +287,98 @@ Ein weitere Vorteil ist die eingebaute Replikationsfunktion, welche die Datenban
     \item \textbf{Umsetzung der Architektur}: Beschreibung der Implementierung der einzelnen Komponenten und ihrer Interaktionen.
     \item \textbf{Schwierigkeiten und Lösungen}: Was waren die technischen Herausforderungen und wie wurden sie bewältigt?
 \end{itemize}
+Die Umsetzung der Architektur erfolgte parallel zur Entwicklung des Spiels.
+Dabei wurden zuerst die Anforderungen an die Anwendungen definiert, dies wurde als Grundlage
+für die Implementierung der Anwendungen verwendet. Während der Entwicklung entstanden immer
+neue Anforderungen, die parallel umgesetzt wurden.
+
+Im ersten Schritt wurde eine Modellierung der Use Cases durchgeführt, woraufhin benötigte Daten definiert wurden.
+Daraufhin konnte eine Technologieauswahl getroffen werden. Mithilfe dieser wurde ein erstes Verteilungsdiagramm erstellt,
+welches mit der Entwicklung der Anwendung immer weiter verfeinert wurde. Anschließend konnte die logische Implementierung
+der Anwendung erfolgen. Dabei wurde auf die Trennung von Datenhaltung und Anwendungslogik geachtet.
+Diese wurde mithilfe von Sequenzdiagrammen dargestellt. Mithilfe dieser konnte die Funktionsweise der Anwendung
+durchdacht werden. Mithilfe dieser Diagramme wurde die Anwendung nun entwickelt.
+
+Zu Beginn wurden die REST API, Nutzerverwaltung als auch Authentifizierung und Datenhaltung implementiert.
+Dabei wurde schnell festgestellt, dass durch die Zustandslosigkeit der REST API,
+keine Sessioninformationen gespeichert werden. Deshalb wurde auf JWT-Token gesetzt, um die Authentifizierung
+zu gewährleisten. Mithilfe dieses Tokens können Nutzerinformationen gespeichert werden, ohne dass der Server
+eine Session speichern muss. 
+
+In (Abbildung \ref{fig:ablaufdiagramm-login}) wird der Ablauf der Nutzerregistrierung dargestellt.
+Der Nutzer sendet eine Anfrage an den Server, um sich zu registrieren. Der Server prüft, ob der Nutzer bereits
+in der Datenbank vorhanden ist. Ist dies nicht der Fall, wird der Nutzer in der Datenbank gespeichert und ein JWT-Token generiert.
+Existiert der Nutzer bereits, wird der Token in der Antwort zurückgesendet und in der Datenbank angelegt.
+Mithilfe dieses Tokens kann sich der Nutzer nun authentifizieren und auf die Ressourcen des Servers zugreifen.
+
+Die REST API wurde mithilfe von Express.js implementiert, dabei wurde eine Middleware implementiert, die die Anfragen des Clients
+überprüft und den Nutzer authentifiziert. Die API akzeptiert dabei nur das JSON-Format.
+
+Die Datenhaltung wurde mithilfe von Postgres realisiert. Dabei wurde ein ER-Modell erstellt, welches die Beziehungen
+zwischen den Tabellen darstellt. Die Abfragen werden dabei von Datenbank-Modellen durchgeführt, wodurch die Datenhaltung
+von der Anwendungslogik getrennt wird. 
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth ]{resources/login.pdf}
-	\caption{Zeigt den Ablauf einer Nutzerregestrierung.}
-	\label{fig:ablaufdiagramm-login}
+  \centering
+  \includegraphics[width=\textwidth ]{resources/login.pdf}
+  \caption{Zeigt den Ablauf einer Nutzerregistrierung.}
+  \label{fig:ablaufdiagramm-login}
 \end{figure}
+
+Als nächstes muss es dem Nutzer möglich sein, sich Räume anzeigen zu lassen, diese zu erstellen als auch beizutreten.
+Die API-Route wurde dabei so implementiert, dass der Nutzer alle Räume abfragen kann, die in der Datenbank vorhanden sind.
+Dabei wird ein JWT-Token benötigt, um die Anfrage zu autorisieren. Der Ablauf dieses Features wird in (Abbildung \ref{fig:ablaufdiagramm-show_lobby}) dargestellt.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth ]{resources/show_lobby.pdf}
 	\caption{Zeigt den Ablauf der Abfrage aller Räume in der Datenbank. welche nach dem Login ausgeführt wird. Hier wir ein JWT-Token benötigt um die Anfrage zu autorisieren.}
 	\label{fig:ablaufdiagramm-show_lobby}
 \end{figure}
+
+Anschließend muss der Nutzer in der Lage sein, einen Raum zu erstellen. Dafür wird eine POST-Anfrage an den Server gesendet.
+Der Server prüft dabei, ob der Nutzer bereits in einem Raum ist. Ist dies nicht der Fall, wird ein Raum erstellt und der Nutzer hinzugefügt.
+Nachdem der den Raum angelegt hat, kann dieser in den Socket.io Raum beitreten.
+Der Ablauf dieses Features wird in (Abbildung \ref{fig:ablaufdiagramm-join_lobby}) dargestellt.
+Hierbei sendet der Client über das Event joinRoom eine Anfrage an den Websocket. Dabei sendet dieser über den
+Body den gewünschten Raum, in den der Nutzer beitreten möchte. Der Server prüft nun, zuersten ob der Raum existiert.
+und ob dieser Raum bereits leer ist. Ist dies der Fall, wird der Nutzer in den Raum hinzugefügt. 
+Ist der erste Nutzer bereits gesetzt und besitzt dieser nicht die gleiche ID wie der anfragende Nutzer,
+wird der zweite Nutzer mit der ID des anfragenden Nutzers besetzt.
+Das setzten des Nutzers erfolgt dabei über die Datenbank.
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth ]{resources/create_room.pdf}
+	\caption{Zeigt wie innerhalb der Datenbank der Raum erstellt wird.}
+	\label{fig:ablaufdiagramm-create_room}
+\end{figure}
+
+Wenn die Aktualisierung der Räume in der Datenbank vorgenommen wurden, wird der anfragende Nutzer dem socket.io Raum hinzugefügt.
+Hierbei war die Schwierigkeit den richtigen Raumname zu wählen.
+Nutzt man nun eine UUID, müsste man hier die UUID abfragen, wenn man den Primary Key der Datenbank als Raumname verwendet,
+hat man einen eindeutigen Namen, welcher auch schon vorhanden ist. 
+Welchen man aber auch theoretisch raten könnte, was zu einem potentiellen Sicherheitsproblem führen könnte.
+Es wurde sich dennoch für die Variante des Primary Key entschieden, 
+da dieser intuitiver zu verenden ist. Für eine zukünftige produktive Anwendung sollte hier jedoch eine UUID 
+verwendet werden, welche über ein SHA-256 Hash generiert wird.
+
+Nachdem der Nutzer dem Raum innerhalb des Game Servers beigetreten ist, kann dieser das Spiel starten.
+Dies geschieht über das startPressed Event, hierbei wird geprüft in welchen Raum der anfragende Nutzer ist.
+Dieser Prozess ist in (Abbildung \ref{fig:ablaufdiagramm-start_game}) beschrieben.
+Wurde der Raum nicht mehr in der Datenbank gefunden, wird eine Fehlermeldung zurückgegeben.
+Ist dem Spiel kein zweiter Nutzer beigetreten, wird ebenfalls eine Fehlermeldung zurückgegeben.
+Passen alle Bedingungen, wird ein Room Token generiert und an beide Nutzer innderhalb des Socket.io Raums zurückgegeben.
+Mithilfe dieses gTokens können die Nutzer nun Nachrichten innerhalb des Raums austauschen.
+
+Hier war die Schwierigkeit, dass wenn einer der Nutzer aus dem Spiel austritt, der Raum gelöscht, wodurch der Fehler
+\glqq No room associated with this user\grqq{} auftritt. Dadurch kann das Spiel nicht weitergeführt werden.
+
+Hier könnte eine elegantere Lösung gefunden werden. Möglich wäre eine weitere Websocket Nachricht, welche den Nutzer 
+über das Verlassen des Raums informiert. Der Raum wird dann nicht gelöscht, sondern nur der Nutzer aus dem Raum entfernt.
+Wenn der Ersteller nun den Raum verlässt, wird der Raum gelöscht und alle Nutzer aus dem Raum entfernt.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth ]{resources/join_lobby.pdf}
@@ -350,6 +429,10 @@ Eine große Herausforderung war außerdem die Verwendung der Programmiersprache 
 
 Für die Verwaltung von Daten wäre eine objektorientierte Datenbank wie z.B. MongoDB besser geeignet gewesen, da 
 Trash Pong die Komplextät für eine relationale Datenbank nicht mitbringt. 
+
+Für eine bessere Modularität hätte man hier die REST API und den Websocket in zwei separate Server aufteilen können.
+Somit wäre es möglich die Server nach Bedarf zu skalieren, sodass jeder Raum seinen eigenen Websocket Server hätte.
+
 \newpage
  \printbibliography[title={Quellen}]
 \end{document}

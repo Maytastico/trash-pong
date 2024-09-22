@@ -91,6 +91,60 @@
       \verb https://tools.ietf.org/html/rfc6455
       \endverb
     \endentry
+    \entry{engine-io-protocol}{online}{}
+      \name{author}{1}{}{%
+        {{hash=52ff54d63e46d6619de683427f024a92}{%
+           family={SocketIO},
+           familyi={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{52ff54d63e46d6619de683427f024a92}
+      \strng{fullhash}{52ff54d63e46d6619de683427f024a92}
+      \strng{bibnamehash}{52ff54d63e46d6619de683427f024a92}
+      \strng{authorbibnamehash}{52ff54d63e46d6619de683427f024a92}
+      \strng{authornamehash}{52ff54d63e46d6619de683427f024a92}
+      \strng{authorfullhash}{52ff54d63e46d6619de683427f024a92}
+      \field{extraname}{1}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Zuletzt Aufgerufen 19.09.2024}
+      \field{title}{The Engine.IO protocol}
+      \field{year}{2020}
+      \verb{urlraw}
+      \verb https://socket.io/docs/v4/engine-io-protocol/
+      \endverb
+      \verb{url}
+      \verb https://socket.io/docs/v4/engine-io-protocol/
+      \endverb
+    \endentry
+    \entry{postgres-adapter}{online}{}
+      \name{author}{1}{}{%
+        {{hash=52ff54d63e46d6619de683427f024a92}{%
+           family={SocketIO},
+           familyi={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{52ff54d63e46d6619de683427f024a92}
+      \strng{fullhash}{52ff54d63e46d6619de683427f024a92}
+      \strng{bibnamehash}{52ff54d63e46d6619de683427f024a92}
+      \strng{authorbibnamehash}{52ff54d63e46d6619de683427f024a92}
+      \strng{authornamehash}{52ff54d63e46d6619de683427f024a92}
+      \strng{authorfullhash}{52ff54d63e46d6619de683427f024a92}
+      \field{extraname}{2}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Zuletzt Aufgerufen 19.09.2024}
+      \field{title}{Postgres adapter}
+      \field{year}{2020}
+      \verb{urlraw}
+      \verb https://socket.io/docs/v4/postgres-adapter/
+      \endverb
+      \verb{url}
+      \verb https://socket.io/docs/v4/postgres-adapter/
+      \endverb
+    \endentry
     \entry{postgresql-high-availability}{online}{}
       \name{author}{1}{}{%
         {{hash=e4728f444b24839e3f80adf3829bcba9}{%
@@ -103,8 +157,8 @@
       \strng{authorbibnamehash}{e4728f444b24839e3f80adf3829bcba9}
       \strng{authornamehash}{e4728f444b24839e3f80adf3829bcba9}
       \strng{authorfullhash}{e4728f444b24839e3f80adf3829bcba9}
-      \field{sortinit}{8}
-      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{note}{Zuletzt Aufgerufen 19.09.2024}
