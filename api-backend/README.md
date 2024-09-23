@@ -28,11 +28,15 @@ Um die Anwendung zum ersten Mal auszuführen, folgen Sie bitte diesen Schritten:
 
 3. **Umgebungsvariablen konfigurieren** (optional):
     Erstellen Sie eine `.env`-Datei im Stammverzeichnis des Projekts und fügen Sie die erforderlichen Umgebungsvariablen hinzu. Ein Beispiel könnte so aussehen:
-    ```yml
-    PGUSER=testuser 
-    PGPASSWORD=SicheresPasswort! 
-    PGDATABASE=pong_daten
-    ```
+   ```yml
+   PGHOST=db
+   PGUSER=testuser
+   PGPASSWORD=SicheresPasswort!
+   PGDATABASE=pong_daten
+   POSTGRES_USER=testuser
+   POSTGRES_PASSWORD=SicheresPasswort!
+   POSTGRES_DB=pong_daten
+   ```
     Innerhalb der package.json sind alle Umbungsvariablen für die Standard Anwendung konfiguriert, sodass ein einfacher
     Einstieg möglich ist.
 
