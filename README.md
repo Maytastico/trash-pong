@@ -1,66 +1,104 @@
-# pong-reimagined
-## Definition of Done
-* Alle zu der User-Story gehörenden Tasks müssen Geschlossen sein.
-* Der Code muss die in der Userstory festgelegten Tasks erfüllen, und der Code muss vom Entwickler gründlich getestet worden sein.
-* Alle bekannten Bugs müssen behoben worden sein.
-* Code wurde von mindestens einer anderen Person überprüft
-* Alle Branches die zu der Userstory gehören müssen zum Sprintende in den Mainbranch gemergt worden sein.
-* Der Code muss ausreichend kommentiert sein.
-## Codeanforderungen
-* Der Code muss die in den Tasks beschriebenen Aufgaben erfüllen
-* Die Namen von Variablen und Funktionen müssen sich an die JavaScript Naming Convention halten.
-* Der Code sollte nie komplexer sein als benötigt, und sollte keine Redundanzen enthalten.
-* Der Code muss auf Sicherheitslücken getestet werden.
-* Der Code muss so kommentiert sein das er leicht verständlich ist.
-## Board
-https://tree.taiga.io/project/aronse1-verteiltes-pong/backlog
+# Trash Pong
+<img src="https://github.com/user-attachments/assets/905f6db1-34cd-4a85-bb24-5580d9cb03b7" alt="logo" width="300"/>
 
-## Git Workflow
-1. **Sprint-basierte Entwicklung:**
-   - Für jeden Sprint wird eine eigene Sprint-Branch erstellt.
-   - Am Ende jedes Sprints wird der Sprint-Branch in den Master-Branch gemerged.
+Trashpong ist eine moderne Neuinterpretation des klassischen Pong-Spiels, das auf einer Client-Server-Architektur basiert. Der Server ist in Node.js implementiert und verwendet eine PostgreSQL-Datenbank zur Speicherung von Spielerdaten und Spielständen. Die Kommunikation zwischen Client und Server erfolgt über eine REST API und Websockets, um Echtzeit-Interaktionen zu ermöglichen.
 
-2. **Story-Branches:**
-   - Jede Story erhält einen eigenen Branch, abgeleitet vom Sprint-Branch.
-   - Die Benennung erfolgt nach dem Schema: `#id-name`.
+### Technische Details
 
-3. **Commits:**
-   - Sprache: Deutsch
-   - Innerhalb der Story-Branches werden für jeden Task oder mehrere Tasks separate Commits durchgeführt.
-   - Die Commit-Nachricht enthält die IDs der zugehörigen Tasks und den Namen der Änderung im Format: `#id_#id2_#id3-name`.
+- **Server**: Der Server läuft in einer Docker-Umgebung und ist über Port 3000 erreichbar. Er bietet Endpunkte für die Benutzerverwaltung und Spielraumverwaltung.
+- **Datenbank**: PostgreSQL wird als Datenbank verwendet, wobei die Verbindung über Umgebungsvariablen konfiguriert wird.
+- **Client**: Der Client ist eine eigenständige Anwendung, die für x86-64 Linux und Windows kompiliert ist. Er kommuniziert mit dem Server über HTTP und Websockets.
+- **Umgebungsvariablen**: Sowohl der Server als auch der Client verwenden Umgebungsvariablen zur Konfiguration, was eine flexible Anpassung an verschiedene Umgebungen ermöglicht.
 
-5. **Abschluss einer Story:**
-   - Nach Abschluss einer Story wird der entsprechende Branch sowohl lokal als auch remote vom Entwickler gelöscht.
+Trashpong bietet eine robuste und skalierbare Plattform für Multiplayer-Pong-Spiele, die sowohl lokal als auch über das Internet gespielt werden kann.
 
-6. **Merge und Approvals:**
-   - Vor dem Merge einer Story in den Sprint-Branch muss mindestens ein Approver die Änderungen genehmigen.
+## Getting Started
+### Server
 
+Standardmäßig sind keine Credentials im Repository. Dafür muss eine `.env` Datei erstellt werden.
+In dieser müssen folgende Umgebungsvariablen definiert werden:
 
-## Definition of done (Dod)
+```bash
+PGHOST=db
+PGUSER=testuser
+PGPASSWORD=SicheresPasswort!
+PGDATABASE=pong_daten
+POSTGRES_USER=testuser
+POSTGRES_PASSWORD=SicheresPasswort!
+POSTGRES_DB=pong_daten
+```
 
-## Requirements
-1. **Spieler-Registrierung und -Login:**
-    - Benutzer müssen sich mit ihren Namen anmelden können, um am Spiel teilzunehmen. 
-2. **Echtzeit-Multiplayer-Funktionalität:**
-    - Das Spiel muss in der Lage sein, mehrere Spieler in Echtzeit zu verbinden und ein synchronisiertes Spiel zu ermöglichen. Die Bewegungen der Schläger und der Ball müssen in Echtzeit zwischen den Spielern synchronisiert werden.
-3. **Punkteverwaltung:**
-    - Das System muss die Punkte der Spieler während des Spiels erfassen und verwalten können. Nach jedem Spiel sollte ein Punktestand angezeigt werden, der den Gewinner ermittelt.
+Alle Umgebungsvariablen des Node Servers fangen mit `PG` an. Alle Umgebungsvariablen mit `POSTGRES` sind Variablen 
+der Postgres-Datenbank. `PGHOST` muss `db`, `PGUSER` muss `testuser` und `PGDATABASE` muss `pong_daten` beinhalten.
+Das einzige Feld, das variieren kann, ist das Passwort-Feld.
 
-### Functional Requirements
+Anschließend muss in `/api-backend/source/auth` eine Token-Datei erstellt werden, welche im folgenden Format abgelegt werden muss. 
 
-### Non functional Requirements
-1. **Leistung und Skalierbarkeit:**
-    - Das Spiel sollte auch bei hoher Benutzerzahl flüssig und ohne Verzögerungen laufen. Das System muss skalierbar sein, um eine große Anzahl von gleichzeitigen Spielern zu unterstützen.
-2. **Sicherheit:**
-    - Die Benutzerdaten, einschließlich Anmeldedaten und Spielstatistiken, müssen sicher gespeichert und übertragen werden. Das System sollte gegen häufige Sicherheitsbedrohungen wie SQL-Injektionen und Cross-Site-Scripting geschützt sein.
-3. **Benutzerfreundlichkeit:**
-    - Die Benutzeroberfläche des Spiels sollte intuitiv und leicht zu bedienen sein. Neue Spieler sollten sich schnell zurechtfinden und das Spiel ohne umfangreiche Anleitungen verstehen können.
-4. **Datensparsamkeit**
-   - Die Datenerhebung und -speicherung wird nur im notwendigen Maß durchgeführt. 
-     Ziel ist es, nur die Daten zu erfassen und zu speichern, die für den Betrieb und die Funktionalität des Systems unbedingt erforderlich sind. 
-     Dies trägt zum Schutz der Privatsphäre der Nutzer bei und reduziert das Risiko von Datenmissbrauch und -verlust.
-     Deshalb sollen nur der Nutzername und die Punkte gespeichert werden.
+### JWT Secret
 
-## Releases
-Die Releases erfolgen innerhalb der Sprintwechsel. Als Dokumentation dienen die Releasnotes innerhalb der Git-Releases.
+1. Erstelle in dem Ordner `/api-backend/source/auth` die Datei `token.ts`.
 
+2. Erstelle dir einen Key, indem du in der Konsole `node` aufrufst.
+
+3. Führe folgendes Kommando aus:
+```js
+> require('crypto').randomBytes(64).toString('hex')
+```
+
+4. Du bekommst dann deinen Secret Key:
+ '09f26e402586e2faa8da4c98a35f1b20d6b033c6097befa8be3486a829587fe2f90a832bd3ff9d42710a4da095a2ce285b009f0c3730cd9b8e1af3eb84df6611'
+
+5. Schreibe folgenden String in die Datei `source/auth/token.ts`:
+```js
+export const SECRET_KEY:string = "<Key>";
+```
+Das könnte wie folgt aussehen:
+Du kannst zu Testzwecken den unteren Key verwenden. Bitte generiere in einer produktiven Umgebung einen separaten Key!
+```js
+export const SECRET_KEY:string = "09f26e402586e2faa8da4c98a35f1b20d6b033c6097befa8be3486a829587fe2f90a832bd3ff9d42710a4da095a2ce285b009f0c3730cd9b8e1af3eb84df6611";
+```
+
+Anschließend kann der Pong-Server gestartet werden.
+Dazu muss im Root-Verzeichnis folgender Befehl ausgeführt werden:
+
+```bash
+docker-compose up -d --build
+```
+
+Standardmäßig ist der Server über den Port 3000 erreichbar.
+Der Server hat dabei zwei Komponenten: einmal die REST API sowie den Websocket, über den das Spiel gespielt werden kann.
+Die API kann über `/api/room` oder `/api/user` aufgerufen werden.
+Um darauf zugreifen zu können, muss sich der Nutzer anmelden. Dies kann über `/user/login` durchgeführt werden.
+Dazu kann eine POST-Anfrage an den Server gestellt werden. Innerhalb des Bodys muss der Nutzername spezifiziert werden.
+Dies sieht wie folgt aus: `{"username": "hans"}`.
+
+### Spiel
+Die Anwendung ist im Verzeichnis `/game/export` zu finden und ist für x86-64 Linux und Windows kompiliert.
+Mit einem Doppelklick kann das Spiel gestartet werden.
+
+#### Für Devs:
+Sollte die Server-URL und der Port vom Standard abweichen, können die Werte über Umgebungsvariablen verändert werden.
+Hier ein Beispiel auf einem Windows-System:
+
+1. Im Verzeichnis der Executable muss die Konsole geöffnet werden.
+2. In der Konsole müssen dann die Umgebungsvariablen gesetzt werden:
+    ```bash
+    set PONG_SERVER_URL=http://localhost
+    set PONG_SERVER_PORT=3000
+    ```
+    Für Linux müssen die Variablen über den export Befehl gesetzt werden:
+    ```bash
+    export PONG_SERVER_URL=http://localhost
+    export PONG_SERVER_PORT=3000
+    ```
+3. In derselben Konsolen-Session muss dann die Executable ausgeführt werden:
+    ```bash
+    Pong.exe
+    ```
+    Für Linux müssen die Variablen über den export Befehl gesetzt werden:
+    Die Datei pong.x86_64 muss Rechte für die Ausführung haben.
+    ```bash
+    chmod g+x pong.x86_64
+    bash pong.sh
+    ```
+4. Im Login-Menü wird zur Kontrolle in der linken oberen Ecke die URL angezeigt.

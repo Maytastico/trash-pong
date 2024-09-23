@@ -1,11 +1,8 @@
-import { User } from "./User"
-import { Socket } from "socket.io";
 
-export interface RoomClient{
-    user: User,
-    ws?: Socket,
-}
 
+/**
+ * Contains the information about a room, that is stored in the database
+ */
 export interface Raum{
     raum_id: number,
     titel: string,

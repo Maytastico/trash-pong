@@ -1,30 +1,30 @@
-# Set the base image from Docker repository to build our app. In this case we want to use node image to run our node app
+# Setze das Basis-Image aus dem Docker-Repository, um unsere App zu bauen. In diesem Fall möchten wir das Node-Image verwenden, um unsere Node-App auszuführen
 FROM node:18.16.0-alpine as base
 
-# Then, we need to copy our package.json and .env file into the image root folder.
+# Dann müssen wir unsere package.json und .env Datei in das Root-Verzeichnis des Images kopieren.
 COPY package.json ./
 
-# Then, we need to install the dependencies inside the base image
+# Dann müssen wir die Abhängigkeiten im Basis-Image installieren
 RUN npm install
 
-# After installing the dependencies, we need to copy the src folder from our local file into the base image
+# Nach der Installation der Abhängigkeiten müssen wir den src-Ordner von unserer lokalen Datei in das Basis-Image kopieren
 COPY source ./source
 
-# Copy tsconfig.json to base image too
+# Kopiere auch tsconfig.json in das Basis-Image
 COPY tsconfig.json ./tsconfig.json
 
-# Then, run the build command, this will compile the ts files into javascript files
+# Dann führen wir den Build-Befehl aus, dieser wird die ts-Dateien in JavaScript-Dateien kompilieren
 RUN npm run build
 
-# After using base image for build process, we can create another image for the production build
-# Start production image build, we will use the same node image
+# Nach der Verwendung des Basis-Images für den Build-Prozess können wir ein weiteres Image für den Produktions-Build erstellen
+# Starte den Produktions-Image-Build, wir werden dasselbe Node-Image verwenden
 FROM node:18.16.0-alpine
 
-# Copy node modules and build directory from base image to new image
+# Kopiere node_modules und das Build-Verzeichnis vom Basis-Image in das neue Image
 COPY --from=base ./node_modules ./node_modules
 COPY --from=base ./package.json ./package.json
 COPY --from=base /dist /dist
 
-# Expose port 3000, and start the app.
+# Öffne Port 3000 und startet die App.
 EXPOSE 3000
 CMD ["npm", "run", "start"]

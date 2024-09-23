@@ -5,7 +5,13 @@ const {Pool} = pg;
 /**
  * Initizilizes a pool object that is used for every database request 
  */
-export const pool = new Pool();
+export const pool = new Pool({
+  user: "testuser",
+  host: "db",
+  database: "pong_daten",
+  password: "SicheresPasswort!",
+  port: 5432,
+}       );
 
 /**
  * Verifies that there the database pool is working

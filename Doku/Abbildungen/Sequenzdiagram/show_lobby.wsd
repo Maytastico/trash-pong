@@ -1,34 +1,38 @@
 @startuml
-title "show lobby"
+title "show lobby with authentication"
+skinparam defaultFontSize 30
+skinparam componentFontSize 30
+skinparam actorFontSize 30
+skinparam noteFontSize 30
+skinparam sequenceParticipantFontSize 30
+skinparam sequenceMessageFontSize 30
+skinparam titleFontSize 30
 actor player
-' box "player services"
-' collections "player services" as ps
-' participant "Sessions" as sess
-' participant "User" as usr 
-' end box
 box "game services"
-collections "game services" as gs
-participant "Lobby Model" as lo
+participant "api controller" as gs
+participant "auth.ts" as auth
+participant "raum.ts" as lo
 end box
 database database as db
 
-player -> gs: show_lobby(filters)
+player -> gs: /api/raum/\nAuthorization: Bearer <token>
 activate gs
-gs->lo: fetch_lobbies()
-activate lo
-lo -> db: select * from lobbies limit 10
-activate db
-db -> lo: lobbies[]
-deactivate db
-lo -> gs: lobbies[]
-deactivate lo
-gs -> player: lobbies[]
-deactivate gs
-
-
-
-
-' else l>obby[0].
-' else lobbies[0].max_players < \n (lobbies.current_player+1)
-'     gs -> player: ThrowException("Lobby Full")
+gs -> auth: verify(token)
+activate auth
+auth -> gs: token valid
+alt token valid
+    deactivate auth
+    gs -> lo: dbAllRooms()
+    activate lo
+    lo -> db: SELECT r.*,s.name as user1, sp.name as user2 FROM\n Raum r \n LEFT JOIN "user" s  on s.user_id=r.user_id1 \n LEFT  JOIN "user" sp on sp.user_id=r.user_id2;
+    activate db
+    db -> lo: lobbies[]
+    deactivate db
+    lo -> gs: lobbies[]
+    deactivate lo
+    gs -> player: lobbies[]
+else token invalid
+    gs -> player: Please authenticate
+    deactivate gs
+end
 @enduml

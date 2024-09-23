@@ -172,6 +172,14 @@ theme = ExtResource("5_l43tc")
 theme_override_fonts/font = ExtResource("1_sxk5a")
 text = "Exit"
 
+[node name="ServerURL" type="Label" parent="."]
+layout_mode = 1
+offset_left = 27.0
+offset_top = 23.0
+offset_right = 294.0
+offset_bottom = 46.0
+theme_override_colors/font_color = Color(0.720468, 0.720467, 0.720467, 0.658824)
+
 [connection signal="request_completed" from="Ping" to="LobbyPanel" method="_on_ping_request_completed"]
 [connection signal="request_completed" from="Login" to="LobbyPanel" method="_on_login_request_completed"]
 [connection signal="gui_input" from="LobbyPanel/EnterNameLabel" to="LobbyPanel" method="_on_enter_name_label_gui_input"]

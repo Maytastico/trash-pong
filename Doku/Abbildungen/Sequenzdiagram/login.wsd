@@ -1,48 +1,77 @@
 @startuml
 title player login
+skinparam defaultFontSize 30
+skinparam componentFontSize 30
+skinparam actorFontSize 30
+skinparam noteFontSize 30
+skinparam sequenceParticipantFontSize 30
+skinparam sequenceMessageFontSize 30
+skinparam titleFontSize 30
 actor player
-box "player services"
-collections "player services" as ps
-participant "Sessions" as sess
-participant "User" as usr 
+box "api service"
+collections "user controller" as ps
+participant "auth.ts" as sess
+participant "user.ts" as usr 
 end box
 database database as db
 
-player -> ps: login(name)
+note right of player: Der Nutzer benötigt keine Authentifizierung. \nEher wird nach Abschluss der Registrierung ein JWT-Token\n generiert, mit dem sich der Nutzer\n authentifizieren kann.
+player -> ps: /user/login\nbody: {"username": name}
 activate ps
-ps -> db: select name, uuid from users where name is name
+ps -> usr: getUserByName(name)
+activate usr
+usr -> db: select \nname, uuid \nfrom users \nwhere name is name
 activate db
-db->ps: user_names[], user_uuids[]
+db -> usr: user_names[]
+note right of usr: Der Benutzer wird aus einem\nArray von Attributen in ein Array\nvon User-Objekten umgewandelt
 deactivate db
-alt user_names.lenght >= 1
-    ps -> sess: generate_user_session(user_name)
+usr -> ps: user_names[User(user_id, name)]
+deactivate usr
+
+alt user_names.length >= 1
+    note right of ps: Der Benutzer existiert bereits und\nmuss nicht erneut in der Datenbank\nregistriert werden.\nEin JWT-Token wird generiert,\nmit dem sich der Benutzer authentifizieren kann.
+    ps -> sess: generateAccessToken(user)
     activate sess
-    ps <- sess: session_id
+    sess -> ps: token
     deactivate sess
-    ps -> sess: register_session(session_id)
-    activate sess
-    sess -> ps: success
-    deactivate sess
-    alt seccess == true
-        ps -> player: session_id
-        
-    else 
+    ps -> usr: registerAuthtoken(user.user_id, token)
+    activate usr
+    usr -> db: UPDATE \n"user" \nSET token = $1 \n WHERE user_id = $2;
+    activate db
+    db -> usr: success
+    deactivate db
+    usr -> ps: success
+    deactivate usr
+    alt success == true
+        ps -> player: token
+        player <-- ps: 200 OK
+    else
         ps -> player: ThrowHTTPException(500)
     end
 else
-    ps -> usr: register_user(user_name)
+note right of ps: Der Benutzer existiert nicht und\nmuss in der Datenbank registriert werden.\nEin JWT-Token wird generiert,\nmit dem sich der Benutzer authentifizieren kann.
+    ps -> usr: registerUser(user_name)
     activate usr
-    usr->db: insert (name) values\n (user_name) into users
+    usr -> db: insert (name) values (user_name) into users
     activate db
     db -> usr: user_name, user_uuid
     deactivate db
     usr -> ps: user_name, user_uuid
     deactivate usr
-    ps -> sess: register_session(user_name)
+    ps -> sess: generateAccessToken(user)
     activate sess
-    sess -> ps: session_id
+    sess -> ps: token
     deactivate sess
-    ps -> player: session_id
+    ps -> usr: registerAuthtoken(user.user_id, token)
+    activate usr
+    usr -> db: UPDATE\n "user" \nSET token = $1\n WHERE user_id = $2;
+    activate db
+    db -> usr: success
+    deactivate db
+    usr -> ps: success
+    deactivate usr
+    ps -> player: token
+    player <-- ps: 200 OK
 end
 
 @enduml

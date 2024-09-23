@@ -1,0 +1,30 @@
+@startuml
+title "Komponenten: Game Server"
+skinparam defaultFontSize 30
+skinparam componentFontSize 30
+skinparam actorFontSize 30
+skinparam noteFontSize 30
+skinparam sequenceParticipantFontSize 30
+skinparam sequenceMessageFontSize 30
+skinparam titleFontSize 30
+
+package "HTTP Server" {
+    [Health Monitoring] as health
+    [User Managment] as user
+    [REST API] as rest
+}
+
+health --> Debugging
+user --> Login
+user --> "Spielerdaten"
+rest --> "Raumdaten"
+rest --> "Spielerdaten"
+
+package "Game Server" {
+    [socket.io] as game
+}
+game --> "Raumdaten"
+game --> "Spielerdaten"
+game --> "Spieler-\nkommunikation"
+
+@enduml

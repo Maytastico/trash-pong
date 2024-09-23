@@ -10,14 +10,13 @@ config_version=5
 
 [application]
 
-config/name="Pong Multiplayer"
-config/description="A multiplayer demo of the classic pong game.
-One of the players should press \"Host\", while the
-other should select the address and press \"Join\"."
-config/tags=PackedStringArray("2d", "demo", "network", "official")
+config/name="Trash Pong"
+config/description="Pong Spiel welches ein Verteiltes System Implementiert für das Modul \"Verteilte Systeme\" der DHBW Heidenheim."
+config/tags=PackedStringArray("2d", "network")
 run/main_scene="res://lobby.tscn"
 config/features=PackedStringArray("4.2")
 config/icon="res://icon.webp"
+config/windows_native_icon="res://logo.ico"
 
 [autoload]
 

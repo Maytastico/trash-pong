@@ -1,12 +1,8 @@
 openapi: 3.0.3
 info:
-  title: DHBW-Blickbox API
+  title: Trash Pong API
   description: |-
-
-    Die API stellt eine Schnittstelle zwischen der DHBW-Blickbox und dem Externen Server bereit. Mit ihr ist es möglich Messdaten in die Datenbank zu schreiben, sowie zu checken ob die Systeme miterinander Verbunden sind und funktionieren.
-      Der Code ist im [DHBW-Blickbox Repo](https://github.com/mxmueller/DHBW-Blickbox) zu finden.
-
-
+    Trashpong ist eine moderne Neuinterpretation des klassischen Pong-Spiels, das auf einer Client-Server-Architektur basiert. Der Server ist in Node.js implementiert und verwendet eine PostgreSQL-Datenbank zur Speicherung von Spielerdaten und Spielständen. Die Kommunikation zwischen Client und Server erfolgt über eine REST API und Websockets, um Echtzeit-Interaktionen zu ermöglichen.
   contact:
     email: aronseidl17@gmail.com
   version: 1.0.0
@@ -14,9 +10,9 @@ servers:
   - url: http://localhost:3000/
 tags:
   - name: health
-    description: Gibt informationen zur health
+    description: Gibt Informationen zur Health
   - name: api
-    description: CRUD REST API um Daten zu verwalten
+    description: CRUD REST API, um Daten zu verwalten
   - name: user
     description: Nutzerfunktionen
 
@@ -25,7 +21,7 @@ paths:
     get:
       tags:
         - health
-      summary: Zum testen der Verbindung zur API
+      summary: Zum Testen der Verbindung zur API
       responses:
         '200':
           description: 'Verbindung steht'
@@ -43,7 +39,7 @@ paths:
     get:
       tags:
         - health
-      summary: Checkt ob die Datenbank funktioniert
+      summary: Prüft, ob die Datenbank funktioniert
       responses:
         '200':
           description: 'API konnte eine Verbindung zur Datenbank herstellen'
@@ -56,85 +52,65 @@ paths:
                     type: string
                     example: 'OK'
         '500':
-          description: Fehler bei der Verbindung
+          description: Connection error
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  Fehler:
+                  error:
                     type: string
-                    example: 'Keine Verbindung zum Grafana Server'
+                    example: 'No connection to the Grafana server'
   /room:
     get:
       tags:
         - api
-      summary: Checkt ob die Blickbox mit dem Internet verbunden ist.
+      summary: Alle Räume abrufen
+      description: Dieser Endpunkt gibt alle Räume zurück.
       security:
-        - bearerAuth: []         # use the same name as above
+        - bearerAuth: []
       responses:
         '200':
-          description: 'Alle Räume werden ausgegeben'
+          description: 'Alle Räume wurden zurückgegeben'
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'raum_id: 3
-                              spieler_id1: 5
-                              spieler_id2: 1
-                              Öffentlich: false
-                              passwort: null
-                              titel: Private Room 1
-                              '
-
+                $ref: '#/components/schemas/Room'
         '401':
-          description: Keine Authentikation über Bearer Token
+          description: Keine Authentifizierung über Bearer Token
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  Fehler:
+                  error:
                     type: string
-                    example: 'Please authenticate'
-
+                    example: 'Bitte authentifizieren'
   /room/{id}:
     get:
       tags:
         - api
-      summary: Frägt einen speziellen Raum ab
+      summary: Einen bestimmten Raum abrufen
+      description: Dieser Endpunkt gibt einen bestimmten Raum anhand seiner ID zurück.
       security:
-        - bearerAuth: []         # use the same name as above
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
-          description: Room id
+          description: Raum ID
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '200':
-          description: 'Raum wird zurückgegeben'
+          description: 'Raum wurde zurückgegeben'
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'raum_id: 3
-                              spieler_id1: 5
-                              spieler_id2: 1
-                              Öffentlich: false
-                              passwort: null
-                              titel: Private Room 1
-                              '
+                $ref: '#/components/schemas/Room'
         '404':
-          description: 'Raum exestiert nicht'
+          description: 'Raum nicht gefunden'
           content:
             application/json:
               schema:
@@ -142,9 +118,9 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'Not Found'
+                    example: 'Nicht gefunden'
         '500':
-          description: 'API failed'
+          description: 'API-Fehler'
           content:
             application/json:
               schema:
@@ -152,15 +128,80 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'IP-Adresse der BlickBox geupdatet. Neue IP: {ip_adress}'
-  /login:
+                    example: 'Interner Serverfehler'
+  /room/:
+    post:
+      tags:
+        - api
+      summary: Einen neuen Raum erstellen
+      description: Dieser Endpunkt erstellt einen neuen Raum.
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Daten zum Erstellen eines neuen Raums
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Raumtitel
+                  example: "Privater Raum 1"
+                pw:
+                  type: string
+                  description: Passwort für den Raum (erforderlich, wenn der Raum privat ist)
+                  example: "geheim"
+                oeffentlich:
+                  type: boolean
+                  description: Gibt an, ob der Raum öffentlich ist
+                  example: false
+      responses:
+        '201':
+          description: Raum erfolgreich erstellt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+        '400':
+          description: Ungültige Eingabe
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "title ist erforderlich und Raumstatus ist erforderlich"
+        '401':
+          description: Fehlende oder ungültige Authentifizierung
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Autorisierungsheader fehlt"
+        '500':
+          description: Interner Fehler
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Interner Serverfehler"
+  /user/login:
     post:
       tags:
         - user
-      summary: Ein neuen Temperatur Wert hinzufügen
-      description: Füg einen neuen Temperatur Wert hinzu.
+      summary: Einen neuen Benutzer registrieren
+      description: Dieser Endpunkt registriert einen neuen Benutzer und gibt ein Bearer Token zurück, um weitere Anfragen zu authentifizieren.
       requestBody:
-        description: Erstelle einen neuen Temperatur Wert
+        description: Daten zur Registrierung
         content:
           application/json:
             schema:
@@ -168,7 +209,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Anmeldung erfolgreich
+          description: Registrierung erfolgreich
           content:
             application/json:
               schema:
@@ -177,9 +218,8 @@ paths:
                   message:
                     type: string
                     example: 'Daten erfolgreich eingefügt'
-
         '400':
-          description: Falscher Input
+          description: Ungültige Eingabe
           content:
             application/json:
               schema:
@@ -187,19 +227,18 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'Bad Request'
+                    example: 'Ungültige Anfrage'
         '500':
           description: Interner Fehler
-
 components:
   securitySchemes:
-    bearerAuth:            # arbitrary name for the security scheme
+    bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT    # optional, arbitrary value for documentation
+      bearerFormat: JWT
   responses:
     UnauthorizedError:
-      description: Access token is missing or invalid
+      description: Zugriffstoken fehlt oder ist ungültig
   schemas:
     User:
       required:
@@ -209,3 +248,42 @@ components:
         username:
           type: string
           example: "Thomas Kircher"
+    Room:
+      required:
+        - title
+        - oeffentlich
+      type: object
+      properties:
+        raum_id:
+          type: integer
+          example: 3
+        titel:
+          type: string
+          example: "Privater Raum 1"
+        user_id1:
+          type: integer
+          example: 5
+        user_id2:
+          type: integer
+          example: 1
+        öffentlich:
+          type: boolean
+          example: false
+        passwort:
+          type: string
+          example: "geheim"
+        user1:
+          type: string
+          example: "GustavHauser"
+        user2:
+          type: string
+          example: "Thomas"
+        Spielstand:
+          type: object
+          properties:
+            punkte_spieler1:
+              type: integer
+              example: 10
+            punkte_spieler2:
+              type: integer
+              example: 8
