@@ -102,3 +102,10 @@ Hier ein Beispiel auf einem Windows-System:
     bash pong.sh
     ```
 4. Im Login-Menü wird zur Kontrolle in der linken oberen Ecke die URL angezeigt.
+
+#### Build it yourself
+Um das Spiel bauen zu können wird die Godot Engine benötigt. Diese kann hier: https://godotengine.org/download/ heruntergeladen werden.
+Nach dem Download kann dann über die Godot Engine die ```project.godot``` Datei im ```/game``` Verzeichnis geöffnet werden. 
+
+Skripte befinden sich im ```/game/logic``` Verzeichnis. Dort ist unter anderem die ```GLOBALS.gd```, welche alle globalen Variablen enthält. Hier kann unter anderem auch die Server URL und der Port verändert werden.
+
