@@ -104,7 +104,7 @@ Der Client ist eine kompilierte Anwendung, geschrieben in der Open-Source Godot 
 Services des Servers nutzt. 
 Die Verteilung der Anwendungslogik, auf Client und Server, wird durch die (Abbildung \ref{fig:destribution-of-logic}) verdeutlicht.
 Der Client besitzt dabei die gesamte Spiellogik, über die der Benutzer das Spiel spielen kann. 
-Die Benutzerschnittstelle ist hierbei die kompilierte Godot Anwendung, welche die Spiellogik implementiert.
+
 
 \begin{figure}[H]
 	\centering
@@ -113,7 +113,7 @@ Die Benutzerschnittstelle ist hierbei die kompilierte Godot Anwendung, welche di
 	\label{fig:clientserver}
 \end{figure}
 
-Um Daten zu erhalten, sendet die Anwendung Anfragen an die REST API, welche Anwendungslogik implementiert hat um mit der Datenbank zu interagieren.
+Um Daten zu erhalten, sendet die Anwendung Anfragen an die REST API, welche Anwendungslogik implementiert hat, um mit der Datenbank zu interagieren.
 Die Benutzeranwendung muss zudem eigene Logik implementieren, da diese aufgrund von Echtzeit Anforderungen nicht auf einen Server warten kann.
 Komponenten mit Echtzeit Anforderungen, die das  Rendering, die Übernahme von Benutzereingaben müssen auf dem Client Computer ausgeführt werden.
 Server wie auch Client besitzen demnach ihre eigene Anwendungslogik, die sich auf die jeweiligen Anforderungen spezialisiert haben.
@@ -125,7 +125,7 @@ Server wie auch Client besitzen demnach ihre eigene Anwendungslogik, die sich au
 	\label{fig:destribution-of-logic}
 \end{figure}
 
-Der Server kann über eine Docker Compose bereitgestellt werden.
+Der Server kann über eine Docker Compose gestartet werden.
 Innerhalb dieses Deployments wird eine Postgres-Datenbank, 
 ein Nginx-Load-Balancer und ein beliebig skalierbarer Spieleserver, welcher die Anfragen der Clients verarbeitet, bereitgestellt.
 
@@ -137,31 +137,31 @@ ein Nginx-Load-Balancer und ein beliebig skalierbarer Spieleserver, welcher die 
 	\label{fig:server}
 \end{figure}
 
-Der Server besteht aus zwei Komponenten, dem HTTP Server und dem Game Server.
-Der HTTP Server verfolgt dabei eine \glqq  [..] client-server Interaktion, auch bekannt als 
+Der Server besteht aus zwei Komponenten, dem HTTP-Server und dem Game Server.
+Der HTTP-Server verfolgt dabei eine \glqq  [..] client-server Interaktion, auch bekannt als 
 request-reply Verhalten [..]\grqq{}\cite[S.37 ff.]{tanenbaum2007distributed}.
 Diese Komponente, wie sie in (Abbildung \ref{fig:server}) dargestellt ist,
-bietet dem Client Benutzerschnittstellen an um sich anzumelden, Räume zu erstellen und diesen beizutreten.
-Der HTTP Server ist dabei verbindungslos, das bedeutet, 
-dass der Server nachdem er die Anfrage bearbeitet hat, die Verbindung schließt.
+bietet dem Client Benutzerschnittstellen an, um sich anzumelden, Räume zu erstellen und diesen beizutreten.
+Der HTTP-Server ist dabei verbindungslos, das bedeutet, 
+dass der Server, nachdem er die Anfrage bearbeitet hat, die Verbindung schließt.
 Der Server hat dabei keine Referenz zu dem Client, der die Anfrage gestellt hat.
 Was für Anwendung, die Daten bereitstellen sollen die einfachste Form der Kommunikation dargestellt.
 
-Innerhalb des Spiels, sind verbindungslose Protokolle nicht ausreichend, da hier eine Echtzeitkommunikation benötigt wird.
+Innerhalb des Spiels sind verbindungslose Protokolle nicht ausreichend, da hier eine Echtzeitkommunikation benötigt wird.
 Websockets wären hier ein Protokoll, welches einen verbindungsorientierten Ansatz verfolgt.
 Diese \glqq [..] verwenden eine einzelne TCP-Verbindung für den Datenverkehr in beide Richtungen. 
 \grqq{} \cite[Kapitel 1.1]{rfc-websocket}.
-Somit kann mit Websockets ein bidirektionaler Kommunikationskanal aufgebaut werden mit dem die Clients 
+Somit kann mit Websockets ein bidirektionaler Kommunikationskanal aufgebaut werden, mit dem die Clients 
 und der Server in Echtzeit kommunizieren können.
-Spieleinformationen können so zwischen den Clients ausgetascht werden. 
-Der Server wird dabei als Vermittler verwendet. Um dies zu ermöglichen wird die Socket.io Bibliothek verwendet.
+Spieleinformationen können so zwischen den Clients ausgetauscht werden. 
+Der Server wird dabei als Vermittler verwendet. Um dies zu ermöglichen, wird die Socket.io Bibliothek verwendet.
 Socket.io ergänzt das Websocket Protokoll und ermöglicht es Räume zu erstellen und zu verwalten.
 Damit können mehrere Clients innerhalb eines Raums miteinander kommunizieren.
 
 Die Datenbank speichert die Räume, in denen die Spieler ihr Spiel spielen. 
 Jeder Spieler kann Räume erstellen und ihnen beitreten und gehört somit diesen 
 Räumen an (vgl. Abbildung \ref{fig:ER-Modell}).
-Ein Spieler kann dabei mehrere Räume erstellen, so ist es diesem auch möglich, in mehreren Räumen gleichzeitig zu sein.
+Ein Spieler kann dabei mehrere Räume erstellen.
 Zum Zeitpunkt des Spiels kann der Spieler nur in einem Raum sein.
 \\Zum Ausgleichen von Anfragen wird ein Nginx Load Balancer verwendet.
 Dieser verteilt die Anfragen auf die verschiedenen Serverinstanzen.
@@ -185,26 +185,26 @@ leitet die Anfragen immer an die gleiche Serverinstanz weiter.
 	\caption{Komponentensicht des Clients.}
 	\label{fig:clientarchitektur}
 \end{figure}
-Der Client besteht aus 4 Komponenten. Im Login Screen authentifiziert sich der Client mit dem Server verbindungslos. Auch das Erstellen und Betreten der Räume ist nur über REST-Anfragen gehandlet. Erst wenn ein Spieler den Raum beitritt wird mit Websockets ein bi-direktionaler Kommunikationskanal erstellt (vgl. Server Architektur). Über diesen Kanal werden dann die Spielelemente des Pong Spiels gesteuert. 
+Der Client besteht aus 4 Komponenten. Im Login Screen authentifiziert sich der Client mit dem Server verbindungslos. Auch das Erstellen und Betreten der Räume ist nur über REST-Anfragen erledigt. Erst wenn ein Spieler den Raum beitritt, wird mit Websockets ein bi-direktionaler Kommunikationskanal erstellt (vgl. Server Architektur). Über diesen Kanal werden dann die Spielelemente des Pong Spiels gesteuert. 
 
 
 \hypertarget{section-achitactural-decision}{
 \subsection{Architektur Entscheidung}}
 
-\glqq Viele Client-Server-Anwendung sind grundsetzlich aus drei unterschiedlichen Komponenten zusammengesetzt[...]\grqq{} \cite[S.57 ff.]{tanenbaum2007distributed}.
-Die Clients interagieren daher auch mit einer Benutzerschnittstelle. Dabei handelt es sich um ein HTTP Server, der die Anfragen der Clients entgegennimmt.
-Der HTTP Server unterstützen dabei HTTP Anfragen, genauso wie Websocketverbindungen.
+\glqq Viele Client-Server-Anwendung sind grundsätzlich aus drei unterschiedlichen Komponenten zusammengesetzt[...]\grqq{} \cite[S.57 ff.]{tanenbaum2007distributed}.
+Die Clients interagieren daher auch mit einer Benutzerschnittstelle. Dabei handelt es sich um ein HTTP-Server, der die Anfragen der Clients entgegennimmt.
+Der HTTP-Server unterstützt dabei HTTP-Anfragen, genauso wie Verbindungen über Websockets.
 Diese wiederum interagiert dabei mit \glqq Controllern \grqq{}, die die Logik der Anwendung implementieren und welche dann
 mit der Datenhaltung interagieren. Damit kann eine klare Trennung von Datenhaltung und Logik erreicht werden, welches die Anwendung
 modular macht. Es können dadurch andere Datenbanksysteme verwendet werden, ohne dass die Logik der Anwendung angepasst werden muss.
 
-Innerhalb der Server Applikation wird auf zwei Paradigmen.
+Innerhalb der Server Applikation wird auf zwei Paradigmen gesetzt.
 Einerseits wird auf das request-reply Paradigma gesetzt, um Nutzer zu autorisieren, Räume zu erstellen und zu verwalten.
 Hierbei ist keine Echtzeitkommunikation notwendig, da die Anfragen nur einmalig durchgeführt werden.
 Auf der Game Server Seite wurde sich dabei für eine nachrichtenbasierte Kommunikation entschieden, 
 um die Anforderungen der Echtzeitkommunikation zu erfüllen. Diese Entscheidung wurde getroffen, 
 weil synchrone Kommunikationsmethoden wie RPCs (Remote Procedure Calls) nicht immer geeignet 
-sind, insbesondere in Szenarien, in denen die empfangende Seite möglicherweise nicht sofort 
+sind, vor allem in Szenarien, in denen die empfangende Seite möglicherweise nicht sofort 
 verfügbar ist. 
 
 \glqq Insbesondere, wenn nicht davon ausgegangen werden kann, 
@@ -214,12 +214,12 @@ Ebenso muss die inhärent synchrone Natur von RPCs,
 bei der ein Client blockiert wird, bis seine Anforderung verarbeitet wurde, 
 manchmal durch etwas anderes ersetzt werden.\grqq{} \cite[S. 140 ff.]{tanenbaum2007distributed}
 
-Deshalb kam für die Nachrichtenbassierde Kommunikation Socket.io zum Einsatz,
+Deshalb kam für die nachrichtenbasierte Kommunikation Socket.io zum Einsatz,
 welches die Funktionen von Websockets erweitert.
 Das unter dem Socket.io liegenden Engine.IO ermöglicht dabei latenzarme Kommunikation
-mit geringen Overhead.\cite[]{engine-io-protocol}
+mit geringem Overhead.\cite[]{engine-io-protocol}
 
-Socket.io bietet zudem eine einfache Möglichkeit zur Skalierung. Durch die integration
+Socket.io bietet zudem eine einfache Möglichkeit zur Skalierung. Durch die Integration
 eines Adapters können nun verschiedene Socket.io Server miteinander kommunizieren.
 Damit erhalten mehrere Server die Möglichkeit, ihre Zustände zu synchronisieren.
 Dies wird mithilfe des Postgres Adapters implementiert, welche auf die Listen und Notify
@@ -228,24 +228,25 @@ Funktionen von Postgres zurückgreift. \cite[]{postgres-adapter}
 Zur Authentifizierung werden JWT-Token verwendet. Dabei ist der Vorteil, dass der Server keine Session speichern muss.
 Der Übertragende Token, kann dabei vom Client gespeichert werden. Die Informationen im Token sind
 dabei signiert und würden bei einer Manipulation des Tokens nicht mehr gültig sein.
-Übertragen wird ein Token für den Nutzercund sobald der Start Game Button gedrückt wird, wird auch 
+Übertragen wird ein Token für den Nutzer und sobald der Start Game Button gedrückt 
+Dort wird auch 
 ein Token für den Raum erstellt, den beide Nutzer empfangen.
 Mit diesem können diese dann Nachrichten innerhalb des Raumes senden.
 
-Nach Tannenbaum eigenen sich relationale Datenbanken um Anwendungslogik von den Daten zu trennen.
+Nach Tannenbaum eigenen sich relationale Datenbanken, um Anwendungslogik von den Daten zu trennen.
 \glqq Die Verwendung relationaler Datenbanken im Client-Server-Modell hilft dabei, 
 die Verarbeitungsebene von der Datenebene zu trennen, da Verarbeitung und Daten als unabhängig betrachtet werden.\grqq{} \cite[S. 40 ff.]{tanenbaum2007distributed}
 Zudem ermöglichen relationale Datenbanken eine einfache Skalierung, der Serveranwendungen.
-Ein weitere Vorteil ist die eingebaute Replikationsfunktion, welche die Datenbanken synchronisiert und hohe Verfügbarkeit gewährleistet.\cite[Chapter 27]{postgresql-high-availability}
+Ein weiterer Vorteil ist die eingebaute Replikationsfunktion, welche die Datenbanken synchronisiert und hohe Verfügbarkeit gewährleistet.\cite[Chapter 27]{postgresql-high-availability}
 
 
 \section{(Nicht-)Funktionale Anforderungen}
 \begin{center}
-  \begin{tabular}{|p{\linewidth}|}
+  \begin{tabular}{|p{\linewidth + 20pt}|}
     \hline
     \textbf{Spieler-Registrierung und -Login (FA1)} \\
     Beschreibung: Benutzer müssen sich mit ihren Namen anmelden können, um am Spiel teilzunehmen.
-    Die Nutzung sollte niederschwelling sein. Ein Benutzer muss deshalb kein Konto anlegenc \\ \\
+    Die Nutzung sollte niederschwellig sein. Ein Benutzer muss deshalb kein Konto anlegen \\ \\
     \hline
     \textbf{Echtzeit-Multiplayer-Funktionalität (FA2)} \\
     Beschreibung: Das Spiel muss in der Lage sein, mehrere Spieler in Echtzeit zu verbinden und ein synchronisiertes Spiel zu ermöglichen. Die Bewegungen der Schläger und der Ball müssen in Echtzeit zwischen den Spielern synchronisiert werden.\\ \\
@@ -288,7 +289,7 @@ durchdacht werden. Mithilfe dieser Diagramme wurde die Anwendung nun entwickelt.
 
 Zu Beginn wurden die REST API, Nutzerverwaltung als auch Authentifizierung und Datenhaltung implementiert.
 Dabei wurde schnell festgestellt, dass durch die Zustandslosigkeit der REST API,
-keine Sessioninformationen gespeichert werden. Deshalb wurde auf JWT-Token gesetzt, um die Authentifizierung
+keine Session Informationen gespeichert werden. Deshalb wurde auf JWT-Token gesetzt, um die Authentifizierung
 zu gewährleisten. Mithilfe dieses Tokens können Nutzerinformationen gespeichert werden, ohne dass der Server
 eine Session speichern muss. 
 
@@ -319,7 +320,7 @@ Dabei wird ein JWT-Token benötigt, um die Anfrage zu autorisieren. Der Ablauf d
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth ]{resources/show_lobby.pdf}
-	\caption{Zeigt den Ablauf der Abfrage aller Räume in der Datenbank. welche nach dem Login ausgeführt wird. Hier wir ein JWT-Token benötigt um die Anfrage zu autorisieren.}
+	\caption{Zeigt den Ablauf der Abfrage aller Räume in der Datenbank. welche nach dem Login ausgeführt wird. Hier wir ein JWT-Token benötigt, um die Anfrage zu autorisieren.}
 	\label{fig:ablaufdiagramm-show_lobby}
 \end{figure}
 
@@ -342,13 +343,13 @@ Das Setzten des Nutzers erfolgt dabei über die Datenbank.
 	\label{fig:ablaufdiagramm-create_room}
 \end{figure}
 
-Wenn die Aktualisierung der Räume in der Datenbank vorgenommen wurden, wird der anfragende Nutzer dem socket.io Raum hinzugefügt.
-Hierbei war die Schwierigkeit den richtigen Raumname zu wählen.
-Nutzt man nun eine UUID, müsste man hier die UUID abfragen, wenn man den Primary Key der Datenbank als Raumname verwendet,
+Wenn die Aktualisierung der Räume in der Datenbank vorgenommen wurde, wird der anfragende Nutzer dem socket.io Raum hinzugefügt.
+Hierbei war die Schwierigkeit den richtigen Raumnamen zu wählen.
+Wenn man nun eine UUID verwendet, müsste man hier die UUID abfragen. Wenn man den Primary Key der Datenbank als Raumname verwendet,
 hat man einen eindeutigen Namen, welcher auch schon vorhanden ist. 
-Welchen man aber auch theoretisch raten könnte, was zu einem potentiellen Sicherheitsproblem führen könnte.
+Diesen könnte man auch theoretisch raten, was zu einem potentiellen Sicherheitsproblem führen könnte.
 Es wurde sich dennoch für die Variante des Primary Key entschieden, 
-da dieser intuitiver zu verenden ist. Für eine zukünftige produktive Anwendung sollte hier jedoch eine UUID 
+da dieser intuitiver zu verwenden ist. Für eine zukünftige produktive Anwendung sollte hier jedoch eine UUID 
 verwendet werden, welche über ein SHA-256 Hash generiert wird.
 
 Nachdem der Nutzer dem Raum innerhalb des Game Servers beigetreten ist, kann dieser das Spiel starten.
@@ -356,7 +357,7 @@ Dies geschieht über das startPressed Event, hierbei wird geprüft in welchen Ra
 Dieser Prozess ist in (Abbildung \ref{fig:ablaufdiagramm-start_game}) beschrieben.
 Wurde der Raum nicht mehr in der Datenbank gefunden, wird eine Fehlermeldung zurückgegeben.
 Ist dem Spiel kein zweiter Nutzer beigetreten, wird ebenfalls eine Fehlermeldung zurückgegeben.
-Passen alle Bedingungen, wird ein Room Token generiert und an beide Nutzer innderhalb des Socket.io Raums zurückgegeben.
+Passen alle Bedingungen, wird ein Room Token generiert und an beide Nutzer innerhalb des Socket.io Raums zurückgegeben.
 Mithilfe dieses Tokens können die Nutzer nun Nachrichten innerhalb des Raums austauschen.
 
 Hier war die Schwierigkeit, dass wenn einer der Nutzer aus dem Spiel austritt, der Raum gelöscht, wodurch der Fehler
@@ -369,17 +370,17 @@ Wenn der Ersteller nun den Raum verlässt, wird der Raum gelöscht und alle Nutz
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth ]{resources/join_lobby.pdf}
-	\caption{Der Nutzer tritt einem Raum bei. Hierbei wird ein JWT-Token benötigt um die Anfrage zu autorisieren. Der Nutzer verbindet sich mit dem Websocket und sendet eine joinRoom Anfrage. Der Server prüft ob der Nutzer die nötigen Berechtigungen hat um in den Raum beizutretten. Wenn der Nutzer alle Berechtigungen hat wird er in den Raum hinzugefügt und empfängt nun Nachrichten von anderen Nutzer.}
+	\caption{Der Nutzer tritt einem Raum bei. Hierbei wird ein JWT-Token benötigt, um die Anfrage zu autorisieren. Der Nutzer verbindet sich mit dem Websocket und sendet eine joinRoom Anfrage. Der Server prüft, ob der Nutzer die nötigen Berechtigungen hat, um den Raum beizutreten. Wenn der Nutzer alle Berechtigungen hat, wird er in den Raum hinzugefügt und empfängt nun Nachrichten von anderen Nutzern.}
 	\label{fig:ablaufdiagramm-join_lobby}
 \end{figure}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth ]{resources/start_game.pdf}
-	\caption{Drückt einer der Nutzer den Start-Button in der Benutzeroberfläche wird ein Event an den Server gesendet. Dieser Prüft ob der Nutzer innerhalb eines Raumes regestriert wurde. Wenn der Nutzer alle Berechtigungen erfüllt wird diesem ein Room Token übermittelt mit dem der Nutzer weitere Informationen authentifieren kann.}
+	\caption{Drückt einer der Nutzer den Start-Button in der Benutzeroberfläche wird ein Event an den Server gesendet. Dieser prüft, ob der Nutzer innerhalb eines Raumes registriert wurde. Wenn der Nutzer alle Berechtigungen erfüllt, wird diesem ein Room Token übermittelt, mit dem der Nutzer weitere Informationen authentifizieren kann.}
 	\label{fig:ablaufdiagramm-start_game}
 \end{figure}
 
-Wurde das Spiel gestartet wird bei jedem Client die Pong Instanz geladen. Die Kommunikation passiert über einen Socket-IO Websocket. Über den Socket senden die Clients dann verschiedene Events (ähnlich wie bei einem Publisher/Subscriber Prinzip \cite{tanenbaum2007distributed}) welche dann auf der anderen Seite interpretiert werden. Die Clients senden nun die Positionen ihrer Paddles an den Server welcher diese an die Clients weitergibt. Prallt ein Ball an einem Paddle ab meldet der Client an dem der Ball abgeprallt ist dass dieser abgeprallt ist. Genauso passiert das, wenn ein Tor geschossen wird (vgl. Abbildung \ref{fig:ablaufdiagramm-spiel}). 
+Wurde das Spiel gestartet wird bei jedem Client die Pong Instanz geladen. Die Kommunikation passiert über einen Socket-IO Websocket. Über den Socket senden die Clients dann verschiedene Events (ähnlich wie bei einem Publisher/Subscriber Prinzip \cite{tanenbaum2007distributed}) welche dann auf der anderen Seite interpretiert werden. Die Clients senden nun die Positionen ihrer Paddles an den Server, welcher diese an die Clients weitergibt. Prallt ein Ball an einem Paddle ab meldet der Client, an dem der Ball abgeprallt ist, dass dieser abgeprallt ist. Genauso passiert das, wenn ein Tor geschossen wird (vgl. Abbildung \ref{fig:ablaufdiagramm-spiel}). 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth -120pt ]{resources/Event-Based-Spielablauf.png}
@@ -387,31 +388,31 @@ Wurde das Spiel gestartet wird bei jedem Client die Pong Instanz geladen. Die Ko
 	\label{fig:ablaufdiagramm-spiel}
 \end{figure}
 Einer der Schwierigkeiten waren stockende Bewegungen vom Ball während des Spielablauf. Um dem Problem entgegenzuwirken, rendert jeder Client den Ball für sich selbst und nur die Änderungen, z.B. beim Aufprall werden übertragen. 
-Außerdem musste sichergestellt werden, dass jeder Raum über einen sepearaten Channel kommuniziert. Hierfür eignete sich das Raum-Management Feature von Socket-IO , da die Verbindung \& Synchronisation schon übernommen wurde und man einfach die Raum ID's aus der Datenbank sehr einfach einbinden konnte. So konnte ein höherer Programmieraufwand und damit Potenzielle Fehler vermieden werden \cite{SocketIORooms}. 
+Außerdem musste sichergestellt werden, dass jeder Raum über einen separaten Channel kommuniziert. Hierfür eignete sich das Raum-Management Feature von Socket-IO, da die Verbindung \& Synchronisation schon übernommen wurde und man einfach die Raum ID's aus der Datenbank sehr einfach einbinden konnte. So konnte ein höherer Programmieraufwand und damit Potenzielle Fehler vermieden werden \cite{SocketIORooms}. 
 
 \subsection{Mögliche Alternativen}
-Anstelle einer zentralisierten Architektur wäre ein dezentralisierter Ansatz möglich. Es könnte ein Peer-To-Peer System Implementiert werden. Anstelle von einem zentralen System ist jeder Client miteinander direkt verbunden \cite{gordon2001distributed}. Im folgenden werden die Vor- und Nachteile eines Peer-To-Peer Systems erläutert:
+Anstelle einer zentralisierten Architektur wäre ein dezentralisierter Ansatz möglich. Es könnte ein Peer-To-Peer System implementiert werden. Anstelle von einem zentralen System ist jeder Client miteinander direkt verbunden \cite{gordon2001distributed}. Im Folgenden werden die Vor- und Nachteile eines Peer-To-Peer Systems erläutert:
 
 \textbf{Vorteile}
 \begin{itemize}
-\item Geringere Latenz wenn die zwei Spieler eine direkte Verbindung zueinander herstellen
+\item Geringere Latenz, wenn die zwei Spieler eine direkte Verbindung zueinander herstellen
 \item Ein Load Balancer wird nicht benötigt da jeder Client seine eigenen Ressourcen mitbringt und die Spiellogik dann von Peer to Peer abläuft
 \end{itemize}
 
 \textbf{Nachteile}
 \begin{itemize}
-\item Synchronisation ist bei einem P2P-Netzwerk komplexer herzustellen, anstatt mit einem zentralisiertem Server
-\item Firewalls \glqq erschweren\grqq{} den Datenaustausch wenn ein Client keine Verbindung zulässt \cite{gordon2001distributed}
+\item Synchronisation ist bei einem P2P-Netzwerk komplexer herzustellen, anstatt mit einem zentralisierten Server
+\item Firewalls \glqq erschweren\grqq{} den Datenaustausch, wenn ein Client keine Verbindung zulässt \cite{gordon2001distributed}
 \end{itemize}
 
 \section{Reflexion}
 
-\subsection{Rückblick \& Hearusforderungen}
-Rückblickend gesehen wäre es besser gewsesen die gesamte Logik der Raumliste mit Websockets aufzubauen. Anstatt die Räume mit einer REST-API abzufragen, könnten Aktualisierungen der Räume in Echtzeit übertragen werden. So müsste der Benutzer nicht Manuell die Räume abfragen und potenzielle Race-Conditions, wie beim Raumbeitritt könnten vermieden werden. Außerdem müssten damit nicht die gesamten Räume vom Server gefetcht werden sondern es könnte zu Beginn einmal alles gefetcht werden und nur noch Änderungen müssten übertragen werden.   
-Eine große Herausforderung war außerdem die Verwendung der Programmiersprache Typescript. Da alle Teilnehmer des Projektes nahezu keine Erfahrung mit Typescript hatten, ist viel Zeit drauf gegangen um Bugs zu fixen welche aufgrund vom Datentypen handling der Programmiersprache entstanden sind. In Zukunft wird für das Backend eine andere Sprache verwendet.
+\subsection{Rückblick \& Herausforderungen}
+Rückblickend gesehen wäre es besser gewesen die gesamte Logik der Raumliste mit Websockets aufzubauen. Anstatt die Räume mit einer REST-API abzufragen, könnten Aktualisierungen der Räume in Echtzeit übertragen werden. So müsste der Benutzer nicht manuell die Räume abfragen und potenzielle Race-Conditions, wie beim Raumbeitritt könnten vermieden werden. Außerdem müssten damit nicht die gesamten Räume vom Server gefetcht werden, sondern es könnte zu Beginn einmal alles gefetcht werden und nur noch Änderungen müssten übertragen werden.   
+Eine große Herausforderung war außerdem die Verwendung der Programmiersprache Typescript. Da alle Teilnehmer des Projektes nahezu keine Erfahrung mit Typescript hatten, ist für das Fixen von Bugs viel Zeit drauf gegangen, welche aufgrund vom Datentypen handling der Programmiersprache entstanden sind. In Zukunft wird für das Backend eine andere Sprache verwendet.
 
 Für die Verwaltung von Daten wäre eine objektorientierte Datenbank wie z.B. MongoDB besser geeignet gewesen, da 
-Trash Pong die Komplextät für eine relationale Datenbank nicht mitbringt. 
+Trash Pong die Komplexität für eine relationale Datenbank nicht mitbringt. 
 
 Für eine bessere Modularität hätte man hier die REST API und den Websocket in zwei separate Server aufteilen können.
 Somit wäre es möglich die Server nach Bedarf zu skalieren, sodass jeder Raum seinen eigenen Websocket Server hätte.
