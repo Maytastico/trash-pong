@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { generateAccessToken } from "../auth/auth";
-import { doesUserExist, getUser, getUserByName, registerAuthtoken, registerUser } from "../database/user";
-import { dbUser } from "./api.controller";
+import { doesUserExist, getUserByName, registerAuthtoken, registerUser } from "../database/user";
 import { User } from "../types/User";
 
 export const login = async (req: Request, res: Response, next: NextFunction) =>{

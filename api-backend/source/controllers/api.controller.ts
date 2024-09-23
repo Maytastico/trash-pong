@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import {getRoom} from "../database/room";
+import {getRoom, getRoomsByPlayerID} from "../database/room";
 import { getAllRooms } from "../database/room";
 import { createRoom } from "../database/room";
 import { updateRoom } from "../database/room";
@@ -29,31 +29,35 @@ const dbAllRooms = async (req: Request, res: Response, next: NextFunction) => {
   
   export { dbRoom, dbAllRooms };
 
-  const dbCreateRoom = async (req: Request, res: Response, next: NextFunction) => {
-    const reqHeader = req.header('Authorization')
-    let token:string
-    if (reqHeader){
-      token = reqHeader.replace('Bearer ', '');
-    }else{
-      return res.status(401).send('Authorization header is missing');
-    }
+          const dbCreateRoom = async (req: Request, res: Response, next: NextFunction) => {
+            const reqHeader = req.header('Authorization')
+            let token:string
+            if (reqHeader){
+              token = reqHeader.replace('Bearer ', '');
+            }else{
+              return res.status(401).send('Authorization header is missing');
+            }
 
-    try {
-      const { title, pw, oeffentlich} = req.body;
-      let user: User = decodeAccessToken(token) as User;
-      if (!title || oeffentlich === undefined) {
-        return res.status(400).json({ error: "title is requiered and room state is requiered" });
-      }
-      if(oeffentlich == false && !pw){
-        return res.status(400).json({ error: "When creating a private room a password is requiered" });
-      }
-      const newRoom = await createRoom(title, pw, oeffentlich, user.user_id, null);
-      return res.status(201).json(newRoom);
-    } catch (err) {
-      return next(err);
-    }
-  }
-export{dbCreateRoom}; 
+            try {
+              const { title, pw, oeffentlich} = req.body;
+              let user: User = decodeAccessToken(token) as User;
+              let roomsOfUser = await getRoomsByPlayerID(user.user_id);
+              if (roomsOfUser.length > 0){
+                return res.status(401).json({ error: "User already has a room" });
+              }
+              if (!title || oeffentlich === undefined) {
+                return res.status(400).json({ error: "title is requiered and room state is requiered" });
+              }
+              if(oeffentlich == false && !pw){
+                return res.status(400).json({ error: "When creating a private room a password is requiered" });
+              }
+              const newRoom = await createRoom(title, pw, oeffentlich, user.user_id, null);
+              return res.status(201).json(newRoom);
+            } catch (err) {
+              return next(err);
+            }
+          }
+        export{dbCreateRoom}; 
 
 const dbUpdateRoom = async (req: Request, res: Response, next: NextFunction) => {
   try {

@@ -8,19 +8,15 @@ import { decodeAccessToken, generateRoomToken } from '../auth/auth';
 import { User } from '../types/User';
 import { deleteRoom, getRoom, getRoomsByPlayerID, joinRoom, updateRoom } from '../database/room';
 import { Raum } from '../types/Room';
-import { Bounce, Goal, Paddle, End } from '../types/Game';
-
-export let io: SocketIOServer;
-
-export interface CustomRequest extends Request {
-    token: string | JwtPayload;
-}
-
-
-
+import {Bounce, Goal, Paddle, End } from '../types/Game';
 
 /**
- * Get the token either trought headers or by handshake
+ * SocketIO Server
+ */
+export let io: SocketIOServer;
+
+/**
+ * Get the token either through headers or by handshake
  * Used for Godot and Debugging with Postman
  * @param socket 
  * @returns 
@@ -40,6 +36,10 @@ function getToken(socket: Socket<any>): string{
     return token;
 }
 
+/**
+ * Initialize the WebSocket server
+ * @param server 
+ */
 export async function initializeWebSocketServer(server: http.Server): Promise<void> {
     io = new SocketIOServer(server);
 
@@ -55,7 +55,7 @@ export async function initializeWebSocketServer(server: http.Server): Promise<vo
          
             next();
           } catch (err) {
-            next(new Error("Invalid Authentication")); // Verbindung ablehnen
+            next(new Error("Invalid Authentication")); // Reject connection
           }
     
     });
@@ -66,11 +66,11 @@ export async function initializeWebSocketServer(server: http.Server): Promise<vo
     
         // Handle 'joinRoom' Event
         ws.on('joinRoom', async (data: { roomId: number;}) => {
-            // Holt sich die RaumID vom Payload
+            // Get the room ID from the payload
             const { roomId} = data;
             let player: User;
 
-            // Verifiziert den JWT Token und extrhiert die Daten des senders
+            // Verify the JWT token and extract the sender's data
             try {
                 const token = getToken(ws);
                 player = decodeAccessToken(token) as User;
@@ -80,19 +80,19 @@ export async function initializeWebSocketServer(server: http.Server): Promise<vo
                 return;
             }
             
-            // Holt sich die Informationen des Raums
+            // Get the room information
             let room: Raum = await getRoom(roomId);
 
             
-            // Wenn beim holen der Raum informationen etwas fehlschlägt
-            // Wird ausgegeben, dass der Raum nicht exestiert
+            // If there is an error getting the room information
+            // It will be indicated that the room does not exist
             if (room === null || typeof room === 'undefined') {
-                // Wenn der Raum nicht existiert, wird der Fehler gefangen und an den Client gesendet
+                // If the room does not exist, catch the error and send it to the client
                 ws.emit('error', 'Room does not exist');
                 return; 
                 }
             
-            // When user_id2 which is the second play is decided the reqest sender can not join the room
+            // When user_id2 which is the second player is decided the request sender cannot join the room
             if (room.user_id2 !== null){
                 ws.emit('error', 'Room is full');
                 return;
@@ -115,7 +115,7 @@ export async function initializeWebSocketServer(server: http.Server): Promise<vo
 
         // startPressed is executed when the Game two uses 
         ws.on('startPressed', async () => {       
-            // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
+            // decodeAccessToken should throw an error if the token is invalid
             let player: User;
             try {
                 const token = getToken(ws);
@@ -129,13 +129,13 @@ export async function initializeWebSocketServer(server: http.Server): Promise<vo
             let room: Raum[] = await getRoomsByPlayerID(player.user_id);
             
             if (room === null || typeof room === 'undefined' || room.length == 0) {
-                // Wenn der Raum nicht existiert, wird der Fehler gefangen und an den Client gesendet
+                // If the room does not exist, catch the error and send it to the client
                 ws.emit("error", "No room associated with this user");
-                return; // Beenden der Funktion, um den Fehler zu behandeln
+                return; // End the function to handle the error
             }
             
             if (room[0].user_id1 === null){
-                ws.emit("error", "Creator of this room disapeared :O");
+                ws.emit("error", "Creator of this room disappeared :O");
                 return;
             }
 
@@ -144,10 +144,10 @@ export async function initializeWebSocketServer(server: http.Server): Promise<vo
                 return;
             }
 
-            // Generiert einen neuen Room Token
+            // Generate a new room token
             let roomToken = generateRoomToken(room[0])
 
-            // Sendet den Room Token an den sender und in den raum
+            // Send the room token to the sender and in the room
             ws.emit("starting_game", {"start_game": true, "room_token": roomToken});
             ws.to(room[0].raum_id.toString()).emit("starting_game", {"start_game": true, "room_token": roomToken});
             // Join the room
@@ -171,7 +171,7 @@ export async function initializeWebSocketServer(server: http.Server): Promise<vo
         ws.on('update_paddle', async (data: {room_token: string, position_x: number, position_y: number, motion: number}) => {
             const token = getToken(ws);
             const {room_token, position_x, position_y, motion} = data;
-            // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
+            // decodeAccessToken should throw an error if the token is invalid
             let player: User;
             let room: Raum;
             try {
@@ -198,11 +198,11 @@ export async function initializeWebSocketServer(server: http.Server): Promise<vo
             ws.to(room.raum_id.toString()).emit("update_paddle", paddle)
         });
 
-        // Handle 'end' Event, wenn das Spiel beendet wird
+        // Handle 'end' Event, when the game ends
         ws.on('end', async (data: {room_token: string}) => {
             const token = getToken(ws);
             const {room_token} = data;
-            // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
+            // decodeAccessToken should throw an error if the token is invalid
             let player: User;
             let room: Raum;
             try {
@@ -227,12 +227,12 @@ export async function initializeWebSocketServer(server: http.Server): Promise<vo
             ws.to(room.raum_id.toString()).emit("end", end)
         });
 
-        // Handle 'bounce' Event, wenn der Ball vom Schläger abprallt
+        // Handle 'bounce' Event, when the ball bounces off the paddle
         ws.on('bounce', async (data: {room_token: string, left: boolean, random: number}) => {
             const token = getToken(ws);
             const {room_token, left, random} = data;
 
-            // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
+            // decodeAccessToken should throw an error if the token is invalid
             let player: User;
             let room: Raum;
             try {
@@ -259,12 +259,12 @@ export async function initializeWebSocketServer(server: http.Server): Promise<vo
             ws.to(room.raum_id.toString()).emit("bounce", bounce)
         });
 
-        // Handle 'goal' Event, wenn ein Tor erzielt wird
+        // Handle 'goal' Event, when a goal is scored
         ws.on('goal', async (data: {room_token: string, left: boolean}) => {
             const token = getToken(ws);
             const {room_token, left} = data;
 
-            // decodeAccessToken sollte einen Fehler werfen, wenn der Token ungültig ist
+            // decodeAccessToken should throw an error if the token is invalid
             let player: User;
             let room: Raum;
             try {
