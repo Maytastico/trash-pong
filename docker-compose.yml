@@ -3,6 +3,10 @@ version: '3.1'
 services:
   db:
     image: postgres:latest
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     build:
         context: ./Datenbank
         dockerfile: Dockerfile
@@ -13,6 +17,11 @@ services:
     build:
         context: ./api-backend
         dockerfile: Dockerfile
+    environment:
+      - PGHOST=${PGHOST}
+      - PGUSER=${PGUSER}
+      - PGPASSWORD=${PGPASSWORD}
+      - PGDATABASE=${PGDATABASE}
     volumes:
       - ./:/usr/src/app
     scale: 3
@@ -22,9 +31,10 @@ services:
       - db
     restart: always
   nginx:
+    restart: always
     build: ./nginx 
     ports:
-    - "3000:80"
+    - "4000:80"
     depends_on:
       - db
       - backend
