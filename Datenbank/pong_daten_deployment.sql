@@ -24,6 +24,12 @@ CREATE TABLE raum (
     FOREIGN KEY (user_id2) REFERENCES "user"(user_id) ON DELETE SET NULL
 );
 
+CREATE TABLE IF NOT EXISTS socket_io_attachments (
+    id          bigserial UNIQUE,
+    created_at  timestamptz DEFAULT NOW(),
+    payload     bytea
+);
+
 -- Einfügen von Daten in die Tabelle 'user'
 INSERT INTO "user" (name, punktestand) VALUES
 ('PlayerOne', 150),
