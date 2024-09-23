@@ -163,8 +163,7 @@ Jeder Spieler kann Räume erstellen und ihnen beitreten und gehört somit diesen
 Räumen an (vgl. Abbildung \ref{fig:ER-Modell}).
 Ein Spieler kann dabei mehrere Räume erstellen, so ist es diesem auch möglich, in mehreren Räumen gleichzeitig zu sein.
 Zum Zeitpunkt des Spiels kann der Spieler nur in einem Raum sein.
-
-Zum Ausgleichen von Anfragen wird ein Nginx Load Balancer verwendet.
+\\Zum Ausgleichen von Anfragen wird ein Nginx Load Balancer verwendet.
 Dieser verteilt die Anfragen auf die verschiedenen Serverinstanzen.
 Da für die Echtzeitkommunikation Websockets verwendet werden, ist es notwendig,
 dass der Verbindung eines Clients immer auf die gleiche Serverinstanz leiten.
@@ -254,13 +253,7 @@ Ein weitere Vorteil ist die eingebaute Replikationsfunktion, welche die Datenban
     \textbf{Punkteverwaltung (FA3)} \\
     Beschreibung: Das System muss die Punkte der Spieler während des Spiels erfassen und verwalten können. Nach jedem Spiel sollte ein Punktestand angezeigt werden, der den Gewinner ermittelt. \\ \\
     \hline
-  \end{tabular}
-\end{center}
-
-\begin{center}
-  \begin{tabular}{|p{\linewidth}|}
-    \hline
-    \textbf{Leistung und Skalierbarkeit (NF1)} \\
+     \textbf{Leistung und Skalierbarkeit (NF1)} \\
     Beschreibung: Das Spiel sollte auch bei hoher Benutzerzahl flüssig und ohne Verzögerungen laufen. Das System muss skalierbar sein, um eine große Anzahl von gleichzeitigen Spielern zu unterstützen. \\ \\
     \hline
     \textbf{Sicherheit (NF2)} \\
@@ -276,17 +269,11 @@ Ein weitere Vorteil ist die eingebaute Replikationsfunktion, welche die Datenban
     \hline
     \textbf{Benutzerfreundlichkeit (NF4)} \\
     Beschreibung: Die Benutzeroberfläche des Spiels sollte intuitiv und leicht zu bedienen sein. Neue Spieler sollten sich schnell zurechtfinden und das Spiel ohne umfangreiche Anleitungen verstehen können.\\ \\
-    \\ \\
     \hline
   \end{tabular}
 \end{center}
 
 \section{Umsetzung}
-
-\begin{itemize}
-    \item \textbf{Umsetzung der Architektur}: Beschreibung der Implementierung der einzelnen Komponenten und ihrer Interaktionen.
-    \item \textbf{Schwierigkeiten und Lösungen}: Was waren die technischen Herausforderungen und wie wurden sie bewältigt?
-\end{itemize}
 Die Umsetzung der Architektur erfolgte parallel zur Entwicklung des Spiels.
 Dabei wurden zuerst die Anforderungen an die Anwendungen definiert, dies wurde als Grundlage
 für die Implementierung der Anwendungen verwendet. Während der Entwicklung entstanden immer
@@ -341,11 +328,11 @@ Der Server prüft dabei, ob der Nutzer bereits in einem Raum ist. Ist dies nicht
 Nachdem der den Raum angelegt hat, kann dieser in den Socket.io Raum beitreten.
 Der Ablauf dieses Features wird in (Abbildung \ref{fig:ablaufdiagramm-join_lobby}) dargestellt.
 Hierbei sendet der Client über das Event joinRoom eine Anfrage an den Websocket. Dabei sendet dieser über den
-Body den gewünschten Raum, in den der Nutzer beitreten möchte. Der Server prüft nun, zuersten ob der Raum existiert.
+Body den gewünschten Raum, in den der Nutzer beitreten möchte. Der Server prüft nun zuerst, ob der Raum existiert
 und ob dieser Raum bereits leer ist. Ist dies der Fall, wird der Nutzer in den Raum hinzugefügt. 
 Ist der erste Nutzer bereits gesetzt und besitzt dieser nicht die gleiche ID wie der anfragende Nutzer,
 wird der zweite Nutzer mit der ID des anfragenden Nutzers besetzt.
-Das setzten des Nutzers erfolgt dabei über die Datenbank.
+Das Setzten des Nutzers erfolgt dabei über die Datenbank.
 
 
 \begin{figure}[H]
@@ -370,7 +357,7 @@ Dieser Prozess ist in (Abbildung \ref{fig:ablaufdiagramm-start_game}) beschriebe
 Wurde der Raum nicht mehr in der Datenbank gefunden, wird eine Fehlermeldung zurückgegeben.
 Ist dem Spiel kein zweiter Nutzer beigetreten, wird ebenfalls eine Fehlermeldung zurückgegeben.
 Passen alle Bedingungen, wird ein Room Token generiert und an beide Nutzer innderhalb des Socket.io Raums zurückgegeben.
-Mithilfe dieses gTokens können die Nutzer nun Nachrichten innerhalb des Raums austauschen.
+Mithilfe dieses Tokens können die Nutzer nun Nachrichten innerhalb des Raums austauschen.
 
 Hier war die Schwierigkeit, dass wenn einer der Nutzer aus dem Spiel austritt, der Raum gelöscht, wodurch der Fehler
 \glqq No room associated with this user\grqq{} auftritt. Dadurch kann das Spiel nicht weitergeführt werden.
@@ -420,10 +407,6 @@ Anstelle einer zentralisierten Architektur wäre ein dezentralisierter Ansatz m�
 \section{Reflexion}
 
 \subsection{Rückblick \& Hearusforderungen}
-\begin{itemize}
-    \item \textbf{Änderungen nach dem Projekt}: Was würde man im Nachhinein anders machen, um das System zu verbessern?
-      \item \textbf{Größte Herausforderungen}: Rückblick auf die bedeutendsten Schwierigkeiten und wie sie gelöst wurden.
-\end{itemize}
 Rückblickend gesehen wäre es besser gewsesen die gesamte Logik der Raumliste mit Websockets aufzubauen. Anstatt die Räume mit einer REST-API abzufragen, könnten Aktualisierungen der Räume in Echtzeit übertragen werden. So müsste der Benutzer nicht Manuell die Räume abfragen und potenzielle Race-Conditions, wie beim Raumbeitritt könnten vermieden werden. Außerdem müssten damit nicht die gesamten Räume vom Server gefetcht werden sondern es könnte zu Beginn einmal alles gefetcht werden und nur noch Änderungen müssten übertragen werden.   
 Eine große Herausforderung war außerdem die Verwendung der Programmiersprache Typescript. Da alle Teilnehmer des Projektes nahezu keine Erfahrung mit Typescript hatten, ist viel Zeit drauf gegangen um Bugs zu fixen welche aufgrund vom Datentypen handling der Programmiersprache entstanden sind. In Zukunft wird für das Backend eine andere Sprache verwendet.
 
