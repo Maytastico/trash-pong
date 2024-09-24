@@ -28,7 +28,7 @@ POSTGRES_PASSWORD=SicheresPasswort!
 POSTGRES_DB=pong_daten
 ```
 
-Alle Umgebungsvariablen des Node Servers fangen mit `PG` an. Alle Umgebungsvariablen mit `POSTGRES` sind Variablen 
+Alle Umgebungsvariablen des Node Servers fangen mit `POSTGRES` an. Alle Umgebungsvariablen mit `PG` sind Variablen 
 der Postgres-Datenbank. `PGHOST` muss `db`, `PGUSER` muss `testuser` und `PGDATABASE` muss `pong_daten` beinhalten.
 Das einzige Feld, das variieren kann, ist das Passwort-Feld.
 
