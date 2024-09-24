@@ -75,6 +75,48 @@ Um darauf zugreifen zu können, muss sich der Nutzer anmelden. Dies kann über `
 Dazu kann eine POST-Anfrage an den Server gestellt werden. Innerhalb des Bodys muss der Nutzername spezifiziert werden.
 Dies sieht wie folgt aus: `{"username": "hans"}`.
 
+### API Endpunkte
+#### Health Endpunkte
+
+- **`GET /ping`**: Testet die Verbindung zur API.
+    - **Antworten**:
+        - `200`: Verbindung steht.
+        - `500`: Fehler bei der Verbindung.
+
+- **`GET /db`**: Überprüft die Verbindung zur Datenbank.
+    - **Antworten**:
+        - `200`: Verbindung zur Datenbank erfolgreich.
+        - `500`: Fehler bei der Verbindung.
+
+#### API Endpunkte
+
+- **`GET /room`**: Gibt alle Räume aus.
+    - **Sicherheit**: Bearer Token erforderlich.
+    - **Antworten**:
+        - `200`: Alle Räume werden ausgegeben.
+        - `401`: Keine Authentifizierung.
+
+- **`GET /room/{id}`**: Fragt einen speziellen Raum ab.
+    - **Parameter**:
+        - `id` (Pfadparameter): Die ID des Raums.
+    - **Sicherheit**: Bearer Token erforderlich.
+    - **Antworten**:
+        - `200`: Raum wird zurückgegeben.
+        - `404`: Raum existiert nicht.
+        - `500`: API Fehler.
+
+#### Nutzer Endpunkte
+
+- **`POST /user/login`**: Regestriert den Nutzer und gibt einen JWT Token zurück mitdem die anderen Routen verwendet werden können
+    - **Anfragekörper**:
+        - `username` (Pflichtfeld): Der Benutzername.
+    - **Antworten**:
+        - `200`: Anmeldung erfolgreich.
+        - `400`: Falscher Input.
+        - `500`: Interner Fehler.
+
+
+
 ### Spiel
 Die Anwendung ist im Verzeichnis `/game/export` zu finden und ist für x86-64 Linux und Windows kompiliert.
 Mit einem Doppelklick kann das Spiel gestartet werden.
