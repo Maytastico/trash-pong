@@ -5,7 +5,7 @@ Trashpong ist eine moderne Neuinterpretation des klassischen Pong-Spiels, das au
 
 ### Technische Details
 
-- **Server**: Der Server läuft in einer Docker-Umgebung und ist über Port 3000 erreichbar. Er bietet Endpunkte für die Benutzerverwaltung und Spielraumverwaltung.
+- **Server**: Der Server läuft in einer Docker-Umgebung und ist über Port 4000 erreichbar. Er bietet Endpunkte für die Benutzerverwaltung und Spielraumverwaltung.
 - **Datenbank**: PostgreSQL wird als Datenbank verwendet, wobei die Verbindung über Umgebungsvariablen konfiguriert wird.
 - **Client**: Der Client ist eine eigenständige Anwendung, die für x86-64 Linux und Windows kompiliert ist. Er kommuniziert mit dem Server über HTTP und Websockets.
 - **Umgebungsvariablen**: Sowohl der Server als auch der Client verwenden Umgebungsvariablen zur Konfiguration, was eine flexible Anpassung an verschiedene Umgebungen ermöglicht.
