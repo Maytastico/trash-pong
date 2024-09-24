@@ -136,7 +136,7 @@ Dies sieht wie folgt aus: `{"username": "hans"}`.
 
 
 ### Spiel
-Die Anwendung ist im Verzeichnis `/game/export` zu finden und ist für x86-64 Linux und Windows kompiliert.
+Die Anwendung ist im Verzeichnis `/game/export` zu finden (IN DER ABGABE NICHT, das Spiel muss selber gebaut werden) und ist für x86-64 Linux und Windows kompiliert.
 Mit einem Doppelklick kann das Spiel gestartet werden.
 
 #### Für Devs:
