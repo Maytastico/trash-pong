@@ -10,7 +10,7 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{ngerman}
-% \usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[a4paper, total={5.5in, 8in}]{geometry}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
@@ -87,7 +87,7 @@
   \end{center}
 }
 \author{Aron Seidl, Maylis Grune, Carolin Enderlein}
-\date{Januar 2023}
+\date{August 2024}
 
 \begin{document}
 \maketitle
@@ -106,28 +106,33 @@ Die Verteilung der Anwendungslogik, auf Client und Server, wird durch die (Abbil
 Der Client besitzt dabei die gesamte Spiellogik, über die der Benutzer das Spiel spielen kann. 
 Die Benutzerschnittstelle ist hierbei die kompilierte Godot Anwendung, welche die Spiellogik implementiert.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\textwidth ]{resources/Client-Server.drawio.png}
-	\caption{Kontext-Sicht der Client-Server-Architektur des Pong Spiels}
-	\label{fig:clientserver}
-\end{figure}
-
 Um Daten zu erhalten, sendet die Anwendung Anfragen an die REST API, welche Anwendungslogik implementiert hat um mit der Datenbank zu interagieren.
 Die Benutzeranwendung muss zudem eigene Logik implementieren, da diese aufgrund von Echtzeit Anforderungen nicht auf einen Server warten kann.
 Komponenten mit Echtzeit Anforderungen, die das  Rendering, die Übernahme von Benutzereingaben müssen auf dem Client Computer ausgeführt werden.
 Server wie auch Client besitzen demnach ihre eigene Anwendungslogik, die sich auf die jeweiligen Anforderungen spezialisiert haben.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.6\textwidth ]{resources/server_client.pdf}
-	\caption{Aufteilung der Anwendungslogik in Client und Server}
-	\label{fig:destribution-of-logic}
-\end{figure}
-
 Der Server kann über eine Docker Compose bereitgestellt werden.
 Innerhalb dieses Deployments wird eine Postgres-Datenbank, 
 ein Nginx-Load-Balancer und ein beliebig skalierbarer Spieleserver, welcher die Anfragen der Clients verarbeitet, bereitgestellt.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth ]{resources/Client-Server.drawio.png}
+	\caption{Kontext-Sicht der Client-Server-Architektur des Pong Spiels. Dabei zeigt die Kontextsicht die Interaktion zwischen den Komponenten. Der zentrale Punkt der Interaktion ist dabei der Nginx Load Balancer, welcher die Anfragen auf die verschiedenen Serverinstanzen verteilt.
+  Die Server nutzen dabei die Postgres Datenbank zur Synchronisation und Speicherung der Daten.       }
+	\label{fig:clientserver}
+\end{figure}
+
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth ]{resources/server_client.pdf}
+	\caption{Aufteilung der Anwendungslogik in Client und Server nach Tannenbaum}
+	\label{fig:destribution-of-logic}
+\end{figure}
+
+
 
 \subsection{Server Architektur}
 \begin{figure}[H]
@@ -238,7 +243,7 @@ die Verarbeitungsebene von der Datenebene zu trennen, da Verarbeitung und Daten 
 Zudem ermöglichen relationale Datenbanken eine einfache Skalierung, der Serveranwendungen.
 Ein weitere Vorteil ist die eingebaute Replikationsfunktion, welche die Datenbanken synchronisiert und hohe Verfügbarkeit gewährleistet.\cite[Chapter 27]{postgresql-high-availability}
 
-
+\newpage
 \section{(Nicht-)Funktionale Anforderungen}
 \begin{center}
   \begin{tabular}{|p{\linewidth}|}
@@ -273,6 +278,7 @@ Ein weitere Vorteil ist die eingebaute Replikationsfunktion, welche die Datenban
   \end{tabular}
 \end{center}
 
+\newpage
 \section{Umsetzung}
 Die Umsetzung der Architektur erfolgte parallel zur Entwicklung des Spiels.
 Dabei wurden zuerst die Anforderungen an die Anwendungen definiert, dies wurde als Grundlage
@@ -358,6 +364,7 @@ Wurde der Raum nicht mehr in der Datenbank gefunden, wird eine Fehlermeldung zur
 Ist dem Spiel kein zweiter Nutzer beigetreten, wird ebenfalls eine Fehlermeldung zurückgegeben.
 Passen alle Bedingungen, wird ein Room Token generiert und an beide Nutzer innderhalb des Socket.io Raums zurückgegeben.
 Mithilfe dieses Tokens können die Nutzer nun Nachrichten innerhalb des Raums austauschen.
+Mithilfe dieses Tokens können die Nutzer nun Nachrichten innerhalb des Raums austauschen.
 
 Hier war die Schwierigkeit, dass wenn einer der Nutzer aus dem Spiel austritt, der Raum gelöscht, wodurch der Fehler
 \glqq No room associated with this user\grqq{} auftritt. Dadurch kann das Spiel nicht weitergeführt werden.
@@ -407,6 +414,10 @@ Anstelle einer zentralisierten Architektur wäre ein dezentralisierter Ansatz m�
 \section{Reflexion}
 
 \subsection{Rückblick \& Hearusforderungen}
+\begin{itemize}
+    \item \textbf{Änderungen nach dem Projekt}: Was würde man im Nachhinein anders machen, um das System zu verbessern?
+      \item \textbf{Größte Herausforderungen}: Rückblick auf die bedeutendsten Schwierigkeiten und wie sie gelöst wurden.
+\end{itemize}
 Rückblickend gesehen wäre es besser gewsesen die gesamte Logik der Raumliste mit Websockets aufzubauen. Anstatt die Räume mit einer REST-API abzufragen, könnten Aktualisierungen der Räume in Echtzeit übertragen werden. So müsste der Benutzer nicht Manuell die Räume abfragen und potenzielle Race-Conditions, wie beim Raumbeitritt könnten vermieden werden. Außerdem müssten damit nicht die gesamten Räume vom Server gefetcht werden sondern es könnte zu Beginn einmal alles gefetcht werden und nur noch Änderungen müssten übertragen werden.   
 Eine große Herausforderung war außerdem die Verwendung der Programmiersprache Typescript. Da alle Teilnehmer des Projektes nahezu keine Erfahrung mit Typescript hatten, ist viel Zeit drauf gegangen um Bugs zu fixen welche aufgrund vom Datentypen handling der Programmiersprache entstanden sind. In Zukunft wird für das Backend eine andere Sprache verwendet.
 

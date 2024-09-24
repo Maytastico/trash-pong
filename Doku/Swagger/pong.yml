@@ -17,7 +17,7 @@ tags:
     description: Nutzerfunktionen
 
 paths:
-  /ping:
+  /health/ping:
     get:
       tags:
         - health
@@ -35,7 +35,7 @@ paths:
                     example: 'Verbindung zur API steht'
         '500':
           description: Fehler bei der Verbindung und in der API
-  /db:
+  /health/db:
     get:
       tags:
         - health
@@ -61,7 +61,7 @@ paths:
                   error:
                     type: string
                     example: 'No connection to the Grafana server'
-  /room:
+  /api/room:
     get:
       tags:
         - api
@@ -86,7 +86,7 @@ paths:
                   error:
                     type: string
                     example: 'Bitte authentifizieren'
-  /room/{id}:
+  /api/room/{id}:
     get:
       tags:
         - api
@@ -129,7 +129,7 @@ paths:
                   message:
                     type: string
                     example: 'Interner Serverfehler'
-  /room/:
+  /api/room/:
     post:
       tags:
         - api

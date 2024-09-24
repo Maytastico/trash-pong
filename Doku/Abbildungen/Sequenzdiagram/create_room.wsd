@@ -1,0 +1,59 @@
+@startuml
+title Create Room
+skinparam defaultFontSize 30
+skinparam componentFontSize 30
+skinparam actorFontSize 30
+skinparam noteFontSize 30
+skinparam sequenceParticipantFontSize 30
+skinparam sequenceMessageFontSize 30
+skinparam titleFontSize 30
+actor player
+box "api service"
+collections "api controller" as rc
+participant "auth.ts" as auth
+participant "room.ts" as room 
+end box
+database database as db
+
+note right of player: Der Nutzer muss\nauthentifiziert sein,\num einen Raum zu\nerstellen.
+player -> rc: POST /room/\nheader: {"Authorization":\n"Bearer token"}\nbody: {"title":title,\n "pw": pw,\n"oeffentlich":oeffentlich}
+activate rc
+
+alt Authorization\nheader is missing
+    rc -> player: 401 Authorization\nheader is missing
+else
+    rc -> auth: decodeAccessToken(token)
+    activate auth
+    auth -> rc: user
+    deactivate auth
+    rc -> room: getRoomsByUser(user.user_id)
+    activate room
+    room -> db: select * from rooms\nwhere user_id = user.user_id
+    activate db
+    db -> room: roomsOfUser
+    deactivate db
+    room -> rc: roomsOfUser
+    deactivate room
+
+    alt roomsOfUser.length > 0
+        rc -> player: 400 User already has a room
+    else
+    alt title or\noeffentlich is missing
+        rc -> player: 400 title is required\nand room state is\nrequired
+    else
+        alt oeffentlich == false\nand pw is missing
+            rc -> player: 400 When creating a\nprivate room a\npassword is required
+        else
+            rc -> room: createRoom(title,\npw, oeffentlich,\nuser.user_id, null)
+            activate room
+            room -> db: insert into rooms\n(title, pw,\noeffentlich, user_id)
+            activate db
+            db -> room: newRoom
+            deactivate db
+            room -> rc: newRoom
+            deactivate room
+            rc -> player: 201 newRoom
+            deactivate rc
+        end
+    end
+end
