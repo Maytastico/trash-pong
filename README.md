@@ -32,9 +32,10 @@ Alle Umgebungsvariablen des Node Servers fangen mit `POSTGRES` an. Alle Umgebung
 der Postgres-Datenbank. `PGHOST` muss `db`, `PGUSER` muss `testuser` und `PGDATABASE` muss `pong_daten` beinhalten.
 Das einzige Feld, das variieren kann, ist das Passwort-Feld.
 
-Anschließend muss in `/api-backend/source/auth` eine Token-Datei erstellt werden, welche im folgenden Format abgelegt werden muss. 
 
 ### JWT Secret
+
+Anschließend muss in `/api-backend/source/auth` eine Token-Datei erstellt werden, welche im folgenden Format abgelegt werden muss. 
 
 1. Erstelle in dem Ordner `/api-backend/source/auth` die Datei `token.ts`.
 
