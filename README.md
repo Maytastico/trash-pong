@@ -67,8 +67,26 @@ Dazu muss im Root-Verzeichnis folgender Befehl ausgeführt werden:
 ```bash
 docker-compose up -d --build
 ```
+NOTE: Wir haben das deployment auf mehreren Systemen getestet. Auf manchen Systemen funktioniert der Scale in der Docker-Compose nicht. Hierfür muss der scale Punkt aus dem Docker Compose entfernt werden und den Container über folgenden Command gestartet werden:
 
-Standardmäßig ist der Server über den Port 3000 erreichbar.
+```bash
+docker-compose up -d --build --scale backend=3
+```
+
+Außerdem kann es passieren, dass Docker die Namen der Container verändert. Manchmal wird die Scale Nummer mit einem Bindestrich und manchmal mit einem Unterstrich gesetzt. Beim Start wirft NginX dann einen Fehler dass die Container nicht gefunden werden.
+Um den Fehler zu beheben müssen dann in der nginx.conf die Containernamen angepasst werden. Diese befindet sich im Verzeichnis ```/nginx/```.
+Das sieht normalerweise so aus:
+```
+upstream loadbalancer {
+    ip_hash;
+    server trash-pong-backend-1:3000 ;
+    server trash-pong-backend-2:3000 ;
+    server trash-pong-backend-3:3000 ;
+}
+
+```
+
+Standardmäßig ist der Server über den Port 4000 erreichbar.
 Der Server hat dabei zwei Komponenten: einmal die REST API sowie den Websocket, über den das Spiel gespielt werden kann.
 Die API kann über `/api/room` oder `/api/user` aufgerufen werden.
 Um darauf zugreifen zu können, muss sich der Nutzer anmelden. Dies kann über `/user/login` durchgeführt werden.
@@ -129,12 +147,12 @@ Hier ein Beispiel auf einem Windows-System:
 2. In der Konsole müssen dann die Umgebungsvariablen gesetzt werden:
     ```bash
     set PONG_SERVER_URL=http://localhost
-    set PONG_SERVER_PORT=3000
+    set PONG_SERVER_PORT=4000
     ```
     Für Linux müssen die Variablen über den export Befehl gesetzt werden:
     ```bash
     export PONG_SERVER_URL=http://localhost
-    export PONG_SERVER_PORT=3000
+    export PONG_SERVER_PORT=4000
     ```
 3. In derselben Konsolen-Session muss dann die Executable ausgeführt werden:
     ```bash
