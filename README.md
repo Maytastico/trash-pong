@@ -78,25 +78,25 @@ Dies sieht wie folgt aus: `{"username": "hans"}`.
 ### API Endpunkte
 #### Health Endpunkte
 
-- **`GET /ping`**: Testet die Verbindung zur API.
+- **`GET /health/ping`**: Testet die Verbindung zur API.
     - **Antworten**:
         - `200`: Verbindung steht.
         - `500`: Fehler bei der Verbindung.
 
-- **`GET /db`**: Überprüft die Verbindung zur Datenbank.
+- **`GET /health/db`**: Überprüft die Verbindung zur Datenbank.
     - **Antworten**:
         - `200`: Verbindung zur Datenbank erfolgreich.
         - `500`: Fehler bei der Verbindung.
 
 #### API Endpunkte
 
-- **`GET /room`**: Gibt alle Räume aus.
+- **`GET /api/room`**: Gibt alle Räume aus.
     - **Sicherheit**: Bearer Token erforderlich.
     - **Antworten**:
         - `200`: Alle Räume werden ausgegeben.
         - `401`: Keine Authentifizierung.
 
-- **`GET /room/{id}`**: Fragt einen speziellen Raum ab.
+- **`GET /api/room/{id}`**: Fragt einen speziellen Raum ab.
     - **Parameter**:
         - `id` (Pfadparameter): Die ID des Raums.
     - **Sicherheit**: Bearer Token erforderlich.
