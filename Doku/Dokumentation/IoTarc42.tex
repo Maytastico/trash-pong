@@ -93,7 +93,7 @@
 \maketitle
 
 % DOCUMENT STARTS HERE
-\hypertarget{section-introduction-and-goals}{%
+\hypertarget{section-introduction-and-goals}{
 \section{Architektur}\label{section-introduction-and-goals}}
 
 Im Rahmen der Architektur wird eine zentralisierte Architektur verwendet, wobei es sich um eine Client-Server-Architektur handelt (vgl. Abbildung \ref{fig:clientserver}).
@@ -203,10 +203,10 @@ Diese wiederum interagiert dabei mit \glqq Controllern \grqq{}, die die Logik de
 mit der Datenhaltung interagieren. Damit kann eine klare Trennung von Datenhaltung und Logik erreicht werden, welches die Anwendung
 modular macht. Es können dadurch andere Datenbanksysteme verwendet werden, ohne dass die Logik der Anwendung angepasst werden muss.
 
-Innerhalb der Server Applikation wird auf zwei Paradigmen.
-Einerseits wird auf das request-reply Paradigma gesetzt, um Nutzer zu autorisieren, Räume zu erstellen und zu verwalten.
+Innerhalb der Server-Applikation wird auf zwei Paradigmen gesetzt.
+Einerseits wird auf das Request-Reply-Paradigma gesetzt, um Nutzer zu autorisieren, Räume zu erstellen und zu verwalten.
 Hierbei ist keine Echtzeitkommunikation notwendig, da die Anfragen nur einmalig durchgeführt werden.
-Auf der Game Server Seite wurde sich dabei für eine nachrichtenbasierte Kommunikation entschieden, 
+Auf der Game-Server-Seite wurde sich dabei für eine nachrichtenbasierte Kommunikation entschieden, 
 um die Anforderungen der Echtzeitkommunikation zu erfüllen. Diese Entscheidung wurde getroffen, 
 weil synchrone Kommunikationsmethoden wie RPCs (Remote Procedure Calls) nicht immer geeignet 
 sind, insbesondere in Szenarien, in denen die empfangende Seite möglicherweise nicht sofort 
@@ -220,22 +220,25 @@ bei der ein Client blockiert wird, bis seine Anforderung verarbeitet wurde,
 manchmal durch etwas anderes ersetzt werden.\grqq{} \cite[S. 140 ff.]{tanenbaum2007distributed}
 
 Deshalb kam für die Nachrichtenbassierde Kommunikation Socket.io zum Einsatz,
-welches die Funktionen von Websockets erweitert.
-Das unter dem Socket.io liegenden Engine.IO ermöglicht dabei latenzarme Kommunikation
+welches die Funktionen von Websockets mit Räumen erweitert.
+Das unter dem Socket.io liegende Engine.IO ermöglicht dabei latenzarme Kommunikation
 mit geringen Overhead.\cite[]{engine-io-protocol}
 
 Socket.io bietet zudem eine einfache Möglichkeit zur Skalierung. Durch die integration
 eines Adapters können nun verschiedene Socket.io Server miteinander kommunizieren.
 Damit erhalten mehrere Server die Möglichkeit, ihre Zustände zu synchronisieren.
 Dies wird mithilfe des Postgres Adapters implementiert, welche auf die Listen und Notify
-Funktionen von Postgres zurückgreift. \cite[]{postgres-adapter}
+Funktionen von Postgres zurückgreift \cite[]{postgres-adapter}.
 
-Zur Authentifizierung werden JWT-Token verwendet. Dabei ist der Vorteil, dass der Server keine Session speichern muss.
-Der Übertragende Token, kann dabei vom Client gespeichert werden. Die Informationen im Token sind
-dabei signiert und würden bei einer Manipulation des Tokens nicht mehr gültig sein.
-Übertragen wird ein Token für den Nutzercund sobald der Start Game Button gedrückt wird, wird auch 
-ein Token für den Raum erstellt, den beide Nutzer empfangen.
-Mit diesem können diese dann Nachrichten innerhalb des Raumes senden.
+Zur Authentifizierung werden JWT-Tokens verwendet. 
+Der Vorteil dabei ist, dass der Server keine Session speichern muss.
+Der übertragene Token kann vom Client gespeichert werden. 
+Die Informationen im Token sind signiert und würden bei einer Manipulation des Tokens ungültig werden. \cite[]{jwt-rfc}
+Ein Token wird für den Nutzer übertragen, und sobald der "Start Game"-Button gedrückt wird, 
+wird auch ein Token für den Raum erstellt, den beide Nutzer empfangen. 
+Mit diesem können sie dann Nachrichten innerhalb des Raumes senden.
+Ein anderer Vorteil der JWT-Tokens ist, dass Daten im Token gespeichert werden können,
+sodass kein weiterer Datenbankzugriff notwendig ist.
 
 Nach Tannenbaum eigenen sich relationale Datenbanken um Anwendungslogik von den Daten zu trennen.
 \glqq Die Verwendung relationaler Datenbanken im Client-Server-Modell hilft dabei, 
@@ -363,7 +366,6 @@ Dieser Prozess ist in (Abbildung \ref{fig:ablaufdiagramm-start_game}) beschriebe
 Wurde der Raum nicht mehr in der Datenbank gefunden, wird eine Fehlermeldung zurückgegeben.
 Ist dem Spiel kein zweiter Nutzer beigetreten, wird ebenfalls eine Fehlermeldung zurückgegeben.
 Passen alle Bedingungen, wird ein Room Token generiert und an beide Nutzer innderhalb des Socket.io Raums zurückgegeben.
-Mithilfe dieses Tokens können die Nutzer nun Nachrichten innerhalb des Raums austauschen.
 Mithilfe dieses Tokens können die Nutzer nun Nachrichten innerhalb des Raums austauschen.
 
 Hier war die Schwierigkeit, dass wenn einer der Nutzer aus dem Spiel austritt, der Raum gelöscht, wodurch der Fehler
